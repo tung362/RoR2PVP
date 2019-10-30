@@ -103,6 +103,9 @@ https://youtu.be/UEWw_pyDfuM
 | REX slot        |               SniperBody  |
 | Loader slot     |               SniperBody  |
 
+### Credits:  
+Special thanks to my friend Riley for helping me test https://github.com/SimpleManGames
+
 ### Change log:  
 **1.0.0 (Current)**  
 - Initial release
