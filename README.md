@@ -1,5 +1,6 @@
 # RoR2TeamPVP
 RoR2TeamPVP is a mod that adds a team PVP game mode to the game Risk of Rain 2.
+Note: Everything is server sided, so host needs this mod installed
 
 ### Old video example of mod in action (NOTE: a lot has been improved since):  
 https://youtu.be/UEWw_pyDfuM
