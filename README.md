@@ -110,4 +110,6 @@ Special thanks to my friend Riley for helping me test https://github.com/SimpleM
 
 ### Change log:  
 **1.0.0 (Current)**  
+- Removed unallowed stuff
+**1.0.0 (Current)**  
 - Initial release
