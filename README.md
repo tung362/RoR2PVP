@@ -109,5 +109,9 @@ Friends :(
 Special thanks to my friend Riley for helping me test https://github.com/SimpleManGames
 
 ### Change log:  
-**1.0.0 (Current)**  
-- Initial release
+**1.0.2 (Current)**  
+- Removed leftovers  
+**1.0.1**  
+- Removed unallowed stuff  
+**1.0.0**  
+- Initial release  
