@@ -39,6 +39,7 @@ https://youtu.be/UEWw_pyDfuM
 ### Requirements:  
 [BepInExPack 2.0.0](https://thunderstore.io/package/download/bbepis/BepInExPack/2.0.0/)  
 [R2API 2.2.32](https://thunderstore.io/package/download/tristanmcpherson/R2API/2.2.32/)  
+Friends :(  
 
 ### Installation:  
 1. Install BepInExPack (Version is provided above)
