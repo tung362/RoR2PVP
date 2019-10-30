@@ -28,8 +28,6 @@ namespace RoR2PVP
 
         /*Config*/
         //Multiplayer settings
-        public static bool BypassAPIRestrictions = false;
-        public static bool ForceHost = false;
         public static int MaxMultiplayerCount = 4;
         //PVP settings
         public static float GraceTimerDuration = 120;

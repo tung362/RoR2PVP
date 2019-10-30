@@ -34,7 +34,6 @@ namespace RoR2PVP
 
         public static void ExtraHooks()
         {
-            On.RoR2.DisableIfGameModded.OnEnable += QuickPlayBypass;
             On.RoR2.Networking.GameNetworkManager.OnServerAddPlayerInternal += DisplayCustomCharacters;
             On.RoR2.Stage.RespawnCharacter += ControlRespawn;
             On.RoR2.SummonMasterBehavior.OpenSummonReturnMaster += CompanionShareInventory;
@@ -68,15 +67,6 @@ namespace RoR2PVP
         #endregion
 
         #region Extras
-        static void QuickPlayBypass(On.RoR2.DisableIfGameModded.orig_OnEnable orig, DisableIfGameModded self)
-        {
-            if (Settings.BypassAPIRestrictions)
-            {
-                self.gameObject.SetActive(true);
-                return;
-            }
-            orig(self);
-        }
 
         static void DisplayCustomCharacters(On.RoR2.Networking.GameNetworkManager.orig_OnServerAddPlayerInternal orig, GameNetworkManager self, NetworkConnection conn, short playerControllerId, NetworkReader extraMessageReader)
         {
