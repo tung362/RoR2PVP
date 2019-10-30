@@ -22,17 +22,7 @@ namespace RoR2PVP
     {
         public static void Preassign()
         {
-            //Modify max player count for multiplayer
-            if(Settings.MaxMultiplayerCount != 4) typeof(RoR2Application).GetField("maxPlayers", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy | BindingFlags.Static).SetValue(null, Settings.MaxMultiplayerCount);
-            if (Settings.BypassAPIRestrictions)
-            {
-                typeof(RoR2Application).GetField("isModded", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy | BindingFlags.Static).SetValue(null, false);
-                if (Settings.ForceHost)
-                {
-                    typeof(SteamworksLobbyManager).GetField("preferredLobbyType", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy | BindingFlags.Static).SetValue(null, Lobby.Type.Public);
-                    typeof(SteamworksLobbyManager).GetField("minimumPlayerCount", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy | BindingFlags.Static).SetValue(null, 1);
-                }
-            }
+            if (Settings.MaxMultiplayerCount != 4) typeof(RoR2Application).GetField("maxPlayers", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy | BindingFlags.Static).SetValue(null, Settings.MaxMultiplayerCount);
         }
 
         public static void CoreHooks()

@@ -132,8 +132,8 @@ namespace RoR2PVP
             //Init
 
             //Multiplayer settings
-            BypassAPIRestrictions = config.Wrap<bool>("Multiplayer Settings", "Bypass API Restrictions", "Not for the faint of heart", false).Value;
-            ForceHost = config.Wrap<bool>("Multiplayer Settings", "Force Host", "Go back before its too late", false).Value;
+            //BypassAPIRestrictions = config.Wrap<bool>("Multiplayer Settings", "Bypass API Restrictions", "Not for the faint of heart", false).Value;
+            //ForceHost = config.Wrap<bool>("Multiplayer Settings", "Force Host", "Go back before its too late", false).Value;
             MaxMultiplayerCount = config.Wrap<int>("Multiplayer Settings", "Max Multiplayer Count", "Max amount of players that can join your game (16 max)", 4).Value;
 
             //PVP settings
