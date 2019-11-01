@@ -34,6 +34,9 @@ namespace RoR2PVP
         {
             if (NetworkServer.active)
             {
+                //Failsafe death plane
+                if(Settings.UseDeathPlaneFailsafe) BruteforceDeathPlane();
+
                 //Gold shores as per usual but with the pvp mechanic in place
                 if (SceneInfo.instance.sceneDef.sceneName == "goldshores")
                 {
@@ -60,9 +63,6 @@ namespace RoR2PVP
                         {
                             baseToken = Util.GenerateColoredString("PVP Enabled. Fight!", new Color32(255, 0, 0, 255))
                         });
-
-                        //Creates failsafe death plane
-                        if (Settings.UseDeathPlaneFailsafe) CreateDeathPlane();
 
                         List<PlayerCharacterMasterController> players = Enumerable.ToList<PlayerCharacterMasterController>(PlayerCharacterMasterController.instances);
                         FilterDCedPlayers(players);
@@ -343,20 +343,31 @@ namespace RoR2PVP
             TeamManager.instance.SetTeamLevel(TeamIndex.Monster, TeamManager.instance.GetTeamLevel(TeamIndex.Player));
         }
 
-        static void CreateDeathPlane()
+        static void CreateDeathPlane(Vector3 pos)
         {
             /*Ghetto death plane*/
             //Note: if you still somehow get past this death plane, then there was either no character body component or you desynced from the server in which case i can't do anything for you.
             //Create death plane
             GameObject DeathPlane = new GameObject();
             DeathPlane.transform.localScale = new Vector3(2000, 2, 2000);
-            DeathPlane.transform.position = new Vector3(TeleporterInteraction.instance.transform.position.x, -2200, TeleporterInteraction.instance.transform.position.z);
+            DeathPlane.transform.position = pos;
             DeathPlane.layer = 10;
             //Create collider
             BoxCollider boxCollider = DeathPlane.AddComponent<BoxCollider>();
             boxCollider.isTrigger = true;
             boxCollider.size = new Vector3(1, 1, 1);
             DeathPlane.AddComponent<RoR2TeamPVPDeathPlane>();
+        }
+
+        static void BruteforceDeathPlane()
+        {
+            for (int i = 0; i < PlayerCharacterMasterController.instances.Count; i++)
+            {
+                if (PlayerCharacterMasterController.instances[i].master.alive && PlayerCharacterMasterController.instances[i].master.GetBody() != null)
+                {
+                    if(PlayerCharacterMasterController.instances[i].master.GetBody().transform.position.y <= -2200) PlayerCharacterMasterController.instances[i].master.GetBody().healthComponent.Suicide();
+                }
+            }
         }
 
         //Shuffles the players

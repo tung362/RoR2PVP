@@ -25,7 +25,11 @@ namespace RoR2PVP.UnityScripts
             if (NetworkServer.active)
             {
                 CharacterBody body = other.GetComponent<CharacterBody>();
-                if (body) body.healthComponent.Suicide();
+                if (body)
+                {
+                    body.inventory.RemoveItem(ItemIndex.ExtraLife, 9999);
+                    body.healthComponent.Suicide();
+                }
             }
         }
     }

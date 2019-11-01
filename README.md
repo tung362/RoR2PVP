@@ -99,11 +99,11 @@ Friends :(
 
 | Character slots | Default custom characters |
 | --------------- | ------------------------- |
-| commando slot   |               BanditBody  |
-| MUL-T slot      |               BanditBody  |
+| commando slot   |             CommandoBody  |
+| MUL-T slot      |             CommandoBody  |
 | Huntress slot   |               BanditBody  |
 | Engineer slot   |               BanditBody  |
-| Artificer slot  |               SniperBody  |
+| Artificer slot  |               BanditBody  |
 | Mercenary slot  |               SniperBody  |
 | REX slot        |               SniperBody  |
 | Loader slot     |               SniperBody  |
@@ -164,7 +164,7 @@ Friends :(
 | Lockbox Amount              |             4  |
 | Lunar Chest Amount          |             4  |
 
-### compatibility: 
+### Compatibility: 
 - If you have any custom character mods that conflicts with this mod set `Custom Playable Characters` to false in `TeamPVP.cfg`
 - If you have any custom companion item giving mods that conflicts with this mod set `Companions Share Items` to false in `TeamPVP.cfg`
 - If you have any custom maps/generation mods that conflicts with this mod set `Custom Interactables Spawner` to false in `TeamPVP.cfg`
@@ -174,7 +174,9 @@ Friends :(
 Special thanks to my friend Riley for helping me test https://github.com/SimpleManGames
 
 ### Change log:  
-**1.1.0 (Current)**  
+**1.1.1 (Current)**  
+- Removed physical death plane for a player Y coord check  
+**1.1.0**  
 - Added commando to the default custom playable characters  
 - Added custom generation config (Balance the spawns how you like!)  
 - Added compatibility notice to the readme to make a few things clear  
