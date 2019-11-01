@@ -13,7 +13,7 @@ using RoR2.Skills;
 
 namespace RoR2PVP
 {
-    [BepInPlugin("TeamPVP", "Team PVP Mode", "1.0.0")]
+    [BepInPlugin("TeamPVP", "Team PVP Mode", "1.1.0")]
     public class Setup : BaseUnityPlugin
     {
         public static string ConfigRootPath;
@@ -30,6 +30,7 @@ namespace RoR2PVP
             Settings.LoadConfig(Config);
             Settings.LoadCustomPlayableCharactersConfig(ConfigRootPath + "TeamPVPCustomPlayableCharacters.cfg");
             Settings.LoadBannedItemListConfig(ConfigRootPath + "TeamPVPBannedItemList.cfg");
+            Settings.LoadCustomInteractablesSpawnerConfig(new ConfigFile(ConfigRootPath + "TeamPVPCustomInteractablesSpawner.cfg", true));
             Hooks.Preassign();
             Hooks.CoreHooks();
             Hooks.ExtraHooks();

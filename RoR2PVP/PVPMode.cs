@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.Networking;
 using BepInEx;
@@ -11,6 +12,7 @@ using R2API.Utils;
 using RoR2;
 using RoR2.CharacterAI;
 using RoR2.UI;
+using RoR2PVP.UnityScripts;
 
 namespace RoR2PVP
 {
@@ -48,7 +50,7 @@ namespace RoR2PVP
                     /*Grace period countdown*/
                     if (Settings.GraceTimer >= 0f)
                     {
-                        CashGrantTimer(Settings.CashGrantAmount);
+                        CashGrantTimer(Settings.CustomInteractablesSpawner ? Settings.CashGrantAmount : (uint)Run.instance.GetDifficultyScaledCost((int)Settings.CashGrantAmount));
                         Countdown();
                     }
                     else
@@ -58,6 +60,9 @@ namespace RoR2PVP
                         {
                             baseToken = Util.GenerateColoredString("PVP Enabled. Fight!", new Color32(255, 0, 0, 255))
                         });
+
+                        //Creates failsafe death plane
+                        if (Settings.UseDeathPlaneFailsafe) CreateDeathPlane();
 
                         List<PlayerCharacterMasterController> players = Enumerable.ToList<PlayerCharacterMasterController>(PlayerCharacterMasterController.instances);
                         FilterDCedPlayers(players);
@@ -76,9 +81,9 @@ namespace RoR2PVP
                                 }
                                 else
                                 {
-                                    players[i].master.teamIndex = TeamIndex.Neutral;
-                                    players[i].master.GetBody().teamComponent.teamIndex = TeamIndex.Neutral;
-                                    Settings.PVPTeams.Add(new PVPTeamTrackerStruct(players[i].GetDisplayName(), TeamIndex.Neutral));
+                                    players[i].master.teamIndex = TeamIndex.Monster;
+                                    players[i].master.GetBody().teamComponent.teamIndex = TeamIndex.Monster;
+                                    Settings.PVPTeams.Add(new PVPTeamTrackerStruct(players[i].GetDisplayName(), TeamIndex.Monster));
                                 }
                                 //Grant respawns
                                 if(Settings.RespawnsPerRound != 0)
@@ -246,6 +251,7 @@ namespace RoR2PVP
                     CharacterBody companion = companions[i].GetComponent<CharacterMaster>().GetBody();
                     CharacterBody player = companions[i].ownerMaster.GetBody();
 
+                    companions[i].GetComponent<CharacterMaster>().teamIndex = companions[i].ownerMaster.teamIndex;
                     if (companion != null && player != null) companion.teamComponent.teamIndex = player.teamComponent.teamIndex;
                 }
             }
@@ -295,10 +301,10 @@ namespace RoR2PVP
                 case TeamIndex.Player:
                     str = "Team 1";
                     break;
-                case TeamIndex.Neutral:
+                case TeamIndex.Monster:
                     str = "Team 2";
                     break;
-                case TeamIndex.Monster:
+                case TeamIndex.Neutral:
                     str = "Team 3";
                     break;
                 default:
@@ -335,6 +341,22 @@ namespace RoR2PVP
             TeamManager.instance.SetTeamLevel(TeamIndex.Player, TeamManager.instance.GetTeamLevel(TeamIndex.Player) + 5u);
             TeamManager.instance.SetTeamLevel(TeamIndex.Neutral, TeamManager.instance.GetTeamLevel(TeamIndex.Player));
             TeamManager.instance.SetTeamLevel(TeamIndex.Monster, TeamManager.instance.GetTeamLevel(TeamIndex.Player));
+        }
+
+        static void CreateDeathPlane()
+        {
+            /*Ghetto death plane*/
+            //Note: if you still somehow get past this death plane, then there was either no character body component or you desynced from the server in which case i can't do anything for you.
+            //Create death plane
+            GameObject DeathPlane = new GameObject();
+            DeathPlane.transform.localScale = new Vector3(2000, 2, 2000);
+            DeathPlane.transform.position = new Vector3(TeleporterInteraction.instance.transform.position.x, -2200, TeleporterInteraction.instance.transform.position.z);
+            DeathPlane.layer = 10;
+            //Create collider
+            BoxCollider boxCollider = DeathPlane.AddComponent<BoxCollider>();
+            boxCollider.isTrigger = true;
+            boxCollider.size = new Vector3(1, 1, 1);
+            DeathPlane.AddComponent<RoR2TeamPVPDeathPlane>();
         }
 
         //Shuffles the players

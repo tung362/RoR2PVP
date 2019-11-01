@@ -39,6 +39,9 @@ namespace RoR2PVP
             On.RoR2.SummonMasterBehavior.OpenSummonReturnMaster += CompanionShareInventory;
             On.RoR2.ShrineRestackBehavior.AddShrineStack += PreventRevivesShuffle;
             On.EntityStates.GhostUtilitySkillState.OnEnter += NerfStridesOfHeresy;
+            On.EntityStates.Sniper.Scope.ScopeSniper.OnEnter += BuffSniper;
+            On.EntityStates.Sniper.Scope.ScopeSniper.OnExit += RemoveSniperBuff;
+            On.RoR2.MapZone.TryZoneStart += FixDeathPlanes;
             On.RoR2.CombatDirector.Simulate += DisableMobSpawn;
             On.RoR2.SceneDirector.Start += DisableDefaultSpawn;
             On.RoR2.SceneDirector.PopulateScene += CustomSpawner;
@@ -78,46 +81,49 @@ namespace RoR2PVP
                 if ((int)playerControllerId < conn.playerControllers.Count && conn.playerControllers[(int)playerControllerId].IsValid && conn.playerControllers[(int)playerControllerId].gameObject != null) return;
                 if (NetworkUser.readOnlyInstancesList.Count >= self.maxConnections) return;
 
-                string text = "";
-                for (int i = 0; i < Settings.PlayableCharactersList.Count; i++)
+                if(Settings.CustomPlayableCharacters)
                 {
-                    string slotName = "";
-                    switch (i)
+                    string text = "";
+                    for (int i = 0; i < Settings.PlayableCharactersList.Count; i++)
                     {
-                        case 0:
-                            slotName = "Commando";
-                            break;
-                        case 1:
-                            slotName = "MUL-T";
-                            break;
-                        case 2:
-                            slotName = "Huntress";
-                            break;
-                        case 3:
-                            slotName = "Engineer";
-                            break;
-                        case 4:
-                            slotName = "Artificer";
-                            break;
-                        case 5:
-                            slotName = "Mercenary";
-                            break;
-                        case 6:
-                            slotName = "REX";
-                            break;
-                        case 7:
-                            slotName = "Loader";
-                            break;
-                    }
-                    text += Util.GenerateColoredString(slotName, new Color32(255, 255, 0, 255)) + " = " + BodyCatalog.GetBodyName(BodyCatalog.FindBodyIndex(Settings.PlayableCharactersList[i])) + " ";
-
-                    if (i + 1 % 3 == 0 || i + 1 == Settings.PlayableCharactersList.Count)
-                    {
-                        SendPM(conn, new Chat.SimpleChatMessage
+                        string slotName = "";
+                        switch (i)
                         {
-                            baseToken = text
-                        });
-                        text = "";
+                            case 0:
+                                slotName = "Commando";
+                                break;
+                            case 1:
+                                slotName = "MUL-T";
+                                break;
+                            case 2:
+                                slotName = "Huntress";
+                                break;
+                            case 3:
+                                slotName = "Engineer";
+                                break;
+                            case 4:
+                                slotName = "Artificer";
+                                break;
+                            case 5:
+                                slotName = "Mercenary";
+                                break;
+                            case 6:
+                                slotName = "REX";
+                                break;
+                            case 7:
+                                slotName = "Loader";
+                                break;
+                        }
+                        text += Util.GenerateColoredString(slotName, new Color32(255, 255, 0, 255)) + " = " + BodyCatalog.GetBodyName(BodyCatalog.FindBodyIndex(Settings.PlayableCharactersList[i])) + " ";
+
+                        if (i + 1 % 3 == 0 || i + 1 == Settings.PlayableCharactersList.Count)
+                        {
+                            SendPM(conn, new Chat.SimpleChatMessage
+                            {
+                                baseToken = text
+                            });
+                            text = "";
+                        }
                     }
                 }
             }
@@ -210,6 +216,52 @@ namespace RoR2PVP
             orig(self);
         }
 
+        static void BuffSniper(On.EntityStates.Sniper.Scope.ScopeSniper.orig_OnEnter orig, EntityStates.Sniper.Scope.ScopeSniper self)
+        {
+            orig(self);
+            if (NetworkServer.active)
+            {
+                self.outer.commonComponents.characterBody.RemoveBuff(BuffIndex.Slow50);
+                self.outer.commonComponents.characterBody.AddBuff(BuffIndex.AttackSpeedOnCrit);
+            }
+        }
+
+        static void RemoveSniperBuff(On.EntityStates.Sniper.Scope.ScopeSniper.orig_OnExit orig, EntityStates.Sniper.Scope.ScopeSniper self)
+        {
+            if (NetworkServer.active)
+            {
+                self.outer.commonComponents.characterBody.AddBuff(BuffIndex.Slow50);
+                self.outer.commonComponents.characterBody.RemoveBuff(BuffIndex.AttackSpeedOnCrit);
+            }
+            orig(self);
+        }
+
+        static void FixDeathPlanes(On.RoR2.MapZone.orig_TryZoneStart orig, MapZone self, Collider other)
+        {
+            if (NetworkServer.active)
+            {
+                CharacterBody body = other.GetComponent<CharacterBody>();
+                if (body)
+                {
+                    for (int i = 0; i < PlayerCharacterMasterController.instances.Count; i++)
+                    {
+                        if (PlayerCharacterMasterController.instances[i].master.alive && PlayerCharacterMasterController.instances[i].master.GetBody() != null)
+                        {
+                            if (body == PlayerCharacterMasterController.instances[i].master.GetBody())
+                            {
+                                TeamIndex PreviousTeam = body.teamComponent.teamIndex;
+                                body.teamComponent.teamIndex = TeamIndex.Player;
+                                orig(self, other);
+                                body.teamComponent.teamIndex = PreviousTeam;
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+            orig(self, other);
+        }
+
         static void DisableMobSpawn(On.RoR2.CombatDirector.orig_Simulate orig, CombatDirector self, float deltaTime)
         {
             if (NetworkServer.active) orig(self, Settings.DisableMobSpawn ? 0 : deltaTime);
@@ -244,23 +296,46 @@ namespace RoR2PVP
                     if (Run.instance && SceneInfo.instance.sceneDef.sceneName != "bazaar" || SceneInfo.instance.sceneDef.sceneName != "mysteryspace")
                     {
                         //Custom spawn
-                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscBrokenMegaDrone", 1, 300, Run.instance.stageRng);
-                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscBrokenDrone2", 8, -1, Run.instance.stageRng);
-                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscChest1", 16, -1, Run.instance.stageRng);
-                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscChest2", 8, -1, Run.instance.stageRng);
-                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscEquipmentBarrel", 6, -1, Run.instance.stageRng);
-                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscGoldChest", 2, -1, Run.instance.stageRng);
-                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscLockbox", 4, -1, Run.instance.stageRng);
-                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscLunarChest", 4, -1, Run.instance.stageRng);
-                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscTripleShop", 3, -1, Run.instance.stageRng);
-                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscTripleShopLarge", 3, -1, Run.instance.stageRng);
-                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscShrineRestack", 2, -1, Run.instance.stageRng);
-                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscCategoryChestDamage", 4, -1, Run.instance.stageRng);
-                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscCategoryChestHealing", 4, -1, Run.instance.stageRng);
-                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscCategoryChestUtility", 4, -1, Run.instance.stageRng);
-                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscDuplicator", 2, -1, Run.instance.stageRng);
-                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscDuplicatorLarge", 1, -1, Run.instance.stageRng);
-                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscRadarTower", 1, -1, Run.instance.stageRng);
+                        //Drones
+                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscBrokenMegaDrone", Settings.MegaDroneAmount, Settings.MegaDronePrice, Run.instance.stageRng);
+                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscBrokenDrone1", Settings.GunnerDroneAmount, Settings.GunnerDronePrice, Run.instance.stageRng); //Non default
+                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscBrokenDrone2", Settings.HealerDroneAmount, Settings.HealerDronePrice, Run.instance.stageRng);
+                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscBrokenMissileDrone", Settings.MissileDroneAmount, Settings.MissileDronePrice, Run.instance.stageRng); //Non default
+                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscBrokenEquipmentDrone", Settings.EquipmentDroneAmount, -1, Run.instance.stageRng); //Non default
+                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscBrokenFlameDrone", Settings.FlameDroneAmount, Settings.FlameDronePrice, Run.instance.stageRng); //Non default
+                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscBrokenTurret1", Settings.TurretAmount, Settings.TurretPrice, Run.instance.stageRng); //Non default
+
+                        //Shrines
+                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscShrineRestack", Settings.ShrineOfOrderAmount, -1, Run.instance.stageRng);
+                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscShrineBlood", Settings.ShrineOfBloodAmount, -1, Run.instance.stageRng); //Non default
+                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscShrineChance", Settings.ShrineOfChanceAmount, Settings.ShrineOfChancePrice, Run.instance.stageRng); //Non default
+                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscShrineCombat", Settings.ShrineOfCombatAmount, -1, Run.instance.stageRng); //Non default
+                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscShrineHealing", Settings.ShrineOfHealingAmount, Settings.ShrineOfHealingPrice, Run.instance.stageRng); //Non default
+                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscShrineGoldshoresAccess", Settings.GoldShrineAmount, Settings.GoldShrinePrice, Run.instance.stageRng); //Non default
+
+                        //Misc
+                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscBarrel1", Settings.CapsuleAmount, -1, Run.instance.stageRng); //Non default
+                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscRadarTower", Settings.RadarTowerAmount, Settings.RadarTowerPrice, Run.instance.stageRng);
+                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscMSPortal", Settings.CelestialPortalAmount, -1, Run.instance.stageRng); //Non default
+                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscShopPortal", Settings.ShopPortalAmount, -1, Run.instance.stageRng); //Non default
+
+                        //Duplicators
+                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscDuplicator", Settings.DuplicatorAmount, -1, Run.instance.stageRng);
+                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscDuplicatorLarge", Settings.DuplicatorLargeAmount, -1, Run.instance.stageRng);
+                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscDuplicatorMilitary", Settings.DuplicatorMilitaryAmount, -1, Run.instance.stageRng); //Non default
+
+                        //Chests
+                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscGoldChest", Settings.GoldChestAmount, Settings.GoldChestPrice, Run.instance.stageRng);
+                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscChest1", Settings.SmallChestAmount, Settings.SmallChestPrice, Run.instance.stageRng);
+                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscChest2", Settings.LargeChestAmount, Settings.LargeChestPrice, Run.instance.stageRng);
+                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscCategoryChestDamage", Settings.DamageChestAmount, Settings.DamageChestPrice, Run.instance.stageRng);
+                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscCategoryChestHealing", Settings.HealingChestAmount, Settings.HealingChestPrice, Run.instance.stageRng);
+                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscCategoryChestUtility", Settings.UtilityChestAmount, Settings.UtilityChestPrice, Run.instance.stageRng);
+                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscTripleShop", Settings.TripleShopAmount, Settings.TripleShopPrice, Run.instance.stageRng);
+                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscTripleShopLarge", Settings.TripleShopLargeAmount, Settings.TripleShopLargePrice, Run.instance.stageRng);
+                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscEquipmentBarrel", Settings.EquipmentBarrelAmount, Settings.EquipmentBarrelPrice, Run.instance.stageRng);
+                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscLockbox", Settings.LockboxAmount, -1, Run.instance.stageRng);
+                        CustomGenerate("SpawnCards/InteractableSpawnCard/iscLunarChest", Settings.LunarChestAmount, -1, Run.instance.stageRng);
                     }
                 }
             }
@@ -303,6 +378,7 @@ namespace RoR2PVP
 
                     if (spawnedObject)
                     {
+                        //Find PurchaseInteraction
                         PurchaseInteraction purchaseInteraction = spawnedObject.GetComponent<PurchaseInteraction>();
                         if (purchaseInteraction)
                         {
@@ -313,6 +389,7 @@ namespace RoR2PVP
                                 break;
                             }
                         }
+
                         break;
                     }
                     else tries++;
