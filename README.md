@@ -99,11 +99,11 @@ Friends :(
 
 | Character slots | Default custom characters |
 | --------------- | ------------------------- |
-| commando slot   |               BanditBody  |
-| MUL-T slot      |               BanditBody  |
+| commando slot   |             CommandoBody  |
+| MUL-T slot      |             CommandoBody  |
 | Huntress slot   |               BanditBody  |
 | Engineer slot   |               BanditBody  |
-| Artificer slot  |               SniperBody  |
+| Artificer slot  |               BanditBody  |
 | Mercenary slot  |               SniperBody  |
 | REX slot        |               SniperBody  |
 | Loader slot     |               SniperBody  |
