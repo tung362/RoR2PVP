@@ -164,7 +164,7 @@ Friends :(
 | Lockbox Amount              |             4  |
 | Lunar Chest Amount          |             4  |
 
-### compatibility: 
+### Compatibility: 
 - If you have any custom character mods that conflicts with this mod set `Custom Playable Characters` to false in `TeamPVP.cfg`
 - If you have any custom companion item giving mods that conflicts with this mod set `Companions Share Items` to false in `TeamPVP.cfg`
 - If you have any custom maps/generation mods that conflicts with this mod set `Custom Interactables Spawner` to false in `TeamPVP.cfg`
