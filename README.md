@@ -174,7 +174,9 @@ Friends :(
 Special thanks to my friend Riley for helping me test https://github.com/SimpleManGames
 
 ### Change log:  
-**1.1.0 (Current)**  
+**1.1.1 (Current)**  
+- Removed physical death plane for a player Y coord check
+**1.1.0**  
 - Added commando to the default custom playable characters  
 - Added custom generation config (Balance the spawns how you like!)  
 - Added compatibility notice to the readme to make a few things clear  
