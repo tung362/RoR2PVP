@@ -13,7 +13,7 @@ using RoR2.Skills;
 
 namespace RoR2PVP
 {
-    [BepInPlugin("TeamPVP", "Team PVP Mode", "1.1.1")]
+    [BepInPlugin("TeamPVP", "Team PVP Mode", "1.1.2")]
     public class Setup : BaseUnityPlugin
     {
         public static string ConfigRootPath;
