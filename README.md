@@ -5,6 +5,9 @@ Note: Everything is server sided, so only host needs this mod installed
 ### Old video example of mod in action (NOTE: a lot has been improved since):  
 https://youtu.be/UEWw_pyDfuM
 
+### Found a bug? Want a feature added?:  
+Feel free to submit an issue here on my [github](https://github.com/tung362/RoR2PVP/issues)!  
+
 ### Features:  
 - **Custom Team PVP game mode**
   - PVP
@@ -39,8 +42,8 @@ https://youtu.be/UEWw_pyDfuM
   - Uka Uka Ouuu?
 
 ### Requirements:  
-[BepInExPack 2.0.0](https://thunderstore.io/package/download/bbepis/BepInExPack/2.0.0/)  
-[R2API 2.2.32](https://thunderstore.io/package/download/tristanmcpherson/R2API/2.2.32/)  
+[BepInExPack 3.0.0](https://thunderstore.io/package/download/bbepis/BepInExPack/3.0.0/)  
+[R2API 2.3.0](https://thunderstore.io/package/download/tristanmcpherson/R2API/2.3.0/)  
 Friends :(  
 
 ### Installation:  
@@ -174,7 +177,9 @@ Friends :(
 Special thanks to my friend Riley for helping me test https://github.com/SimpleManGames
 
 ### Change log:  
-**1.1.1 (Current)**  
+**1.1.2 (Current)**  
+- Updated to BepInExPack 3.0.0 and R2API 2.3.0  
+**1.1.1**  
 - Removed physical failsafe death plane for a player Y coord check  
 **1.1.0**  
 - Added commando to the default custom playable characters  
