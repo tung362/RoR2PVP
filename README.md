@@ -180,9 +180,9 @@ Special thanks to my friend Riley for helping me test https://github.com/SimpleM
 
 ### Change log:  
 **1.1.3 (Current)**  
+- Updated to R2API 2.3.7  
 - Added equipment "The Back-up" to the default item ban list  
 - Added character slot "Acrid" to the Custom Playable Characters config  
-- Updated to R2API 2.3.7  
 **1.1.2**  
 - Updated to BepInExPack 3.0.0 and R2API 2.3.0  
 **1.1.1**  
