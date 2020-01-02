@@ -183,13 +183,10 @@ Special thanks to my friend Riley for helping me test https://github.com/SimpleM
 - Added equipment "The Back-up" to the default item ban list  
 - Added character slot "Acrid" to the Custom Playable Characters config  
 - Updated to R2API 2.3.7  
-
 **1.1.2**  
 - Updated to BepInExPack 3.0.0 and R2API 2.3.0  
-
 **1.1.1**  
 - Removed physical failsafe death plane for a player Y coord check  
-
 **1.1.0**  
 - Added commando to the default custom playable characters  
 - Added custom generation config (Balance the spawns how you like!)  
@@ -203,12 +200,9 @@ Special thanks to my friend Riley for helping me test https://github.com/SimpleM
 - Fixed bug where custom characters would still be notified to the player even when Custom Playable Characters is false  
 - Fixed bug where companions wouldn't showing up in the ui for the player when pvp mode is enabled  
 - Fixed bug where companions wouldn't attack certain players when pvp mode is enabled  
-
 **1.0.2**  
 - Removed leftovers  
-
 **1.0.1**  
 - Removed unallowed stuff  
-
 **1.0.0**  
 - Initial release  
