@@ -113,6 +113,9 @@ namespace RoR2PVP
                             case 7:
                                 slotName = "Loader";
                                 break;
+                            case 8:
+                                slotName = "Acrid";
+                                break;
                         }
                         text += Util.GenerateColoredString(slotName, new Color32(255, 255, 0, 255)) + " = " + BodyCatalog.GetBodyName(BodyCatalog.FindBodyIndex(Settings.PlayableCharactersList[i])) + " ";
 
@@ -137,6 +140,7 @@ namespace RoR2PVP
             {
                 if (!characterMaster) return;
 
+                self.usePod = false;
                 if (Settings.CustomPlayableCharacters)
                 {
                     switch (playerCharater.bodyPrefab.name)
@@ -164,6 +168,9 @@ namespace RoR2PVP
                             break;
                         case "LoaderBody":
                             playerCharater.bodyPrefab = BodyCatalog.FindBodyPrefab(Settings.PlayableCharactersList[7]);
+                            break;
+                        case "CrocoBody":
+                            playerCharater.bodyPrefab = BodyCatalog.FindBodyPrefab(Settings.PlayableCharactersList[8]);
                             break;
                         default:
                             break;
@@ -293,7 +300,7 @@ namespace RoR2PVP
             {
                 if(Settings.CustomInteractablesSpawner)
                 {
-                    if (Run.instance && SceneInfo.instance.sceneDef.sceneName != "bazaar" || SceneInfo.instance.sceneDef.sceneName != "mysteryspace")
+                    if (Run.instance && SceneInfo.instance.sceneDef.baseSceneName != "bazaar" || SceneInfo.instance.sceneDef.baseSceneName != "mysteryspace")
                     {
                         //Custom spawn
                         //Drones

@@ -43,7 +43,7 @@ Feel free to submit an issue here on my [github](https://github.com/tung362/RoR2
 
 ### Requirements:  
 [BepInExPack 3.0.0](https://thunderstore.io/package/download/bbepis/BepInExPack/3.0.0/)  
-[R2API 2.3.0](https://thunderstore.io/package/download/tristanmcpherson/R2API/2.3.0/)  
+[R2API 2.3.7](https://thunderstore.io/package/download/tristanmcpherson/R2API/2.3.7/)  
 Friends :(  
 
 ### Installation:  
@@ -77,7 +77,7 @@ Friends :(
 | Max Multiplayer Count         |             4  |
 | Ban Items                     |          true  |
 | Custom Playable Characters    |          true  |
-| UseDeathPlaneFailsafe         |          true  |
+| Use Death Plane Failsafe      |          true  |
 
 **`TeamPVPBannedItemList.cfg`**  
 
@@ -96,6 +96,7 @@ Friends :(
 | CommandMissile       |
 | FireBallDash         |
 | GoldGat              |
+| DroneBackup          |
 
 
 **`TeamPVPCustomPlayableCharacters.cfg`**  
@@ -104,12 +105,13 @@ Friends :(
 | --------------- | ------------------------- |
 | commando slot   |             CommandoBody  |
 | MUL-T slot      |             CommandoBody  |
-| Huntress slot   |               BanditBody  |
+| Huntress slot   |             CommandoBody  |
 | Engineer slot   |               BanditBody  |
 | Artificer slot  |               BanditBody  |
-| Mercenary slot  |               SniperBody  |
+| Mercenary slot  |               BanditBody  |
 | REX slot        |               SniperBody  |
 | Loader slot     |               SniperBody  |
+| Acrid slot      |               SniperBody  |
 
 
 **`TeamPVPCustomInteractablesSpawner.cfg`**  
@@ -177,7 +179,11 @@ Friends :(
 Special thanks to my friend Riley for helping me test https://github.com/SimpleManGames
 
 ### Change log:  
-**1.1.2 (Current)**  
+**1.1.3 (Current)**  
+- Updated to R2API 2.3.7  
+- Added equipment "The Back-up" to the default item ban list  
+- Added character slot "Acrid" to the Custom Playable Characters config  
+**1.1.2**  
 - Updated to BepInExPack 3.0.0 and R2API 2.3.0  
 **1.1.1**  
 - Removed physical failsafe death plane for a player Y coord check  

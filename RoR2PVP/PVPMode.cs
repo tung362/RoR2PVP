@@ -38,14 +38,14 @@ namespace RoR2PVP
                 if(Settings.UseDeathPlaneFailsafe) BruteforceDeathPlane();
 
                 //Gold shores as per usual but with the pvp mechanic in place
-                if (SceneInfo.instance.sceneDef.sceneName == "goldshores")
+                if (SceneInfo.instance.sceneDef.baseSceneName == "goldshores")
                 {
                     CashGrantTimer(1000u);
                     return;
                 }
 
                 //Safe zones
-                if (SceneInfo.instance.sceneDef.sceneName == "bazaar" || SceneInfo.instance.sceneDef.sceneName == "mysteryspace") return;
+                if (SceneInfo.instance.sceneDef.baseSceneName == "bazaar" || SceneInfo.instance.sceneDef.baseSceneName == "mysteryspace") return;
 
                 /*Grace period*/
                 if (Settings.IsGracePeriod)

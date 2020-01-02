@@ -110,14 +110,14 @@ namespace RoR2PVP
         {
             List<string> bodiesList = new List<string>();
             //Character slots
-            bodiesList.Add("# Custom playable character for commando slot");
+            bodiesList.Add("# Custom playable character for Commando slot");
             bodiesList.Add("CommandoBody");
             bodiesList.Add("");
             bodiesList.Add("# Custom playable character for MUL-T slot");
             bodiesList.Add("CommandoBody");
             bodiesList.Add("");
             bodiesList.Add("# Custom playable character for Huntress slot");
-            bodiesList.Add("BanditBody");
+            bodiesList.Add("CommandoBody");
             bodiesList.Add("");
             bodiesList.Add("# Custom playable character for Engineer slot");
             bodiesList.Add("BanditBody");
@@ -126,12 +126,15 @@ namespace RoR2PVP
             bodiesList.Add("BanditBody");
             bodiesList.Add("");
             bodiesList.Add("# Custom playable character for Mercenary slot");
-            bodiesList.Add("SniperBody");
+            bodiesList.Add("BanditBody");
             bodiesList.Add("");
             bodiesList.Add("# Custom playable character for REX slot");
             bodiesList.Add("SniperBody");
             bodiesList.Add("");
             bodiesList.Add("# Custom playable character for Loader slot");
+            bodiesList.Add("SniperBody");
+            bodiesList.Add("");
+            bodiesList.Add("# Custom playable character for Acrid slot");
             bodiesList.Add("SniperBody");
             bodiesList.Add("");
             //Output all body names
@@ -165,6 +168,8 @@ namespace RoR2PVP
             bannedItems.Add("CommandMissile");
             bannedItems.Add("FireBallDash");
             bannedItems.Add("GoldGat");
+            bannedItems.Add("GoldGat");
+            bannedItems.Add("DroneBackup");
             //Output all item names
             bannedItems.Add("# -----------------------------------------------------------------------------------------");
             bannedItems.Add("# List of item ids and it's full name");
@@ -189,26 +194,26 @@ namespace RoR2PVP
         public static void LoadConfig(ConfigFile config)
         {
             //Multiplayer settings
-            MaxMultiplayerCount = config.Wrap<int>("Multiplayer Settings", "Max Multiplayer Count", "Max amount of players that can join your game (16 max)", MaxMultiplayerCount).Value;
+            MaxMultiplayerCount = config.Bind<int>("Multiplayer Settings", "Max Multiplayer Count", MaxMultiplayerCount, "Max amount of players that can join your game (16 max)").Value;
 
             //PVP settings
-            GraceTimerDuration = config.Wrap<float>("PVP Settings", "Grace Timer Duration", "Grace period duration before enabling pvp in seconds", GraceTimerDuration).Value;
-            CashDelay = config.Wrap<float>("PVP Settings", "Cash Delay", "Cash grant delay in seconds", CashDelay).Value;
-            CashGrantAmount = config.Wrap<uint>("PVP Settings", "Cash Grant Amount", "Amount of cash granted after each delay", CashGrantAmount).Value;
-            RespawnsPerRound = config.Wrap<int>("PVP Settings", "Respawns Per Round", "Amount of free revives per round", RespawnsPerRound).Value;
-            RandomTeams = config.Wrap<bool>("PVP Settings", "Random Teams", "Shuffles team members every round", RandomTeams).Value;
-            CompanionsShareItems = config.Wrap<bool>("PVP Settings", "Companions Share Items", "Companions(drones, etc) share items with their owner", CompanionsShareItems).Value;
-            DisableMobSpawn = config.Wrap<bool>("PVP Settings", "Disable Mob Spawn", "Disables mobs from spawning in this game mode", DisableMobSpawn).Value;
-            UseDeathPlaneFailsafe = config.Wrap<bool>("PVP Settings", "Use Death Plane Failsafe", "Creates a kill zone at height -2200 just in case the vanilla kill zone doesn't stop the player from falling off the map, prevents softlock", UseDeathPlaneFailsafe).Value;
+            GraceTimerDuration = config.Bind<float>("PVP Settings", "Grace Timer Duration", GraceTimerDuration, "Grace period duration before enabling pvp in seconds").Value;
+            CashDelay = config.Bind<float>("PVP Settings", "Cash Delay", CashDelay, "Cash grant delay in seconds").Value;
+            CashGrantAmount = config.Bind<uint>("PVP Settings", "Cash Grant Amount", CashGrantAmount, "Amount of cash granted after each delay").Value;
+            RespawnsPerRound = config.Bind<int>("PVP Settings", "Respawns Per Round", RespawnsPerRound, "Amount of free revives per round").Value;
+            RandomTeams = config.Bind<bool>("PVP Settings", "Random Teams", RandomTeams, "Shuffles team members every round").Value;
+            CompanionsShareItems = config.Bind<bool>("PVP Settings", "Companions Share Items", CompanionsShareItems, "Companions(drones, etc) share items with their owner").Value;
+            DisableMobSpawn = config.Bind<bool>("PVP Settings", "Disable Mob Spawn", DisableMobSpawn, "Disables mobs from spawning in this game mode").Value;
+            UseDeathPlaneFailsafe = config.Bind<bool>("PVP Settings", "Use Death Plane Failsafe", UseDeathPlaneFailsafe, "Creates a kill zone at height -2200 just in case the vanilla kill zone doesn't stop the player from falling off the map, prevents softlock").Value;
 
             //Characters Settings
-            CustomPlayableCharacters = config.Wrap<bool>("Characters Settings", "Custom Playable Characters", "Enables the ability to change the playable characters in the character select menu with custom picked characters when starting the game (see TeamPVPCustomPlayableCharacters.cfg)", CustomPlayableCharacters).Value;
+            CustomPlayableCharacters = config.Bind<bool>("Characters Settings", "Custom Playable Characters", CustomPlayableCharacters, "Enables the ability to change the playable characters in the character select menu with custom picked characters when starting the game (see TeamPVPCustomPlayableCharacters.cfg)").Value;
 
             //Ban items setting
-            BanItems = config.Wrap<bool>("Ban Item Settings", "Ban Items", "Enables the ability to ban certain items from this game mode to balance it more (see TeamPVPBannedItemList.cfg)", BanItems).Value;
+            BanItems = config.Bind<bool>("Ban Item Settings", "Ban Items", BanItems, "Enables the ability to ban certain items from this game mode to balance it more (see TeamPVPBannedItemList.cfg)").Value;
 
             //Interactables Spawner Settings
-            CustomInteractablesSpawner = config.Wrap<bool>("Interactables Spawner Settings", "Custom Interactables Spawner", "Use custom interactables(chests, drones, etc) spawners instead of default ones in this game mode (See TeamPVPCustomInteractablesSpawner.cfg)", CustomInteractablesSpawner).Value;
+            CustomInteractablesSpawner = config.Bind<bool>("Interactables Spawner Settings", "Custom Interactables Spawner", CustomInteractablesSpawner, "Use custom interactables(chests, drones, etc) spawners instead of default ones in this game mode (See TeamPVPCustomInteractablesSpawner.cfg)").Value;
         }
 
         public static void LoadCustomPlayableCharactersConfig(string configPath)
@@ -272,60 +277,60 @@ namespace RoR2PVP
         public static void LoadCustomInteractablesSpawnerConfig(ConfigFile config)
         {
             //Drones
-            MegaDroneAmount = config.Wrap<int>("Drones", "Mega Drone Amount", "Amount to attempt to spawn in each stage", MegaDroneAmount).Value;
-            MegaDronePrice = config.Wrap<int>("Drones", "Mega Drone Price", "custom cost to buy, leave at -1 for vanilla cost", MegaDronePrice).Value;
-            GunnerDroneAmount = config.Wrap<int>("Drones", "Gunner Drone Amount", "Amount to attempt to spawn in each stage", GunnerDroneAmount).Value;
-            GunnerDronePrice = config.Wrap<int>("Drones", "Gunner Drone Price", "custom cost to buy, leave at -1 for vanilla cost", GunnerDronePrice).Value;
-            MissileDroneAmount = config.Wrap<int>("Drones", "Missile Drone Amount", "Amount to attempt to spawn in each stage", MissileDroneAmount).Value;
-            MissileDronePrice = config.Wrap<int>("Drones", "Missile Drone Price", "custom cost to buy, leave at -1 for vanilla cost", MissileDronePrice).Value;
-            HealerDroneAmount = config.Wrap<int>("Drones", "Healer Drone Amount", "Amount to attempt to spawn in each stage", HealerDroneAmount).Value;
-            HealerDronePrice = config.Wrap<int>("Drones", "Healer Drone Price", "custom cost to buy, leave at -1 for vanilla cost", HealerDronePrice).Value;
-            EquipmentDroneAmount = config.Wrap<int>("Drones", "Equipment Drone Amount", "Amount to attempt to spawn in each stage", EquipmentDroneAmount).Value;
-            FlameDroneAmount = config.Wrap<int>("Drones", "Flame Drone Amount", "Amount to attempt to spawn in each stage", FlameDroneAmount).Value;
-            FlameDronePrice = config.Wrap<int>("Drones", "Flame Drone Price", "custom cost to buy, leave at -1 for vanilla cost", FlameDronePrice).Value;
-            TurretAmount = config.Wrap<int>("Drones", "Turret Amount", "Amount to attempt to spawn in each stage", TurretAmount).Value;
-            TurretPrice = config.Wrap<int>("Drones", "Turret Price", "custom cost to buy, leave at -1 for vanilla cost", TurretPrice).Value;
+            MegaDroneAmount = config.Bind<int>("Drones", "Mega Drone Amount", MegaDroneAmount, "Amount to attempt to spawn in each stage").Value;
+            MegaDronePrice = config.Bind<int>("Drones", "Mega Drone Price", MegaDronePrice, "custom cost to buy, leave at -1 for vanilla cost").Value;
+            GunnerDroneAmount = config.Bind<int>("Drones", "Gunner Drone Amount", GunnerDroneAmount, "Amount to attempt to spawn in each stage").Value;
+            GunnerDronePrice = config.Bind<int>("Drones", "Gunner Drone Price", GunnerDronePrice, "custom cost to buy, leave at -1 for vanilla cost").Value;
+            MissileDroneAmount = config.Bind<int>("Drones", "Missile Drone Amount", MissileDroneAmount, "Amount to attempt to spawn in each stage").Value;
+            MissileDronePrice = config.Bind<int>("Drones", "Missile Drone Price", MissileDronePrice, "custom cost to buy, leave at -1 for vanilla cost").Value;
+            HealerDroneAmount = config.Bind<int>("Drones", "Healer Drone Amount", HealerDroneAmount, "Amount to attempt to spawn in each stage").Value;
+            HealerDronePrice = config.Bind<int>("Drones", "Healer Drone Price", HealerDronePrice, "custom cost to buy, leave at -1 for vanilla cost").Value;
+            EquipmentDroneAmount = config.Bind<int>("Drones", "Equipment Drone Amount", EquipmentDroneAmount, "Amount to attempt to spawn in each stage").Value;
+            FlameDroneAmount = config.Bind<int>("Drones", "Flame Drone Amount", FlameDroneAmount, "Amount to attempt to spawn in each stage").Value;
+            FlameDronePrice = config.Bind<int>("Drones", "Flame Drone Price", FlameDronePrice, "custom cost to buy, leave at -1 for vanilla cost").Value;
+            TurretAmount = config.Bind<int>("Drones", "Turret Amount", TurretAmount, "Amount to attempt to spawn in each stage").Value;
+            TurretPrice = config.Bind<int>("Drones", "Turret Price", TurretPrice, "custom cost to buy, leave at -1 for vanilla cost").Value;
             //Shrines
-            ShrineOfOrderAmount = config.Wrap<int>("Shrines", "Shrine Of Order Amount", "Amount to attempt to spawn in each stage", ShrineOfOrderAmount).Value;
-            ShrineOfBloodAmount = config.Wrap<int>("Shrines", "Shrine Of Blood Amount", "Amount to attempt to spawn in each stage", ShrineOfBloodAmount).Value;
-            ShrineOfChanceAmount = config.Wrap<int>("Shrines", "Shrine Of Chance Amount", "Amount to attempt to spawn in each stage", ShrineOfChanceAmount).Value;
-            ShrineOfChancePrice = config.Wrap<int>("Shrines", "Shrine Of Chance Price", "custom cost to buy, leave at -1 for vanilla cost", ShrineOfChancePrice).Value;
-            ShrineOfCombatAmount = config.Wrap<int>("Shrines", "Shrine Of Combat Amount", "Amount to attempt to spawn in each stage", ShrineOfCombatAmount).Value;
-            ShrineOfHealingAmount = config.Wrap<int>("Shrines", "Shrine Of Healing Amount", "Amount to attempt to spawn in each stage", ShrineOfHealingAmount).Value;
-            ShrineOfHealingPrice = config.Wrap<int>("Shrines", "Shrine Of Healing Price", "custom cost to buy, leave at -1 for vanilla cost", ShrineOfHealingPrice).Value;
-            GoldShrineAmount = config.Wrap<int>("Shrines", "Gold Shrine Amount", "Amount to attempt to spawn in each stage", GoldShrineAmount).Value;
-            GoldShrinePrice = config.Wrap<int>("Shrines", "Gold Shrine Price", "custom cost to buy, leave at -1 for vanilla cost", GoldShrinePrice).Value;
+            ShrineOfOrderAmount = config.Bind<int>("Shrines", "Shrine Of Order Amount", ShrineOfOrderAmount, "Amount to attempt to spawn in each stage").Value;
+            ShrineOfBloodAmount = config.Bind<int>("Shrines", "Shrine Of Blood Amount", ShrineOfBloodAmount, "Amount to attempt to spawn in each stage").Value;
+            ShrineOfChanceAmount = config.Bind<int>("Shrines", "Shrine Of Chance Amount", ShrineOfChanceAmount, "Amount to attempt to spawn in each stage").Value;
+            ShrineOfChancePrice = config.Bind<int>("Shrines", "Shrine Of Chance Price", ShrineOfChancePrice, "custom cost to buy, leave at -1 for vanilla cost").Value;
+            ShrineOfCombatAmount = config.Bind<int>("Shrines", "Shrine Of Combat Amount", ShrineOfCombatAmount, "Amount to attempt to spawn in each stage").Value;
+            ShrineOfHealingAmount = config.Bind<int>("Shrines", "Shrine Of Healing Amount", ShrineOfHealingAmount, "Amount to attempt to spawn in each stage").Value;
+            ShrineOfHealingPrice = config.Bind<int>("Shrines", "Shrine Of Healing Price", ShrineOfHealingPrice, "custom cost to buy, leave at -1 for vanilla cost").Value;
+            GoldShrineAmount = config.Bind<int>("Shrines", "Gold Shrine Amount", GoldShrineAmount, "Amount to attempt to spawn in each stage").Value;
+            GoldShrinePrice = config.Bind<int>("Shrines", "Gold Shrine Price", GoldShrinePrice, "custom cost to buy, leave at -1 for vanilla cost").Value;
             //Misc
-            CapsuleAmount = config.Wrap<int>("Misc", "Capsule Amount", "Amount to attempt to spawn in each stage", CapsuleAmount).Value;
-            RadarTowerAmount = config.Wrap<int>("Misc", "Radar Tower Amount", "Amount to attempt to spawn in each stage", RadarTowerAmount).Value;
-            RadarTowerPrice = config.Wrap<int>("Misc", "Radar Tower Price", "custom cost to buy, leave at -1 for vanilla cost", RadarTowerPrice).Value;
-            CelestialPortalAmount = config.Wrap<int>("Misc", "Celestial Portal Amount", "Amount to attempt to spawn in each stage", CelestialPortalAmount).Value;
-            ShopPortalAmount = config.Wrap<int>("Misc", "Shop Portal Amount", "Amount to attempt to spawn in each stage", ShopPortalAmount).Value;
+            CapsuleAmount = config.Bind<int>("Misc", "Capsule Amount", CapsuleAmount, "Amount to attempt to spawn in each stage").Value;
+            RadarTowerAmount = config.Bind<int>("Misc", "Radar Tower Amount", RadarTowerAmount, "Amount to attempt to spawn in each stage").Value;
+            RadarTowerPrice = config.Bind<int>("Misc", "Radar Tower Price", RadarTowerPrice, "custom cost to buy, leave at -1 for vanilla cost").Value;
+            CelestialPortalAmount = config.Bind<int>("Misc", "Celestial Portal Amount", CelestialPortalAmount, "Amount to attempt to spawn in each stage").Value;
+            ShopPortalAmount = config.Bind<int>("Misc", "Shop Portal Amount", ShopPortalAmount, "Amount to attempt to spawn in each stage").Value;
             //Duplicators
-            DuplicatorAmount = config.Wrap<int>("Duplicators", "Duplicator Amount", "Amount to attempt to spawn in each stage", DuplicatorAmount).Value;
-            DuplicatorLargeAmount = config.Wrap<int>("Duplicators", "Duplicator Large Amount", "Amount to attempt to spawn in each stage", DuplicatorLargeAmount).Value;
-            DuplicatorMilitaryAmount = config.Wrap<int>("Duplicators", "Duplicator Military Amount", "Amount to attempt to spawn in each stage", DuplicatorMilitaryAmount).Value;
+            DuplicatorAmount = config.Bind<int>("Duplicators", "Duplicator Amount", DuplicatorAmount, "Amount to attempt to spawn in each stage").Value;
+            DuplicatorLargeAmount = config.Bind<int>("Duplicators", "Duplicator Large Amount", DuplicatorLargeAmount, "Amount to attempt to spawn in each stage").Value;
+            DuplicatorMilitaryAmount = config.Bind<int>("Duplicators", "Duplicator Military Amount", DuplicatorMilitaryAmount, "Amount to attempt to spawn in each stage").Value;
             //Chests
-            GoldChestAmount = config.Wrap<int>("Chests", "Gold Chest Amount", "Amount to attempt to spawn in each stage", GoldChestAmount).Value;
-            GoldChestPrice = config.Wrap<int>("Chests", "Gold Chest Price", "custom cost to buy, leave at -1 for vanilla cost", GoldChestPrice).Value;
-            SmallChestAmount = config.Wrap<int>("Chests", "Small Chest Amount", "Amount to attempt to spawn in each stage", SmallChestAmount).Value;
-            SmallChestPrice = config.Wrap<int>("Chests", "Small Chest Price", "custom cost to buy, leave at -1 for vanilla cost", SmallChestPrice).Value;
-            LargeChestAmount = config.Wrap<int>("Chests", "Large Chest Amount", "Amount to attempt to spawn in each stage", LargeChestAmount).Value;
-            LargeChestPrice = config.Wrap<int>("Chests", "Large Chest Price", "custom cost to buy, leave at -1 for vanilla cost", LargeChestPrice).Value;
-            DamageChestAmount = config.Wrap<int>("Chests", "Damage Chest Amount", "Amount to attempt to spawn in each stage", DamageChestAmount).Value;
-            DamageChestPrice = config.Wrap<int>("Chests", "Damage Chest Price", "custom cost to buy, leave at -1 for vanilla cost", DamageChestPrice).Value;
-            HealingChestAmount = config.Wrap<int>("Chests", "Healing Chest Amount", "Amount to attempt to spawn in each stage", HealingChestAmount).Value;
-            HealingChestPrice = config.Wrap<int>("Chests", "Healing Chest Price", "custom cost to buy, leave at -1 for vanilla cost", HealingChestPrice).Value;
-            UtilityChestAmount = config.Wrap<int>("Chests", "Utility Chest Amount", "Amount to attempt to spawn in each stage", UtilityChestAmount).Value;
-            UtilityChestPrice = config.Wrap<int>("Chests", "Utility Chest Price", "custom cost to buy, leave at -1 for vanilla cost", UtilityChestPrice).Value;
-            TripleShopAmount = config.Wrap<int>("Chests", "Triple Shop Amount", "Amount to attempt to spawn in each stage", TripleShopAmount).Value;
-            TripleShopPrice = config.Wrap<int>("Chests", "Triple Shop Price", "custom cost to buy, leave at -1 for vanilla cost", TripleShopPrice).Value;
-            TripleShopLargeAmount = config.Wrap<int>("Chests", "Triple Shop Large Amount", "Amount to attempt to spawn in each stage", TripleShopLargeAmount).Value;
-            TripleShopLargePrice = config.Wrap<int>("Chests", "Triple Shop Large Price", "custom cost to buy, leave at -1 for vanilla cost", TripleShopLargePrice).Value;
-            EquipmentBarrelAmount = config.Wrap<int>("Chests", "Equipment Barrel Amount", "Amount to attempt to spawn in each stage", EquipmentBarrelAmount).Value;
-            EquipmentBarrelPrice = config.Wrap<int>("Chests", "Equipment Barrel Price", "custom cost to buy, leave at -1 for vanilla cost", EquipmentBarrelPrice).Value;
-            LockboxAmount = config.Wrap<int>("Chests", "Lockbox Amount", "Amount to attempt to spawn in each stage", LockboxAmount).Value;
-            LunarChestAmount = config.Wrap<int>("Chests", "Lunar Chest Amount", "Amount to attempt to spawn in each stage", LunarChestAmount).Value;
+            GoldChestAmount = config.Bind<int>("Chests", "Gold Chest Amount", GoldChestAmount, "Amount to attempt to spawn in each stage").Value;
+            GoldChestPrice = config.Bind<int>("Chests", "Gold Chest Price", GoldChestPrice, "custom cost to buy, leave at -1 for vanilla cost").Value;
+            SmallChestAmount = config.Bind<int>("Chests", "Small Chest Amount", SmallChestAmount, "Amount to attempt to spawn in each stage").Value;
+            SmallChestPrice = config.Bind<int>("Chests", "Small Chest Price", SmallChestPrice, "custom cost to buy, leave at -1 for vanilla cost").Value;
+            LargeChestAmount = config.Bind<int>("Chests", "Large Chest Amount", LargeChestAmount, "Amount to attempt to spawn in each stage").Value;
+            LargeChestPrice = config.Bind<int>("Chests", "Large Chest Price", LargeChestPrice, "custom cost to buy, leave at -1 for vanilla cost").Value;
+            DamageChestAmount = config.Bind<int>("Chests", "Damage Chest Amount", DamageChestAmount, "Amount to attempt to spawn in each stage").Value;
+            DamageChestPrice = config.Bind<int>("Chests", "Damage Chest Price", DamageChestPrice, "custom cost to buy, leave at -1 for vanilla cost").Value;
+            HealingChestAmount = config.Bind<int>("Chests", "Healing Chest Amount", HealingChestAmount, "Amount to attempt to spawn in each stage").Value;
+            HealingChestPrice = config.Bind<int>("Chests", "Healing Chest Price", HealingChestPrice, "custom cost to buy, leave at -1 for vanilla cost").Value;
+            UtilityChestAmount = config.Bind<int>("Chests", "Utility Chest Amount", UtilityChestAmount, "Amount to attempt to spawn in each stage").Value;
+            UtilityChestPrice = config.Bind<int>("Chests", "Utility Chest Price", UtilityChestPrice, "custom cost to buy, leave at -1 for vanilla cost").Value;
+            TripleShopAmount = config.Bind<int>("Chests", "Triple Shop Amount", TripleShopAmount, "Amount to attempt to spawn in each stage").Value;
+            TripleShopPrice = config.Bind<int>("Chests", "Triple Shop Price", TripleShopPrice, "custom cost to buy, leave at -1 for vanilla cost").Value;
+            TripleShopLargeAmount = config.Bind<int>("Chests", "Triple Shop Large Amount", TripleShopLargeAmount, "Amount to attempt to spawn in each stage").Value;
+            TripleShopLargePrice = config.Bind<int>("Chests", "Triple Shop Large Price", TripleShopLargePrice, "custom cost to buy, leave at -1 for vanilla cost").Value;
+            EquipmentBarrelAmount = config.Bind<int>("Chests", "Equipment Barrel Amount", EquipmentBarrelAmount, "Amount to attempt to spawn in each stage").Value;
+            EquipmentBarrelPrice = config.Bind<int>("Chests", "Equipment Barrel Price", EquipmentBarrelPrice, "custom cost to buy, leave at -1 for vanilla cost").Value;
+            LockboxAmount = config.Bind<int>("Chests", "Lockbox Amount", LockboxAmount, "Amount to attempt to spawn in each stage").Value;
+            LunarChestAmount = config.Bind<int>("Chests", "Lunar Chest Amount", LunarChestAmount, "Amount to attempt to spawn in each stage").Value;
         }
     }
 }
