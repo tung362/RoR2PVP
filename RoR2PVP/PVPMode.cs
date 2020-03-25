@@ -11,23 +11,33 @@ using R2API;
 using R2API.Utils;
 using RoR2;
 using RoR2.CharacterAI;
-using RoR2.UI;
+using APIExtension.VoteAPI;
 using RoR2PVP.UnityScripts;
 
 namespace RoR2PVP
 {
     class PVPMode
     {
+        /*Data*/
+        public static bool IsGracePeriod = true;
+        public static float GraceTimer;
+        public static float CashGrantTimer = 0;
+        public static float CurrentGraceTimeReminder;
+        public static bool PVPEnded = false;
+        public static bool UsedTeleporter = false;
+        //Unused for now
+        public static List<PVPTeamTrackerStruct> PVPTeams = new List<PVPTeamTrackerStruct>();
+
         #region Core
         public static void Reset()
         {
-            Settings.IsGracePeriod = true;
-            Settings.GraceTimer = Settings.GraceTimerDuration;
-            Settings.CashGrantTimer = 0;
-            Settings.CurrentGraceTimeReminder = Settings.GraceTimer;
-            Settings.PVPEnded = false;
-            Settings.UsedTeleporter = false;
-            Settings.PVPTeams.Clear();
+            PVPMode.IsGracePeriod = true;
+            PVPMode.GraceTimer = Settings.GraceTimerDuration;
+            PVPMode.CashGrantTimer = 0;
+            PVPMode.CurrentGraceTimeReminder = PVPMode.GraceTimer;
+            PVPMode.PVPEnded = false;
+            PVPMode.UsedTeleporter = false;
+            PVPMode.PVPTeams.Clear();
         }
 
         public static void Tick()
@@ -35,12 +45,12 @@ namespace RoR2PVP
             if (NetworkServer.active)
             {
                 //Failsafe death plane
-                if(Settings.UseDeathPlaneFailsafe) BruteforceDeathPlane();
+                if(VoteAPI.VoteResults.HasVote(Settings.UseDeathPlaneFailsafe.Item2)) BruteforceDeathPlane();
 
                 //Gold shores as per usual but with the pvp mechanic in place
                 if (SceneInfo.instance.sceneDef.baseSceneName == "goldshores")
                 {
-                    CashGrantTimer(1000u);
+                    CashGrantTimerTick(1000u);
                     return;
                 }
 
@@ -48,12 +58,12 @@ namespace RoR2PVP
                 if (SceneInfo.instance.sceneDef.baseSceneName == "bazaar" || SceneInfo.instance.sceneDef.baseSceneName == "mysteryspace") return;
 
                 /*Grace period*/
-                if (Settings.IsGracePeriod)
+                if (PVPMode.IsGracePeriod)
                 {
                     /*Grace period countdown*/
-                    if (Settings.GraceTimer >= 0f)
+                    if (PVPMode.GraceTimer >= 0f)
                     {
-                        CashGrantTimer(Settings.CustomInteractablesSpawner ? Settings.CashGrantAmount : (uint)Run.instance.GetDifficultyScaledCost((int)Settings.CashGrantAmount));
+                        CashGrantTimerTick(VoteAPI.VoteResults.HasVote(Settings.CustomInteractablesSpawner.Item2) ? Settings.CashGrantAmount : (uint)Run.instance.GetDifficultyScaledCost((int)Settings.CashGrantAmount));
                         Countdown();
                     }
                     else
@@ -67,7 +77,7 @@ namespace RoR2PVP
                         List<PlayerCharacterMasterController> players = Enumerable.ToList<PlayerCharacterMasterController>(PlayerCharacterMasterController.instances);
                         FilterDCedPlayers(players);
                         //Shuffle teams, grant respawn items, and reset money count
-                        if(Settings.RandomTeams) Shuffle<PlayerCharacterMasterController>(players);
+                        if(VoteAPI.VoteResults.HasVote(Settings.RandomTeams.Item2)) Shuffle<PlayerCharacterMasterController>(players);
                         for (int i = 0; i < players.Count; i++)
                         {
                             if (players[i].master.alive && players[i].master.GetBody() != null)
@@ -77,13 +87,13 @@ namespace RoR2PVP
                                 {
                                     players[i].master.teamIndex = TeamIndex.Player;
                                     players[i].master.GetBody().teamComponent.teamIndex = TeamIndex.Player;
-                                    Settings.PVPTeams.Add(new PVPTeamTrackerStruct(players[i].GetDisplayName(), TeamIndex.Player));
+                                    PVPMode.PVPTeams.Add(new PVPTeamTrackerStruct(players[i].GetDisplayName(), TeamIndex.Player));
                                 }
                                 else
                                 {
                                     players[i].master.teamIndex = TeamIndex.Monster;
                                     players[i].master.GetBody().teamComponent.teamIndex = TeamIndex.Monster;
-                                    Settings.PVPTeams.Add(new PVPTeamTrackerStruct(players[i].GetDisplayName(), TeamIndex.Monster));
+                                    PVPMode.PVPTeams.Add(new PVPTeamTrackerStruct(players[i].GetDisplayName(), TeamIndex.Monster));
                                 }
                                 //Grant respawns
                                 if(Settings.RespawnsPerRound != 0)
@@ -100,13 +110,13 @@ namespace RoR2PVP
                         UpdateCompanionTeams();
                         DestroyAllPurchaseables();
 
-                        Settings.IsGracePeriod = false;
+                        PVPMode.IsGracePeriod = false;
                     }
                 }
                 else
                 {
                     /*PVP period*/
-                    if (!Settings.PVPEnded)
+                    if (!PVPMode.PVPEnded)
                     {
                         TeamIndex survivingTeamIndex;
 
@@ -121,7 +131,7 @@ namespace RoR2PVP
                             TeleporterInteraction.instance.bonusDirector = null;
                             TeleporterInteraction.instance.bossDirector = null;
                             //PingTeleporter();
-                            Settings.PVPEnded = true;
+                            PVPMode.PVPEnded = true;
                         }
                     }
                 }
@@ -130,13 +140,13 @@ namespace RoR2PVP
 
         public static void Teleport(TeleporterInteraction self)
         {
-            if (!Settings.UsedTeleporter)
+            if (!PVPMode.UsedTeleporter)
             {
-                if (Settings.PVPEnded)
+                if (PVPMode.PVPEnded)
                 {
                     ApplyExp();
                     self.GetComponent<SceneExitController>().Begin();
-                    Settings.UsedTeleporter = true;
+                    PVPMode.UsedTeleporter = true;
                     return;
                 }
 
@@ -151,32 +161,32 @@ namespace RoR2PVP
         #region Core Functions
         static void Countdown()
         {
-            Settings.GraceTimer -= Time.fixedDeltaTime;
+            PVPMode.GraceTimer -= Time.fixedDeltaTime;
 
             //Send a 5 second warning to players before grace period runs out
-            if (Settings.GraceTimer <= 5f)
+            if (PVPMode.GraceTimer <= 5f)
             {
-                if (Settings.GraceTimer <= Settings.CurrentGraceTimeReminder)
+                if (PVPMode.GraceTimer <= PVPMode.CurrentGraceTimeReminder)
                 {
                     Chat.SendBroadcastChat(new Chat.SimpleChatMessage
                     {
-                        baseToken = Util.GenerateColoredString(Settings.CurrentGraceTimeReminder.ToString(), new Color32(255, 106, 0, 255)) + " Seconds left of grace period!"
+                        baseToken = Util.GenerateColoredString(PVPMode.CurrentGraceTimeReminder.ToString(), new Color32(255, 106, 0, 255)) + " Seconds left of grace period!"
                     });
-                    Settings.CurrentGraceTimeReminder -= 1f;
+                    PVPMode.CurrentGraceTimeReminder -= 1f;
                 }
             }
             else
             {
                 //Reminds players of remaining time every 30 seconds
-                if (Settings.GraceTimer <= Settings.CurrentGraceTimeReminder)
+                if (PVPMode.GraceTimer <= PVPMode.CurrentGraceTimeReminder)
                 {
                     Chat.SendBroadcastChat(new Chat.SimpleChatMessage
                     {
-                        baseToken = Util.GenerateColoredString(Settings.CurrentGraceTimeReminder.ToString(), new Color32(255, 216, 0, 255)) + " Seconds left of grace period!"
+                        baseToken = Util.GenerateColoredString(PVPMode.CurrentGraceTimeReminder.ToString(), new Color32(255, 216, 0, 255)) + " Seconds left of grace period!"
                     });
-                    float nextTimeReminder = Settings.CurrentGraceTimeReminder - 30f;
-                    if (nextTimeReminder <= 5f) Settings.CurrentGraceTimeReminder = 5f;
-                    else Settings.CurrentGraceTimeReminder = nextTimeReminder;
+                    float nextTimeReminder = PVPMode.CurrentGraceTimeReminder - 30f;
+                    if (nextTimeReminder <= 5f) PVPMode.CurrentGraceTimeReminder = 5f;
+                    else PVPMode.CurrentGraceTimeReminder = nextTimeReminder;
                 }
             }
         }
@@ -209,7 +219,7 @@ namespace RoR2PVP
                         }
                     }
                     if (text == Util.GenerateColoredString("Your allies: ", new Color32(0, 255, 255, 255))) text += "None";
-                    Hooks.SendPM(PlayerCharacterMasterController.instances[i].master.networkIdentity.clientAuthorityOwner, new Chat.SimpleChatMessage
+                    Tools.SendPM(PlayerCharacterMasterController.instances[i].master.networkIdentity.clientAuthorityOwner, new Chat.SimpleChatMessage
                     {
                         baseToken = text
                     });
@@ -217,15 +227,15 @@ namespace RoR2PVP
             }
         }
 
-        static void CashGrantTimer(uint cashAmount)
+        static void CashGrantTimerTick(uint cashAmount)
         {
-            Settings.CashGrantTimer += Time.fixedDeltaTime;
+            PVPMode.CashGrantTimer += Time.fixedDeltaTime;
 
             //Grant cash to each player
-            if (Settings.CashGrantTimer >= Settings.CashDelay)
+            if (PVPMode.CashGrantTimer >= Settings.CashDelay)
             {
                 for (int i = 0; i < PlayerCharacterMasterController.instances.Count; i++) PlayerCharacterMasterController.instances[i].master.GiveMoney(cashAmount);
-                Settings.CashGrantTimer -= Settings.CashDelay;
+                PVPMode.CashGrantTimer -= Settings.CashDelay;
             }
         }
 

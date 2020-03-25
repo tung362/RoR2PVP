@@ -16,37 +16,35 @@ namespace RoR2PVP
 {
     class Settings
     {
-        /*In-game*/
-        public static bool IsGracePeriod = true;
-        public static float GraceTimer;
-        public static float CashGrantTimer = 0;
-        public static float CurrentGraceTimeReminder;
-        public static bool PVPEnded = false;
-        public static bool UsedTeleporter = false;
-        //Unused for now
-        public static List<PVPTeamTrackerStruct> PVPTeams = new List<PVPTeamTrackerStruct>();
+        /*Assets*/
+        public static AssetBundle Assets;
+        public static AssetBundleResourcesProvider Provider;
+
+        /*Default values and registered artifact indexes for voteable mod options*/
+        public static readonly Tuple<bool, int> TeamPVPToggle = Tuple.Create(false, 100);
+        public static readonly Tuple<bool, int> RandomTeams = Tuple.Create(true, 101);
+        public static readonly Tuple<bool, int> MobSpawn = Tuple.Create(false, 102);
+        public static readonly Tuple<bool, int> BanItems = Tuple.Create(true, 103);
+        public static readonly Tuple<bool, int> CompanionsShareItems = Tuple.Create(true, 104);
+        public static readonly Tuple<bool, int> CustomPlayableCharacters = Tuple.Create(true, 105);
+        public static readonly Tuple<bool, int> CustomInteractablesSpawner = Tuple.Create(true, 106);
+        public static readonly Tuple<bool, int> UseDeathPlaneFailsafe = Tuple.Create(true, 107);
 
         /*Config*/
         //Multiplayer settings
         public static int MaxMultiplayerCount = 4;
+        public static bool Modded = true;
 
         //PVP settings
         public static float GraceTimerDuration = 120;
         public static float CashDelay = 10;
         public static uint CashGrantAmount = 50u;
         public static int RespawnsPerRound = 2;
-        public static bool RandomTeams = true;
-        public static bool CompanionsShareItems = true;
-        public static bool DisableMobSpawn = true;
-        public static bool CustomInteractablesSpawner = true;
-        public static bool UseDeathPlaneFailsafe = true;
 
         //Characters settings
-        public static bool CustomPlayableCharacters = true;
         public static List<string> PlayableCharactersList = new List<string>();
 
         //Ban item settings
-        public static bool BanItems = true;
         public static List<string> BannedItemList = new List<string>();
 
         //Interactables Spawner Settings
@@ -159,6 +157,7 @@ namespace RoR2PVP
             bannedItems.Add("NovaOnHeal");
             bannedItems.Add("ShockNearby");
             bannedItems.Add("SprintWisp");
+            bannedItems.Add("Thorns");
             //Equipment
             bannedItems.Add("Meteor");
             bannedItems.Add("BurnNearby");
@@ -167,7 +166,6 @@ namespace RoR2PVP
             bannedItems.Add("Lightning");
             bannedItems.Add("CommandMissile");
             bannedItems.Add("FireBallDash");
-            bannedItems.Add("GoldGat");
             bannedItems.Add("GoldGat");
             bannedItems.Add("DroneBackup");
             //Output all item names
@@ -195,25 +193,13 @@ namespace RoR2PVP
         {
             //Multiplayer settings
             MaxMultiplayerCount = config.Bind<int>("Multiplayer Settings", "Max Multiplayer Count", MaxMultiplayerCount, "Max amount of players that can join your game (16 max)").Value;
+            Modded = config.Bind<bool>("Multiplayer Settings", "Modded", Modded, "Set to false allows you to play with unmodded players, does not enable quickplay").Value;
 
             //PVP settings
             GraceTimerDuration = config.Bind<float>("PVP Settings", "Grace Timer Duration", GraceTimerDuration, "Grace period duration before enabling pvp in seconds").Value;
             CashDelay = config.Bind<float>("PVP Settings", "Cash Delay", CashDelay, "Cash grant delay in seconds").Value;
             CashGrantAmount = config.Bind<uint>("PVP Settings", "Cash Grant Amount", CashGrantAmount, "Amount of cash granted after each delay").Value;
             RespawnsPerRound = config.Bind<int>("PVP Settings", "Respawns Per Round", RespawnsPerRound, "Amount of free revives per round").Value;
-            RandomTeams = config.Bind<bool>("PVP Settings", "Random Teams", RandomTeams, "Shuffles team members every round").Value;
-            CompanionsShareItems = config.Bind<bool>("PVP Settings", "Companions Share Items", CompanionsShareItems, "Companions(drones, etc) share items with their owner").Value;
-            DisableMobSpawn = config.Bind<bool>("PVP Settings", "Disable Mob Spawn", DisableMobSpawn, "Disables mobs from spawning in this game mode").Value;
-            UseDeathPlaneFailsafe = config.Bind<bool>("PVP Settings", "Use Death Plane Failsafe", UseDeathPlaneFailsafe, "Creates a kill zone at height -2200 just in case the vanilla kill zone doesn't stop the player from falling off the map, prevents softlock").Value;
-
-            //Characters Settings
-            CustomPlayableCharacters = config.Bind<bool>("Characters Settings", "Custom Playable Characters", CustomPlayableCharacters, "Enables the ability to change the playable characters in the character select menu with custom picked characters when starting the game (see TeamPVPCustomPlayableCharacters.cfg)").Value;
-
-            //Ban items setting
-            BanItems = config.Bind<bool>("Ban Item Settings", "Ban Items", BanItems, "Enables the ability to ban certain items from this game mode to balance it more (see TeamPVPBannedItemList.cfg)").Value;
-
-            //Interactables Spawner Settings
-            CustomInteractablesSpawner = config.Bind<bool>("Interactables Spawner Settings", "Custom Interactables Spawner", CustomInteractablesSpawner, "Use custom interactables(chests, drones, etc) spawners instead of default ones in this game mode (See TeamPVPCustomInteractablesSpawner.cfg)").Value;
         }
 
         public static void LoadCustomPlayableCharactersConfig(string configPath)

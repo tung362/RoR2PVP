@@ -2,6 +2,12 @@
 RoR2TeamPVP is a mod that adds a team PVP game mode to the game Risk of Rain 2.  
 Note: Everything is server sided, so only host needs this mod installed
 
+(Optional: non host players can also vote on settings if they have the mod installed but isn't needed necessarily to play)
+![alt text](https://i.imgur.com/rxlknWX.png)  
+
+Also enables the hidden artifacts  
+![alt text](https://i.imgur.com/cLRsufP.png)  
+
 ### Old video example of mod in action (NOTE: a lot has been improved since):  
 https://youtu.be/UEWw_pyDfuM
 
@@ -42,8 +48,8 @@ Feel free to submit an issue here on my [github](https://github.com/tung362/RoR2
   - Uka Uka Ouuu?
 
 ### Requirements:  
-[BepInExPack 3.0.0](https://thunderstore.io/package/download/bbepis/BepInExPack/3.0.0/)  
-[R2API 2.3.7](https://thunderstore.io/package/download/tristanmcpherson/R2API/2.3.7/)  
+[BepInExPack 3.1.0](https://thunderstore.io/package/download/bbepis/BepInExPack/3.1.0/)  
+[R2API 2.4.2](https://thunderstore.io/package/download/tristanmcpherson/R2API/2.4.2/)  
 Friends :(  
 
 ### Installation:  
@@ -70,14 +76,8 @@ Friends :(
 | Cash Delay                    |            10  |
 | Cash Grant Amount             |            50  |
 | Respawns Per Round            |             2  |
-| Random Teams                  |          true  |
-| Companions Share Items        |          true  |
-| Disable Mob Spawn             |          true  |
-| Custom Interactables Spawner  |          true  |
 | Max Multiplayer Count         |             4  |
-| Ban Items                     |          true  |
-| Custom Playable Characters    |          true  |
-| Use Death Plane Failsafe      |          true  |
+| Modded                        |          true  |
 
 **`TeamPVPBannedItemList.cfg`**  
 
@@ -88,6 +88,7 @@ Friends :(
 | NovaOnHeal           |
 | ShockNearby          |
 | SprintWisp           |
+| Thorns               |
 | Meteor               |
 | BurnNearby           |
 | BFG                  |
@@ -176,10 +177,25 @@ Friends :(
 - Note to modders with custom maps: In this mod a failsafe kill zone is generated at y coord -2200 if that is a problem set `Use Death Plane Failsafe` to false in `TeamPVP.cfg`. Just keep in mind that there will be no failsafes should this be disabled.
 
 ### Credits:  
-Special thanks to my friend Riley for helping me test https://github.com/SimpleManGames
+Special thanks to my friend Riley for helping me test https://github.com/SimpleManGames  
+Special thanks to my friend Justin for helping me test https://github.com/Sethix  
 
 ### Change log:  
-**1.1.3 (Current)**  
+**1.3.0 (Current)**  
+- Updated to BepInExPack 3.1.0 and R2API 2.4.2  
+- Added a votable config system for certain mod settings during lobby  
+- Made the votable artifacts visible during lobby  
+- Added item "Razorwire" to the default item ban list  
+- Re-enabled config for removing the "Mod" build id for easy lobby hosting with non modded players (does not enable quickplay)  
+- Fixed bug where players were able to spawn infinite fireworks using the teleporter  
+- Migrated config entry "Random Teams" over to the votable config system  
+- Migrated config entry "Companions Share Items" over to the votable config system  
+- Migrated config entry "Disable Mob Spawn" over to the votable config system  
+- Migrated config entry "Custom Interactables Spawner" over to the votable config system  
+- Migrated config entry "Ban Items" over to the votable config system  
+- Migrated config entry "Custom Playable Characters" over to the votable config system  
+- Migrated config entry "Use Death Plane Failsafe" over to the votable config system  
+**1.1.3**  
 - Updated to R2API 2.3.7  
 - Added equipment "The Back-up" to the default item ban list  
 - Added character slot "Acrid" to the Custom Playable Characters config  
