@@ -20,7 +20,7 @@ namespace RoR2PVP
         public static AssetBundle Assets;
         public static AssetBundleResourcesProvider Provider;
 
-        /*Default values and registered artifact indexes for voteable mod options*/
+        /*Default values and registered vote indexes for voteable mod options*/
         public static readonly Tuple<bool, int> TeamPVPToggle = Tuple.Create(false, 100);
         public static readonly Tuple<bool, int> RandomTeams = Tuple.Create(true, 101);
         public static readonly Tuple<bool, int> MobSpawn = Tuple.Create(false, 102);
