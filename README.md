@@ -89,6 +89,7 @@ Friends :(
 | ShockNearby          |
 | SprintWisp           |
 | Thorns               |
+| Tonic                |
 | Meteor               |
 | BurnNearby           |
 | BFG                  |
