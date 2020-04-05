@@ -182,12 +182,12 @@ Special thanks to my friend Justin for helping me test https://github.com/Sethix
 
 ### Change log:  
 **1.3.5 (Current)**  
-- Updated to BepInExPack 3.2.0 and R2API 2.4.10
-- Mobs and pvp team 2 are no longer in the same team!
-- Added full unlock of artifacts
-- Added item "Spinel Tonic" to the default item ban list
-- Removed debug code left in from the previous build
-- Fixed bug where some areas would result in a softlocked due to destroying essential gameobjects
+- Updated to BepInExPack 3.2.0 and R2API 2.4.10  
+- Mobs and pvp team 2 are no longer in the same team!  
+- Added full unlock of artifacts  
+- Added item "Spinel Tonic" to the default item ban list  
+- Removed debug code left in from the previous build  
+- Fixed bug where some areas would result in a softlocked due to destroying essential gameobjects  
 **1.3.0**  
 - Updated to BepInExPack 3.1.0 and R2API 2.4.2  
 - Added a votable config system for certain mod settings during lobby  
