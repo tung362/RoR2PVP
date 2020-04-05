@@ -3,10 +3,10 @@ RoR2TeamPVP is a mod that adds a team PVP game mode to the game Risk of Rain 2.
 Note: Everything is server sided, so only host needs this mod installed
 
 (Optional: non host players can also vote on settings if they have the mod installed but isn't needed necessarily to play)
-![alt text](https://i.imgur.com/rxlknWX.png)  
+![alt text](https://i.imgur.com/2871Zif.png)  
 
-Also enables the hidden artifacts  
-![alt text](https://i.imgur.com/cLRsufP.png)  
+Also unlocks all artifacts  
+![alt text](https://i.imgur.com/SQzJkPB.png)  
 
 ### Old video example of mod in action (NOTE: a lot has been improved since):  
 https://youtu.be/UEWw_pyDfuM
@@ -48,8 +48,8 @@ Feel free to submit an issue here on my [github](https://github.com/tung362/RoR2
   - Uka Uka Ouuu?
 
 ### Requirements:  
-[BepInExPack 3.1.0](https://thunderstore.io/package/download/bbepis/BepInExPack/3.1.0/)  
-[R2API 2.4.2](https://thunderstore.io/package/download/tristanmcpherson/R2API/2.4.2/)  
+[BepInExPack 3.2.0](https://thunderstore.io/package/download/bbepis/BepInExPack/3.2.0/)  
+[R2API 2.4.10](https://thunderstore.io/package/download/tristanmcpherson/R2API/2.4.10/)  
 Friends :(  
 
 ### Installation:  
@@ -181,7 +181,14 @@ Special thanks to my friend Riley for helping me test https://github.com/SimpleM
 Special thanks to my friend Justin for helping me test https://github.com/Sethix  
 
 ### Change log:  
-**1.3.0 (Current)**  
+**1.3.5 (Current)**  
+- Updated to BepInExPack 3.2.0 and R2API 2.4.10
+- Mobs and pvp team 2 are no longer in the same team!
+- Added full unlock of artifacts
+- Added item "Spinel Tonic" to the default item ban list
+- Removed debug code left in from the previous build
+- Fixed bug where some areas would result in a softlocked due to destroying essential gameobjects
+**1.3.0**  
 - Updated to BepInExPack 3.1.0 and R2API 2.4.2  
 - Added a votable config system for certain mod settings during lobby  
 - Made the votable artifacts visible during lobby  
