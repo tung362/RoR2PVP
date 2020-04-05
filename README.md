@@ -188,7 +188,7 @@ Special thanks to my friend Justin for helping me test https://github.com/Sethix
 - Added full unlock of artifacts  
 - Added item "Spinel Tonic" to the default item ban list  
 - Removed debug code left in from the previous build  
-- Fixed bug where some areas would result in a softlocked due to destroying essential gameobjects  
+- Fixed bug where some areas would result in a softlock due to destroying essential gameobjects  
 **1.3.0**  
 - Updated to BepInExPack 3.1.0 and R2API 2.4.2  
 - Added a votable config system for certain mod settings during lobby  
