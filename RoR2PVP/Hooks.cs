@@ -29,36 +29,36 @@ namespace RoR2PVP
             RuleCategoryDef teamPVPHeader = VoteAPI.AddVoteHeader("Team PVP", new Color(1.0f, 0.0f, 0.0f, 1.0f), false);
 
             //Selection
-            RuleDef teamPVPSelection = VoteAPI.AddVoteSelection(teamPVPHeader, "Team PVP", new ChoiceMenu("Team PVP On", new Color(0.0f, 1.0f, 0.0f, 0.4f), "Enables Mod", Color.black, "@TeamPVP:Assets/Resources/UI/TeamPVPSelected.png", "", "artifact_teampvp", Settings.TeamPVPToggle.Item2));
-            VoteAPI.AddVoteChoice(teamPVPSelection, new ChoiceMenu("Team PVP Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Disables Mod", Color.black, "@TeamPVP:Assets/Resources/UI/TeamPVPDeselected.png", "Materials/UI/matRuleChoiceOff", "artifact_teampvp", -1));
+            RuleDef teamPVPSelection = VoteAPI.AddVoteSelection(teamPVPHeader, "Team PVP", new ChoiceMenu("Team PVP On", new Color(0.0f, 1.0f, 0.0f, 0.4f), "Enables Mod", Color.black, "@TeamPVP:Assets/Resources/UI/TeamPVPSelected.png", "artifact_teampvp", Settings.TeamPVPToggle.Item2));
+            VoteAPI.AddVoteChoice(teamPVPSelection, new ChoiceMenu("Team PVP Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Disables Mod", Color.black, "@TeamPVP:Assets/Resources/UI/TeamPVPDeselected.png", "artifact_teampvp", -1));
             teamPVPSelection.defaultChoiceIndex = Settings.TeamPVPToggle.Item1 ? 0 : 1;
 
-            RuleDef randomTeamsSelection = VoteAPI.AddVoteSelection(teamPVPHeader, "Random Teams", new ChoiceMenu("Random Teams On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Teams will be shuffled every round", Color.black, "@TeamPVP:Assets/Resources/UI/RandomTeamsSelected.png", "", "artifact_teampvp", Settings.RandomTeams.Item2));
-            VoteAPI.AddVoteChoice(randomTeamsSelection, new ChoiceMenu("Random Teams Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Teams will stay the same every round", Color.black, "@TeamPVP:Assets/Resources/UI/RandomTeamsDeselected.png", "Materials/UI/matRuleChoiceOff", "artifact_teampvp", -1));
+            RuleDef randomTeamsSelection = VoteAPI.AddVoteSelection(teamPVPHeader, "Random Teams", new ChoiceMenu("Random Teams On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Teams will be shuffled every round", Color.black, "@TeamPVP:Assets/Resources/UI/RandomTeamsSelected.png", "artifact_teampvp", Settings.RandomTeams.Item2));
+            VoteAPI.AddVoteChoice(randomTeamsSelection, new ChoiceMenu("Random Teams Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Teams will stay the same every round", Color.black, "@TeamPVP:Assets/Resources/UI/RandomTeamsDeselected.png", "artifact_teampvp", -1));
             randomTeamsSelection.defaultChoiceIndex = Settings.RandomTeams.Item1 ? 0 : 1;
 
-            RuleDef mobSpawnSelection = VoteAPI.AddVoteSelection(teamPVPHeader, "Mob Spawn", new ChoiceMenu("Mob Spawn On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Mobs will spawn", Color.black, "@TeamPVP:Assets/Resources/UI/MobSpawnSelected.png", "", "artifact_teampvp", Settings.MobSpawn.Item2));
-            VoteAPI.AddVoteChoice(mobSpawnSelection, new ChoiceMenu("Mob Spawn Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Mobs will not spawn", Color.black, "@TeamPVP:Assets/Resources/UI/MobSpawnDeselected.png", "Materials/UI/matRuleChoiceOff", "artifact_teampvp", -1));
+            RuleDef mobSpawnSelection = VoteAPI.AddVoteSelection(teamPVPHeader, "Mob Spawn", new ChoiceMenu("Mob Spawn On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Mobs will spawn", Color.black, "@TeamPVP:Assets/Resources/UI/MobSpawnSelected.png", "artifact_teampvp", Settings.MobSpawn.Item2));
+            VoteAPI.AddVoteChoice(mobSpawnSelection, new ChoiceMenu("Mob Spawn Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Mobs will not spawn", Color.black, "@TeamPVP:Assets/Resources/UI/MobSpawnDeselected.png", "artifact_teampvp", -1));
             mobSpawnSelection.defaultChoiceIndex = Settings.MobSpawn.Item1 ? 0 : 1;
 
-            RuleDef banItemsSelection = VoteAPI.AddVoteSelection(teamPVPHeader, "Ban Items", new ChoiceMenu("Ban Items On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Banned items configured in the config will be blacklisted", Color.black, "@TeamPVP:Assets/Resources/UI/BanItemsSelected.png", "", "artifact_teampvp", Settings.BanItems.Item2));
-            VoteAPI.AddVoteChoice(banItemsSelection, new ChoiceMenu("Ban Items Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Banned Items will not be blacklisted", Color.black, "@TeamPVP:Assets/Resources/UI/BanItemsDeselected.png", "Materials/UI/matRuleChoiceOff", "artifact_teampvp", -1));
+            RuleDef banItemsSelection = VoteAPI.AddVoteSelection(teamPVPHeader, "Ban Items", new ChoiceMenu("Ban Items On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Banned items configured in the config will be blacklisted", Color.black, "@TeamPVP:Assets/Resources/UI/BanItemsSelected.png", "artifact_teampvp", Settings.BanItems.Item2));
+            VoteAPI.AddVoteChoice(banItemsSelection, new ChoiceMenu("Ban Items Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Banned Items will not be blacklisted", Color.black, "@TeamPVP:Assets/Resources/UI/BanItemsDeselected.png", "artifact_teampvp", -1));
             banItemsSelection.defaultChoiceIndex = Settings.BanItems.Item1 ? 0 : 1;
 
-            RuleDef companionsShareItemsSelection = VoteAPI.AddVoteSelection(teamPVPHeader, "Companions Share Items", new ChoiceMenu("Companions Share Items On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Items picked up by the player will be shared with their drones etc", Color.black, "@TeamPVP:Assets/Resources/UI/CompanionsShareItemsSelected.png", "", "artifact_teampvp", Settings.CompanionsShareItems.Item2));
-            VoteAPI.AddVoteChoice(companionsShareItemsSelection, new ChoiceMenu("Companions Share Items Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Items will not be shared with drones etc", Color.black, "@TeamPVP:Assets/Resources/UI/CompanionsShareItemsDeselected.png", "Materials/UI/matRuleChoiceOff", "artifact_teampvp", -1));
+            RuleDef companionsShareItemsSelection = VoteAPI.AddVoteSelection(teamPVPHeader, "Companions Share Items", new ChoiceMenu("Companions Share Items On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Items picked up by the player will be shared with their drones etc", Color.black, "@TeamPVP:Assets/Resources/UI/CompanionsShareItemsSelected.png", "artifact_teampvp", Settings.CompanionsShareItems.Item2));
+            VoteAPI.AddVoteChoice(companionsShareItemsSelection, new ChoiceMenu("Companions Share Items Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Items will not be shared with drones etc", Color.black, "@TeamPVP:Assets/Resources/UI/CompanionsShareItemsDeselected.png", "artifact_teampvp", -1));
             companionsShareItemsSelection.defaultChoiceIndex = Settings.CompanionsShareItems.Item1 ? 0 : 1;
 
-            RuleDef customPlayableCharactersSelection = VoteAPI.AddVoteSelection(teamPVPHeader, "Custom Playable Characters", new ChoiceMenu("Custom Playable Characters On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Play custom characters configured in the config", Color.black, "@TeamPVP:Assets/Resources/UI/CustomPlayableCharactersSelected.png", "", "artifact_teampvp", Settings.CustomPlayableCharacters.Item2));
-            VoteAPI.AddVoteChoice(customPlayableCharactersSelection, new ChoiceMenu("Custom Playable Characters Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Play the default vanilla characters (unbalanced)", Color.black, "@TeamPVP:Assets/Resources/UI/CustomPlayableCharactersDeselected.png", "Materials/UI/matRuleChoiceOff", "artifact_teampvp", -1));
+            RuleDef customPlayableCharactersSelection = VoteAPI.AddVoteSelection(teamPVPHeader, "Custom Playable Characters", new ChoiceMenu("Custom Playable Characters On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Play custom characters configured in the config", Color.black, "@TeamPVP:Assets/Resources/UI/CustomPlayableCharactersSelected.png", "artifact_teampvp", Settings.CustomPlayableCharacters.Item2));
+            VoteAPI.AddVoteChoice(customPlayableCharactersSelection, new ChoiceMenu("Custom Playable Characters Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Play the default vanilla characters (unbalanced)", Color.black, "@TeamPVP:Assets/Resources/UI/CustomPlayableCharactersDeselected.png", "artifact_teampvp", -1));
             customPlayableCharactersSelection.defaultChoiceIndex = Settings.CustomPlayableCharacters.Item1 ? 0 : 1;
 
-            RuleDef customInteractablesSpawnerSelection = VoteAPI.AddVoteSelection(teamPVPHeader, "Custom Interactables Spawner", new ChoiceMenu("Custom Interactables Spawner On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Spawn custom objects(chests, drones, etc) at custom rates configured in the config", Color.black, "@TeamPVP:Assets/Resources/UI/CustomInteractablesSpawnerSelected.png", "", "artifact_teampvp", Settings.CustomInteractablesSpawner.Item2));
-            VoteAPI.AddVoteChoice(customInteractablesSpawnerSelection, new ChoiceMenu("Custom Interactables Spawner Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Spawn objects(chests, drones, etc) normally as vanilla", Color.black, "@TeamPVP:Assets/Resources/UI/CustomInteractablesSpawnerDeselected.png", "Materials/UI/matRuleChoiceOff", "artifact_teampvp", -1));
+            RuleDef customInteractablesSpawnerSelection = VoteAPI.AddVoteSelection(teamPVPHeader, "Custom Interactables Spawner", new ChoiceMenu("Custom Interactables Spawner On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Spawn custom objects(chests, drones, etc) at custom rates configured in the config", Color.black, "@TeamPVP:Assets/Resources/UI/CustomInteractablesSpawnerSelected.png", "artifact_teampvp", Settings.CustomInteractablesSpawner.Item2));
+            VoteAPI.AddVoteChoice(customInteractablesSpawnerSelection, new ChoiceMenu("Custom Interactables Spawner Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Spawn objects(chests, drones, etc) normally as vanilla", Color.black, "@TeamPVP:Assets/Resources/UI/CustomInteractablesSpawnerDeselected.png", "artifact_teampvp", -1));
             customInteractablesSpawnerSelection.defaultChoiceIndex = Settings.CustomInteractablesSpawner.Item1 ? 0 : 1;
 
-            RuleDef useDeathPlaneFailsafeSelection = VoteAPI.AddVoteSelection(teamPVPHeader, "Use Death Plane Failsafe", new ChoiceMenu("Use Death Plane Failsafe On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Force players to die should they fall off the map to prevent softlock", Color.black, "@TeamPVP:Assets/Resources/UI/UseDeathPlaneFailsafeSelected.png", "", "artifact_teampvp", Settings.UseDeathPlaneFailsafe.Item2));
-            VoteAPI.AddVoteChoice(useDeathPlaneFailsafeSelection, new ChoiceMenu("Use Death Plane Failsafe Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Disables the death plane. Only turn off if your using a custom map!", Color.black, "@TeamPVP:Assets/Resources/UI/UseDeathPlaneFailsafeDeselected.png", "Materials/UI/matRuleChoiceOff", "artifact_teampvp", -1));
+            RuleDef useDeathPlaneFailsafeSelection = VoteAPI.AddVoteSelection(teamPVPHeader, "Use Death Plane Failsafe", new ChoiceMenu("Use Death Plane Failsafe On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Force players to die should they fall off the map to prevent softlock", Color.black, "@TeamPVP:Assets/Resources/UI/UseDeathPlaneFailsafeSelected.png", "artifact_teampvp", Settings.UseDeathPlaneFailsafe.Item2));
+            VoteAPI.AddVoteChoice(useDeathPlaneFailsafeSelection, new ChoiceMenu("Use Death Plane Failsafe Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Disables the death plane. Only turn off if your using a custom map!", Color.black, "@TeamPVP:Assets/Resources/UI/UseDeathPlaneFailsafeDeselected.png", "artifact_teampvp", -1));
             useDeathPlaneFailsafeSelection.defaultChoiceIndex = Settings.UseDeathPlaneFailsafe.Item1 ? 0 : 1;
         }
 
@@ -103,6 +103,7 @@ namespace RoR2PVP
             On.RoR2.SceneDirector.PopulateScene += CustomSpawner;
             On.RoR2.Run.BuildDropTable += BanItems;
             On.RoR2.GlobalEventManager.OnInteractionBegin += PreventTeleporterFireworks;
+            On.RoR2.CharacterAI.BaseAI.FindEnemyHurtBox += CustomAITargetFilter;
         }
 
         public static void UnsetExtraHooks()
@@ -119,6 +120,7 @@ namespace RoR2PVP
             On.RoR2.SceneDirector.PopulateScene -= CustomSpawner;
             On.RoR2.Run.BuildDropTable -= BanItems;
             On.RoR2.GlobalEventManager.OnInteractionBegin -= PreventTeleporterFireworks;
+            On.RoR2.CharacterAI.BaseAI.FindEnemyHurtBox -= CustomAITargetFilter;
         }
 
         #region Init
@@ -365,7 +367,7 @@ namespace RoR2PVP
                 {
                     for (int i = 0; i < PlayerCharacterMasterController.instances.Count; i++)
                     {
-                        if (PlayerCharacterMasterController.instances[i].master.alive && PlayerCharacterMasterController.instances[i].master.GetBody() != null)
+                        if (!PlayerCharacterMasterController.instances[i].master.IsDeadAndOutOfLivesServer() && PlayerCharacterMasterController.instances[i].master.GetBody() != null)
                         {
                             if (body == PlayerCharacterMasterController.instances[i].master.GetBody())
                             {
@@ -486,6 +488,24 @@ namespace RoR2PVP
         {
             TeleporterInteraction teleporter = interactableObject.GetComponent<TeleporterInteraction>();
             if (!teleporter) orig(self, interactor, interactable, interactableObject);
+        }
+
+        static HurtBox CustomAITargetFilter(On.RoR2.CharacterAI.BaseAI.orig_FindEnemyHurtBox orig, RoR2.CharacterAI.BaseAI self, float maxDistance, bool full360Vision, bool filterByLoS)
+        {
+            if (!self.body) return null;
+            BullseyeSearch enemySearch = self.GetFieldValue<BullseyeSearch>("enemySearch");
+            enemySearch.viewer = self.body;
+            enemySearch.teamMaskFilter = TeamMask.all;
+            enemySearch.teamMaskFilter.RemoveTeam(self.master.teamIndex);
+            enemySearch.sortMode = BullseyeSearch.SortMode.Distance;
+            enemySearch.minDistanceFilter = 0f;
+            enemySearch.maxDistanceFilter = maxDistance;
+            enemySearch.searchOrigin = self.bodyInputBank.aimOrigin;
+            enemySearch.searchDirection = self.bodyInputBank.aimDirection;
+            enemySearch.maxAngleFilter = (full360Vision ? 180f : 90f);
+            enemySearch.filterByLoS = filterByLoS;
+            enemySearch.RefreshCandidates();
+            return enemySearch.GetResults().FirstOrDefault<HurtBox>();
         }
         #endregion
     }

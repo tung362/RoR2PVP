@@ -1,8 +1,7 @@
-R2API 2.4.2
-BepInExPack 3.1.0
+R2API 2.4.10
+BepInExPack 3.2.0
 
 free for all
-fix mobs
 
 TeamComponent - sets the teams for players
 TeamManager - keeps track of team's data

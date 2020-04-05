@@ -13,7 +13,7 @@ using APIExtension.VoteAPI;
 
 namespace RoR2PVP
 {
-    [BepInPlugin("TeamPVP", "Team PVP Mode", "1.3.0")]
+    [BepInPlugin("TeamPVP", "Team PVP Mode", "1.3.5")]
     [R2APISubmoduleDependency(new string[]
     {
         "AssetPlus",
@@ -45,20 +45,6 @@ namespace RoR2PVP
             Settings.LoadCustomInteractablesSpawnerConfig(new ConfigFile(ConfigRootPath + "TeamPVPCustomInteractablesSpawner.cfg", true));
             /*Setup*/
             Hooks.SetupHook();
-        }
-
-        public void Update()
-        {
-            if(Input.GetKeyDown(KeyCode.K))
-            {
-                List<PlayerCharacterMasterController> players = Enumerable.ToList<PlayerCharacterMasterController>(PlayerCharacterMasterController.instances);
-                Debug.Log("Player Count: " + players.Count);
-                if (players[1].master.alive && players[1].master.GetBody() != null)
-                {
-                    players[1].master.teamIndex = TeamIndex.Monster;
-                    players[1].master.GetBody().teamComponent.teamIndex = TeamIndex.Monster;
-                }
-            }
         }
     }
 }

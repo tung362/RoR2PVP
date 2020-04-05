@@ -11,6 +11,7 @@ using R2API;
 using R2API.Utils;
 using RoR2;
 using RoR2.CharacterAI;
+using EntityStates;
 using APIExtension.VoteAPI;
 using RoR2PVP.UnityScripts;
 
@@ -80,7 +81,7 @@ namespace RoR2PVP
                         if(VoteAPI.VoteResults.HasVote(Settings.RandomTeams.Item2)) Shuffle<PlayerCharacterMasterController>(players);
                         for (int i = 0; i < players.Count; i++)
                         {
-                            if (players[i].master.alive && players[i].master.GetBody() != null)
+                            if (!players[i].master.IsDeadAndOutOfLivesServer() && players[i].master.GetBody() != null)
                             {
                                 //Split players into 2 teams
                                 if (i % 2 == 0)
@@ -91,9 +92,9 @@ namespace RoR2PVP
                                 }
                                 else
                                 {
-                                    players[i].master.teamIndex = TeamIndex.Monster;
-                                    players[i].master.GetBody().teamComponent.teamIndex = TeamIndex.Monster;
-                                    PVPMode.PVPTeams.Add(new PVPTeamTrackerStruct(players[i].GetDisplayName(), TeamIndex.Monster));
+                                    players[i].master.teamIndex = TeamIndex.Neutral;
+                                    players[i].master.GetBody().teamComponent.teamIndex = TeamIndex.Neutral;
+                                    PVPMode.PVPTeams.Add(new PVPTeamTrackerStruct(players[i].GetDisplayName(), TeamIndex.Neutral));
                                 }
                                 //Grant respawns
                                 if(Settings.RespawnsPerRound != 0)
@@ -126,11 +127,15 @@ namespace RoR2PVP
                             AnnounceWinningTeam(survivingTeamIndex);
                             ChangeTeams(TeamIndex.Player);
                             UpdateCompanionTeams();
-                            TeleporterInteraction.instance.NetworkactivationStateInternal = 2u;
-                            TeleporterInteraction.instance.remainingChargeTimer = 1;
-                            TeleporterInteraction.instance.bonusDirector = null;
-                            TeleporterInteraction.instance.bossDirector = null;
-                            //PingTeleporter();
+                            if(TeleporterInteraction.instance)
+                            {
+                                Type chargingState = typeof(TeleporterInteraction).GetNestedType("ChargingState", BindingFlags.NonPublic);
+                                object chargingStateInstance = Activator.CreateInstance(chargingState);
+                                TeleporterInteraction.instance.mainStateMachine.state.outer.SetNextState((EntityState)chargingStateInstance);
+                                TeleporterInteraction.instance.holdoutZoneController.Network_charge = 0.98f;
+                                TeleporterInteraction.instance.bonusDirector = null;
+                                TeleporterInteraction.instance.bossDirector = null;
+                            }
                             PVPMode.PVPEnded = true;
                         }
                     }
@@ -195,7 +200,7 @@ namespace RoR2PVP
         {
             for (int i = listToFilter.Count - 1; i >= 0; i--)
             {
-                if (!listToFilter[i].master.alive) listToFilter.RemoveAt(i);
+                if (listToFilter[i].master.IsDeadAndOutOfLivesServer()) listToFilter.RemoveAt(i);
             }
         }
 
@@ -204,12 +209,12 @@ namespace RoR2PVP
             //PM ally list
             for (int i = 0; i < PlayerCharacterMasterController.instances.Count; i++)
             {
-                if (PlayerCharacterMasterController.instances[i].master.alive && PlayerCharacterMasterController.instances[i].master.GetBody() != null)
+                if (!PlayerCharacterMasterController.instances[i].master.IsDeadAndOutOfLivesServer() && PlayerCharacterMasterController.instances[i].master.GetBody() != null)
                 {
                     string text = Util.GenerateColoredString("Your allies: ", new Color32(0, 255, 255, 255));
                     for (int j = 0; j < PlayerCharacterMasterController.instances.Count; j++)
                     {
-                        if (PlayerCharacterMasterController.instances[j].master.alive && PlayerCharacterMasterController.instances[j].master.GetBody() != null)
+                        if (!PlayerCharacterMasterController.instances[j].master.IsDeadAndOutOfLivesServer() && PlayerCharacterMasterController.instances[j].master.GetBody() != null)
                         {
                             if (PlayerCharacterMasterController.instances[i].master != PlayerCharacterMasterController.instances[j].master &&
                                 PlayerCharacterMasterController.instances[i].master.GetBody().teamComponent.teamIndex == PlayerCharacterMasterController.instances[j].master.GetBody().teamComponent.teamIndex)
@@ -244,7 +249,7 @@ namespace RoR2PVP
             for (int i = 0; i < PlayerCharacterMasterController.instances.Count; i++)
             {
                 PlayerCharacterMasterController.instances[i].master.teamIndex = teamIndex;
-                if (PlayerCharacterMasterController.instances[i].master.alive && PlayerCharacterMasterController.instances[i].master.GetBody() != null)
+                if (!PlayerCharacterMasterController.instances[i].master.IsDeadAndOutOfLivesServer() && PlayerCharacterMasterController.instances[i].master.GetBody() != null)
                 {
                     PlayerCharacterMasterController.instances[i].master.GetBody().teamComponent.teamIndex = teamIndex;
                 }
@@ -269,10 +274,15 @@ namespace RoR2PVP
 
         static void DestroyAllPurchaseables()
         {
-            PurchaseInteraction[] array2 = GameObject.FindObjectsOfType<PurchaseInteraction>();
-            for (int n = 0; n < array2.Length; n++)
+            PurchaseInteraction[] purchaseables = GameObject.FindObjectsOfType<PurchaseInteraction>();
+            for (int i = 0; i < purchaseables.Length; i++)
             {
-                NetworkServer.Destroy(array2[n].gameObject);
+                if(purchaseables[i].costType == CostTypeIndex.Money ||
+                   purchaseables[i].costType == CostTypeIndex.PercentHealth ||
+                   purchaseables[i].costType == CostTypeIndex.WhiteItem ||
+                   purchaseables[i].costType == CostTypeIndex.GreenItem ||
+                   purchaseables[i].costType == CostTypeIndex.RedItem ||
+                   purchaseables[i].costType == CostTypeIndex.LunarCoin) NetworkServer.Destroy(purchaseables[i].gameObject);
             }
         }
 
@@ -286,12 +296,12 @@ namespace RoR2PVP
                 //GetBody() null on dc
                 //Master still exists even after dc
                 //Isalive is false when player dc or full dead
-                if (PlayerCharacterMasterController.instances[i].master.alive && PlayerCharacterMasterController.instances[i].master.GetBody())
+                if (!PlayerCharacterMasterController.instances[i].master.IsDeadAndOutOfLivesServer() && PlayerCharacterMasterController.instances[i].master.GetBody())
                 {
-                    if (survivingTeamIndex == TeamIndex.None) survivingTeamIndex = PlayerCharacterMasterController.instances[i].master.GetBody().teamComponent.teamIndex;
+                    if (survivingTeamIndex == TeamIndex.None) survivingTeamIndex = PlayerCharacterMasterController.instances[i].master.teamIndex;
                     else
                     {
-                        if (survivingTeamIndex != PlayerCharacterMasterController.instances[i].master.GetBody().teamComponent.teamIndex)
+                        if (survivingTeamIndex != PlayerCharacterMasterController.instances[i].master.teamIndex)
                         {
                             allDead = false;
                             break;
@@ -311,10 +321,10 @@ namespace RoR2PVP
                 case TeamIndex.Player:
                     str = "Team 1";
                     break;
-                case TeamIndex.Monster:
+                case TeamIndex.Neutral:
                     str = "Team 2";
                     break;
-                case TeamIndex.Neutral:
+                case TeamIndex.Monster:
                     str = "Team 3";
                     break;
                 default:
@@ -373,7 +383,7 @@ namespace RoR2PVP
         {
             for (int i = 0; i < PlayerCharacterMasterController.instances.Count; i++)
             {
-                if (PlayerCharacterMasterController.instances[i].master.alive && PlayerCharacterMasterController.instances[i].master.GetBody() != null)
+                if (!PlayerCharacterMasterController.instances[i].master.IsDeadAndOutOfLivesServer() && PlayerCharacterMasterController.instances[i].master.GetBody() != null)
                 {
                     if(PlayerCharacterMasterController.instances[i].master.GetBody().transform.position.y <= -2200) PlayerCharacterMasterController.instances[i].master.GetBody().healthComponent.Suicide();
                 }

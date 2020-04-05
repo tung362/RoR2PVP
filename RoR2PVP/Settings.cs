@@ -158,6 +158,7 @@ namespace RoR2PVP
             bannedItems.Add("ShockNearby");
             bannedItems.Add("SprintWisp");
             bannedItems.Add("Thorns");
+            bannedItems.Add("Tonic");
             //Equipment
             bannedItems.Add("Meteor");
             bannedItems.Add("BurnNearby");

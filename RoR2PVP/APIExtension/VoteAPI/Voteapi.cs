@@ -9,7 +9,7 @@ using RoR2;
 namespace APIExtension.VoteAPI
 {
     /// <summary>
-    /// Unoffical api implementing a voting system to multiplayer and singleplayer lobbies created for ror2teampvp
+    /// Unofficial api implementing a voting system to multiplayer and singleplayer lobbies created for ror2teampvp
     /// Works regardless of other players having vanilla or modded clients over the network with no desync errors
     /// Send me a message if you'd like a public version for your mod on https://github.com/tung362
     /// Does not yet fully support other mods
@@ -83,13 +83,13 @@ namespace APIExtension.VoteAPI
             RuleCategoryDef dummyHeader = VoteAPI.AddVoteHeader("Dummy", new Color(0.0f, 0.0f, 0.0f, 1.0f), true);
             RegisterVoteHeader(dummyHeader);
 
-            RuleDef dummySelection1 = VoteAPI.AddVoteSelection(dummyHeader, "Dummy1", new ChoiceMenu("Dummy1 On", new Color(0.0f, 0.0f, 0.0f, 0.4f), "", Color.black, "Textures/ArtifactIcons/texCommandSmallSelected", "", "artifact_dummy", -1));
-            VoteAPI.AddVoteChoice(dummySelection1, new ChoiceMenu("Dummy1 Off", new Color(0.0f, 0.0f, 0.0f, 0.4f), "", Color.black, "Textures/ArtifactIcons/texCommandSmallDeselected", "Materials/UI/matRuleChoiceOff", "artifact_dummy", -1));
+            RuleDef dummySelection1 = VoteAPI.AddVoteSelection(dummyHeader, "Dummy1", new ChoiceMenu("Dummy1 On", new Color(0.0f, 0.0f, 0.0f, 0.4f), "", Color.black, "Textures/ArtifactIcons/texCommandSmallSelected", "artifact_dummy", -1));
+            VoteAPI.AddVoteChoice(dummySelection1, new ChoiceMenu("Dummy1 Off", new Color(0.0f, 0.0f, 0.0f, 0.4f), "", Color.black, "Textures/ArtifactIcons/texCommandSmallDeselected", "artifact_dummy", -1));
             dummySelection1.defaultChoiceIndex = 0;
             RegisterVoteSelection(dummySelection1);
 
-            RuleDef dummySelection2 = VoteAPI.AddVoteSelection(dummyHeader, "Dummy2", new ChoiceMenu("Dummy2 On", new Color(0.0f, 0.0f, 0.0f, 0.4f), "", Color.black, "Textures/ArtifactIcons/texCommandSmallSelected", "", "artifact_dummy", -1));
-            VoteAPI.AddVoteChoice(dummySelection2, new ChoiceMenu("Dummy2 Off", new Color(0.0f, 0.0f, 0.0f, 0.4f), "", Color.black, "Textures/ArtifactIcons/texCommandSmallDeselected", "Materials/UI/matRuleChoiceOff", "artifact_dummy", -1));
+            RuleDef dummySelection2 = VoteAPI.AddVoteSelection(dummyHeader, "Dummy2", new ChoiceMenu("Dummy2 On", new Color(0.0f, 0.0f, 0.0f, 0.4f), "", Color.black, "Textures/ArtifactIcons/texCommandSmallSelected", "artifact_dummy", -1));
+            VoteAPI.AddVoteChoice(dummySelection2, new ChoiceMenu("Dummy2 Off", new Color(0.0f, 0.0f, 0.0f, 0.4f), "", Color.black, "Textures/ArtifactIcons/texCommandSmallDeselected", "artifact_dummy", -1));
             dummySelection2.defaultChoiceIndex = 0;
             RegisterVoteSelection(dummySelection2);
         }
@@ -288,7 +288,6 @@ namespace APIExtension.VoteAPI
             choice.tooltipBodyToken = choiceMenu.TooltipBody;
             choice.tooltipBodyColor = choiceMenu.TooltipBodyColor;
             choice.spritePath = choiceMenu.IconPath;
-            choice.materialPath = choiceMenu.MaterialPath;
             choice.unlockableName = choiceMenu.UnlockableName;
             choice.VoteIndex = choiceMenu.ChoiceIndex;
         }
