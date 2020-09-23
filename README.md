@@ -110,8 +110,8 @@ Friends :(
 | Character slots | Default custom characters |
 | --------------- | ------------------------- |
 | commando slot   |             CommandoBody  |
-| MUL-T slot      |             CommandoBody  |
 | Huntress slot   |             CommandoBody  |
+| MUL-T slot      |             CommandoBody  |
 | Engineer slot   |               BanditBody  |
 | Artificer slot  |               BanditBody  |
 | Mercenary slot  |               BanditBody  |
