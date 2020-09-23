@@ -41,6 +41,9 @@ namespace RoR2PVP
         public static uint CashGrantAmount = 50u;
         public static int RespawnsPerRound = 2;
 
+        //Debug settings
+        public static bool UnlockAll = false;
+
         //Characters settings
         public static List<string> PlayableCharactersList = new List<string>();
 
@@ -111,10 +114,10 @@ namespace RoR2PVP
             bodiesList.Add("# Custom playable character for Commando slot");
             bodiesList.Add("CommandoBody");
             bodiesList.Add("");
-            bodiesList.Add("# Custom playable character for MUL-T slot");
+            bodiesList.Add("# Custom playable character for Huntress slot");
             bodiesList.Add("CommandoBody");
             bodiesList.Add("");
-            bodiesList.Add("# Custom playable character for Huntress slot");
+            bodiesList.Add("# Custom playable character for MUL-T slot");
             bodiesList.Add("CommandoBody");
             bodiesList.Add("");
             bodiesList.Add("# Custom playable character for Engineer slot");
@@ -133,6 +136,9 @@ namespace RoR2PVP
             bodiesList.Add("SniperBody");
             bodiesList.Add("");
             bodiesList.Add("# Custom playable character for Acrid slot");
+            bodiesList.Add("SniperBody");
+            bodiesList.Add("");
+            bodiesList.Add("# Custom playable character for Captain slot");
             bodiesList.Add("SniperBody");
             bodiesList.Add("");
             //Output all body names
@@ -201,6 +207,9 @@ namespace RoR2PVP
             CashDelay = config.Bind<float>("PVP Settings", "Cash Delay", CashDelay, "Cash grant delay in seconds").Value;
             CashGrantAmount = config.Bind<uint>("PVP Settings", "Cash Grant Amount", CashGrantAmount, "Amount of cash granted after each delay").Value;
             RespawnsPerRound = config.Bind<int>("PVP Settings", "Respawns Per Round", RespawnsPerRound, "Amount of free revives per round").Value;
+
+            //Debug settings
+            UnlockAll = config.Bind<bool>("Debug Settings", "Unlock All", UnlockAll, "Set to true unlocks all characters and loadouts").Value;
         }
 
         public static void LoadCustomPlayableCharactersConfig(string configPath)

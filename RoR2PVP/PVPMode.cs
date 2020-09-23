@@ -56,7 +56,7 @@ namespace RoR2PVP
                 }
 
                 //Safe zones
-                if (SceneInfo.instance.sceneDef.baseSceneName == "bazaar" || SceneInfo.instance.sceneDef.baseSceneName == "mysteryspace") return;
+                if (SceneInfo.instance.sceneDef.baseSceneName == "bazaar" || SceneInfo.instance.sceneDef.baseSceneName == "mysteryspace" || SceneInfo.instance.sceneDef.baseSceneName == "moon") return;
 
                 /*Grace period*/
                 if (PVPMode.IsGracePeriod)

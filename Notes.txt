@@ -1,5 +1,5 @@
-R2API 2.4.10
-BepInExPack 3.2.0
+R2API 2.5.14
+BepInExPack 5.3.1
 
 free for all
 

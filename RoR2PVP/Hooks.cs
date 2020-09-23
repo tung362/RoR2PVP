@@ -65,12 +65,18 @@ namespace RoR2PVP
         public static void SetupHook()
         {
             /*Preassign*/
-            if (Settings.MaxMultiplayerCount != 4) typeof(RoR2Application).GetField("maxPlayers", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy | BindingFlags.Static).SetValue(null, Settings.MaxMultiplayerCount);
+            if (Settings.MaxMultiplayerCount != 4)
+            {
+                typeof(RoR2Application).GetField("maxPlayers", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy | BindingFlags.Static).SetValue(null, Settings.MaxMultiplayerCount);
+                GameNetworkManager.SvMaxPlayersConVar.instance.SetString(Settings.MaxMultiplayerCount.ToString());
+                SteamworksLobbyManager.cvSteamLobbyMaxMembers.SetString(Settings.MaxMultiplayerCount.ToString());
+            }
             if (!Settings.Modded) typeof(RoR2Application).GetField("isModded", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy | BindingFlags.Static).SetValue(null, false);
 
             //Start mod
             On.RoR2.Networking.GameNetworkManager.OnServerAddPlayerInternal += DisplayCustomCharacters;
             On.RoR2.PreGameController.ResolveChoiceMask += DisplayArtifacts;
+            On.RoR2.Stats.StatSheet.HasUnlockable += UnlockAll;
             On.RoR2.Run.Start += GameStart;
             RoR2.Run.onRunDestroyGlobal += GameEnd;
         }
@@ -156,10 +162,10 @@ namespace RoR2PVP
                             slotName = "Commando";
                             break;
                         case 1:
-                            slotName = "MUL-T";
+                            slotName = "Huntress";
                             break;
                         case 2:
-                            slotName = "Huntress";
+                            slotName = "MUL-T";
                             break;
                         case 3:
                             slotName = "Engineer";
@@ -178,6 +184,9 @@ namespace RoR2PVP
                             break;
                         case 8:
                             slotName = "Acrid";
+                            break;
+                        case 9:
+                            slotName = "Captain";
                             break;
                     }
                     text += Util.GenerateColoredString(slotName, new Color32(255, 255, 0, 255)) + " = " + BodyCatalog.GetBodyName(BodyCatalog.FindBodyIndex(Settings.PlayableCharactersList[i])) + " ";
@@ -204,6 +213,12 @@ namespace RoR2PVP
                 R2API.Utils.Reflection.SetFieldValue<RuleChoiceMask>(self, "unlockedChoiceMask", unlockedChoiceMask);
             }
             orig(self);
+        }
+
+        private static bool UnlockAll(On.RoR2.Stats.StatSheet.orig_HasUnlockable orig, RoR2.Stats.StatSheet self, UnlockableDef unlockableDef)
+        {
+            if (Settings.UnlockAll) return true;
+            return orig(self, unlockableDef);
         }
 
         static void GameStart(On.RoR2.Run.orig_Start orig, Run self)
@@ -263,10 +278,10 @@ namespace RoR2PVP
                         case "CommandoBody":
                             playerCharater.bodyPrefab = BodyCatalog.FindBodyPrefab(Settings.PlayableCharactersList[0]);
                             break;
-                        case "ToolbotBody":
+                        case "HuntressBody":
                             playerCharater.bodyPrefab = BodyCatalog.FindBodyPrefab(Settings.PlayableCharactersList[1]);
                             break;
-                        case "HuntressBody":
+                        case "ToolbotBody":
                             playerCharater.bodyPrefab = BodyCatalog.FindBodyPrefab(Settings.PlayableCharactersList[2]);
                             break;
                         case "EngiBody":
@@ -286,6 +301,9 @@ namespace RoR2PVP
                             break;
                         case "CrocoBody":
                             playerCharater.bodyPrefab = BodyCatalog.FindBodyPrefab(Settings.PlayableCharactersList[8]);
+                            break;
+                        case "CaptainBody":
+                            playerCharater.bodyPrefab = BodyCatalog.FindBodyPrefab(Settings.PlayableCharactersList[9]);
                             break;
                         default:
                             break;
@@ -476,8 +494,8 @@ namespace RoR2PVP
                     //Remove all items and equipments that is mentioned in the ban list
                     for (int i = 0; i < Settings.BannedItemList.Count; i++)
                     {
-                        if (Enum.TryParse(Settings.BannedItemList[i], out itemToRemove)) Run.instance.availableItems.RemoveItem(itemToRemove);
-                        if (Enum.TryParse(Settings.BannedItemList[i], out equipmentToRemove)) Run.instance.availableEquipment.RemoveEquipment(equipmentToRemove);
+                        if (Enum.TryParse(Settings.BannedItemList[i], out itemToRemove)) Run.instance.availableItems.Remove(itemToRemove);
+                        if (Enum.TryParse(Settings.BannedItemList[i], out equipmentToRemove)) Run.instance.availableEquipment.Remove(equipmentToRemove);
                     }
                 }
             }

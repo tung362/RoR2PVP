@@ -2,7 +2,7 @@
 RoR2TeamPVP is a mod that adds a team PVP game mode to the game Risk of Rain 2.  
 Note: Everything is server sided, so only host needs this mod installed
 
-(Optional: non host players can also vote on settings if they have the mod installed but isn't needed necessarily to play)
+(Optional: non host players can also vote on settings if they have the mod installed but isn't needed necessarily to play)  
 ![alt text](https://i.imgur.com/2871Zif.png)  
 
 Also unlocks all artifacts  
@@ -17,6 +17,9 @@ Feel free to submit an issue here on my [github](https://github.com/tung362/RoR2
 ### Features:  
 - **Custom Team PVP game mode**
   - PVP
+  - lobby rule voting system
+  - unlocking of all artifacts
+  - configurable unlocking of all characters and loadouts
   - configurable randomized or fixed teams
   - configurable grace time until pvp starts
   - configurable periodic money gain during grace period
@@ -48,8 +51,8 @@ Feel free to submit an issue here on my [github](https://github.com/tung362/RoR2
   - Uka Uka Ouuu?
 
 ### Requirements:  
-[BepInExPack 3.2.0](https://thunderstore.io/package/download/bbepis/BepInExPack/3.2.0/)  
-[R2API 2.4.10](https://thunderstore.io/package/download/tristanmcpherson/R2API/2.4.10/)  
+[BepInExPack 5.3.1](https://thunderstore.io/package/download/bbepis/BepInExPack/5.3.1/)  
+[R2API 2.5.14](https://thunderstore.io/package/download/tristanmcpherson/R2API/2.5.14/)  
 Friends :(  
 
 ### Installation:  
@@ -78,6 +81,7 @@ Friends :(
 | Respawns Per Round            |             2  |
 | Max Multiplayer Count         |             4  |
 | Modded                        |          true  |
+| Unlock All                    |         false  |
 
 **`TeamPVPBannedItemList.cfg`**  
 
@@ -182,13 +186,19 @@ Special thanks to my friend Riley for helping me test https://github.com/SimpleM
 Special thanks to my friend Justin for helping me test https://github.com/Sethix  
 
 ### Change log:  
-**1.3.5 (Current)**  
+**1.4.0 (Current)**  
+- Updated to BepInExPack 5.3.1 and R2API 2.5.14  
+- Added character slot "Captain" to the Custom Playable Characters config  
+- Added the ability to unlock all characters and loadouts temporarily(configurable in TeamPVP.cfg)  
+- Mithrix stage is now considered a safe zone  
+- Fixed max lobby size  
+**1.3.5**  
 - Updated to BepInExPack 3.2.0 and R2API 2.4.10  
 - Mobs and pvp team 2 are no longer in the same team!  
 - Added full unlock of artifacts  
 - Added item "Spinel Tonic" to the default item ban list  
 - Removed debug code left in from the previous build  
-- Fixed bug where some areas would result in a softlocked due to destroying essential gameobjects  
+- Fixed bug where some areas would result in a softlock due to destroying essential gameobjects  
 **1.3.0**  
 - Updated to BepInExPack 3.1.0 and R2API 2.4.2  
 - Added a votable config system for certain mod settings during lobby  

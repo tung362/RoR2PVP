@@ -13,7 +13,8 @@ using APIExtension.VoteAPI;
 
 namespace RoR2PVP
 {
-    [BepInPlugin("TeamPVP", "Team PVP Mode", "1.3.5")]
+    [BepInPlugin("TeamPVP", "Team PVP Mode", "1.4.0")]
+    [NetworkCompatibility(CompatibilityLevel.NoNeedForSync)]
     [R2APISubmoduleDependency(new string[]
     {
         "AssetPlus",
