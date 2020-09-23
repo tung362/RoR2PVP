@@ -189,7 +189,7 @@ Special thanks to my friend Justin for helping me test https://github.com/Sethix
 **1.4.0 (Current)**  
 - Updated to BepInExPack 5.3.1 and R2API 2.5.14  
 - Added character slot "Captain" to the Custom Playable Characters config  
-- Added the ability to unlock all characters and loadouts temporarily(configurable in TeamPVP.cfg)  
+- Added the ability to unlock all characters and loadouts temporarily (configurable in TeamPVP.cfg)  
 - Mithrix stage is now considered a safe zone  
 - Fixed max lobby size  
 **1.3.5**  
