@@ -118,6 +118,7 @@ Friends :(
 | REX slot        |               SniperBody  |
 | Loader slot     |               SniperBody  |
 | Acrid slot      |               SniperBody  |
+| Captain slot    |               SniperBody  |
 
 
 **`TeamPVPCustomInteractablesSpawner.cfg`**  
