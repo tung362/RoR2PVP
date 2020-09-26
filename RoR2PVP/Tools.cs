@@ -54,6 +54,40 @@ namespace RoR2PVP
             }
         }
 
+        public static GameObject CustomGenerate(string prefabPath, int Price, Xoroshiro128Plus rng)
+        {
+            //Amount of attempts to try spawning this prefab before moving on
+            int tries = 0;
+            while (tries < 10)
+            {
+                DirectorPlacementRule placementRule = new DirectorPlacementRule
+                {
+                    placementMode = DirectorPlacementRule.PlacementMode.Random
+                };
+                //Spawn
+                GameObject spawnedObject = DirectorCore.instance.TrySpawnObject(new DirectorSpawnRequest((InteractableSpawnCard)Resources.Load(prefabPath), placementRule, rng));
+
+                if (spawnedObject)
+                {
+                    //Find PurchaseInteraction
+                    PurchaseInteraction purchaseInteraction = spawnedObject.GetComponent<PurchaseInteraction>();
+                    if (purchaseInteraction)
+                    {
+                        if (purchaseInteraction.costType == CostTypeIndex.Money)
+                        {
+                            //Apply unscaled cost
+                            purchaseInteraction.Networkcost = Price == -1 ? purchaseInteraction.cost : Price;
+                            break;
+                        }
+                    }
+
+                    return spawnedObject;
+                }
+                else tries++;
+            }
+            return null;
+        }
+
         public static void SendPM(NetworkConnection conn, Chat.ChatMessageBase message)
         {
             NetworkWriter networkWriter = new NetworkWriter();
@@ -62,6 +96,28 @@ namespace RoR2PVP
             networkWriter.Write(message);
             networkWriter.FinishMessage();
             conn.SendWriter(networkWriter, QosChannelIndex.chat.intVal);
+        }
+
+        public static bool TryGetStage(string stageName, out SceneDef stage)
+        {
+            stage = SceneCatalog.GetSceneDefFromSceneName(stageName);
+            if (!stage)
+            {
+                Debug.LogWarning("Warning! Stage name: \"" + stageName + "\" does not exist, TeamPVP mod might be outdated!");
+                return false;
+            }
+            return true;
+        }
+
+        public static void TryAddStage(string stageName, List<SceneDef> stages)
+        {
+            SceneDef stage = SceneCatalog.GetSceneDefFromSceneName(stageName);
+            if (!stage)
+            {
+                Debug.LogWarning("Warning! Stage name: \"" + stageName + "\" does not exist, TeamPVP mod might be outdated!");
+                return;
+            }
+            stages.Add(stage);
         }
 
         public static NetworkUser FindNetworkUser()

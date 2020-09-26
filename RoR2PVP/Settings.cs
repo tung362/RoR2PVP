@@ -29,6 +29,7 @@ namespace RoR2PVP
         public static readonly Tuple<bool, int> CustomPlayableCharacters = Tuple.Create(true, 105);
         public static readonly Tuple<bool, int> CustomInteractablesSpawner = Tuple.Create(true, 106);
         public static readonly Tuple<bool, int> UseDeathPlaneFailsafe = Tuple.Create(true, 107);
+        public static readonly Tuple<bool, int> WiderStageTransitions = Tuple.Create(false, 108);
 
         /*Config*/
         //Multiplayer settings
@@ -112,13 +113,13 @@ namespace RoR2PVP
             List<string> bodiesList = new List<string>();
             //Character slots
             bodiesList.Add("# Custom playable character for Commando slot");
-            bodiesList.Add("CommandoBody");
+            bodiesList.Add("BanditBody");
             bodiesList.Add("");
             bodiesList.Add("# Custom playable character for Huntress slot");
-            bodiesList.Add("CommandoBody");
+            bodiesList.Add("BanditBody");
             bodiesList.Add("");
             bodiesList.Add("# Custom playable character for MUL-T slot");
-            bodiesList.Add("CommandoBody");
+            bodiesList.Add("BanditBody");
             bodiesList.Add("");
             bodiesList.Add("# Custom playable character for Engineer slot");
             bodiesList.Add("BanditBody");
@@ -127,7 +128,7 @@ namespace RoR2PVP
             bodiesList.Add("BanditBody");
             bodiesList.Add("");
             bodiesList.Add("# Custom playable character for Mercenary slot");
-            bodiesList.Add("BanditBody");
+            bodiesList.Add("SniperBody");
             bodiesList.Add("");
             bodiesList.Add("# Custom playable character for REX slot");
             bodiesList.Add("SniperBody");
@@ -164,8 +165,9 @@ namespace RoR2PVP
             bannedItems.Add("ShockNearby");
             bannedItems.Add("SprintWisp");
             bannedItems.Add("Thorns");
-            bannedItems.Add("Tonic");
+            bannedItems.Add("LunarUtilityReplacement");
             //Equipment
+            bannedItems.Add("Tonic");
             bannedItems.Add("Meteor");
             bannedItems.Add("BurnNearby");
             bannedItems.Add("BFG");
@@ -175,6 +177,7 @@ namespace RoR2PVP
             bannedItems.Add("FireBallDash");
             bannedItems.Add("GoldGat");
             bannedItems.Add("DroneBackup");
+            bannedItems.Add("DeathProjectile");
             //Output all item names
             bannedItems.Add("# -----------------------------------------------------------------------------------------");
             bannedItems.Add("# List of item ids and it's full name");

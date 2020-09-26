@@ -5,3 +5,6 @@ free for all
 
 TeamComponent - sets the teams for players
 TeamManager - keeps track of team's data
+
+Run.instance.AdvanceStage - instant teleport
+Run.instance.nextStageScene - teleporter destination

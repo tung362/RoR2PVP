@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
 using BepInEx;
 using R2API;
@@ -60,6 +61,10 @@ namespace RoR2PVP
             RuleDef useDeathPlaneFailsafeSelection = VoteAPI.AddVoteSelection(teamPVPHeader, "Use Death Plane Failsafe", new ChoiceMenu("Use Death Plane Failsafe On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Force players to die should they fall off the map to prevent softlock", Color.black, "@TeamPVP:Assets/Resources/UI/UseDeathPlaneFailsafeSelected.png", "artifact_teampvp", Settings.UseDeathPlaneFailsafe.Item2));
             VoteAPI.AddVoteChoice(useDeathPlaneFailsafeSelection, new ChoiceMenu("Use Death Plane Failsafe Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Disables the death plane. Only turn off if your using a custom map!", Color.black, "@TeamPVP:Assets/Resources/UI/UseDeathPlaneFailsafeDeselected.png", "artifact_teampvp", -1));
             useDeathPlaneFailsafeSelection.defaultChoiceIndex = Settings.UseDeathPlaneFailsafe.Item1 ? 0 : 1;
+
+            RuleDef widerStageTransitionsSelection = VoteAPI.AddVoteSelection(teamPVPHeader, "Wider Stage Transitions", new ChoiceMenu("Wider Stage Transitions On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Transitions through a wider selection of stages when using the teleporter", Color.black, "@TeamPVP:Assets/Resources/UI/WiderStageTransitionsSelected.png", "artifact_teampvp", Settings.WiderStageTransitions.Item2));
+            VoteAPI.AddVoteChoice(widerStageTransitionsSelection, new ChoiceMenu("Wider Stage Transitions Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Vanilla stage transitions. Also turn off when using custom stages", Color.black, "@TeamPVP:Assets/Resources/UI/WiderStageTransitionsDeselected.png", "artifact_teampvp", -1));
+            widerStageTransitionsSelection.defaultChoiceIndex = Settings.WiderStageTransitions.Item1 ? 0 : 1;
         }
 
         public static void SetupHook()
@@ -74,6 +79,7 @@ namespace RoR2PVP
             if (!Settings.Modded) typeof(RoR2Application).GetField("isModded", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy | BindingFlags.Static).SetValue(null, false);
 
             //Start mod
+            On.RoR2.UI.UIJuice.Awake += ApplyLogo;
             On.RoR2.Networking.GameNetworkManager.OnServerAddPlayerInternal += DisplayCustomCharacters;
             On.RoR2.PreGameController.ResolveChoiceMask += DisplayArtifacts;
             On.RoR2.Stats.StatSheet.HasUnlockable += UnlockAll;
@@ -142,6 +148,17 @@ namespace RoR2PVP
         #endregion
 
         #region Startup
+        static void ApplyLogo(On.RoR2.UI.UIJuice.orig_Awake orig, RoR2.UI.UIJuice self)
+        {
+            if (self.name == "ImagePanel (JUICED)")
+            {
+                GameObject skull = GameObject.Instantiate((GameObject)Resources.Load("@TeamPVP:Assets/Resources/Prefabs/TeamPVPSkull.prefab"), self.transform);
+                RectTransform skullTransform = skull.GetComponent<RectTransform>();
+                skullTransform.anchoredPosition = new Vector2(55, -385);
+            }
+            orig(self);
+        }
+
         static void DisplayCustomCharacters(On.RoR2.Networking.GameNetworkManager.orig_OnServerAddPlayerInternal orig, GameNetworkManager self, NetworkConnection conn, short playerControllerId, NetworkReader extraMessageReader)
         {
             if (NetworkServer.active)
@@ -226,6 +243,7 @@ namespace RoR2PVP
             //Run mod if mod was enabled in the lobby menu
             if (VoteAPI.VoteResults.HasVote(Settings.TeamPVPToggle.Item2))
             {
+                PVPMode.LoadDestinations();
                 SetCoreHooks();
                 SetExtraHooks();
             }
@@ -431,9 +449,11 @@ namespace RoR2PVP
         {
             if(NetworkServer.active)
             {
-                if(VoteAPI.VoteResults.HasVote(Settings.CustomInteractablesSpawner.Item2))
+                if (VoteAPI.VoteResults.HasVote(Settings.CustomInteractablesSpawner.Item2))
                 {
-                    if (Run.instance && SceneInfo.instance.sceneDef.baseSceneName != "bazaar" || SceneInfo.instance.sceneDef.baseSceneName != "mysteryspace")
+                    if (Run.instance && SceneInfo.instance.sceneDef.baseSceneName != "bazaar" ||
+                        SceneInfo.instance.sceneDef.baseSceneName != "mysteryspace" ||
+                        SceneInfo.instance.sceneDef.baseSceneName != "arena")
                     {
                         //Custom spawn
                         //Drones

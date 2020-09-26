@@ -118,8 +118,7 @@ namespace APIExtension.VoteAPI
         static void VoteControllerDeserialize(On.RoR2.VoteController.orig_OnDeserialize orig, VoteController self, NetworkReader reader, bool initialState)
         {
             orig(self, reader, initialState);
-
-            if (reader.Position < reader.Length)
+            if (reader.Position < reader.Length && !Run.instance)
             {
                 if (TargetedRuleBook != null && TargetedRuleChoiceMask != null)
                 {

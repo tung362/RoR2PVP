@@ -4,7 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Networking;
+using UnityEngine.EventSystems;
+using TMPro;
 using BepInEx;
 using BepInEx.Configuration;
 using R2API.Utils;
@@ -13,7 +16,7 @@ using APIExtension.VoteAPI;
 
 namespace RoR2PVP
 {
-    [BepInPlugin("TeamPVP", "Team PVP Mode", "1.4.0")]
+    [BepInPlugin("TeamPVP", "Team PVP Mode", "1.4.3")]
     [NetworkCompatibility(CompatibilityLevel.NoNeedForSync)]
     [R2APISubmoduleDependency(new string[]
     {
