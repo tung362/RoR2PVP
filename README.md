@@ -89,23 +89,25 @@ Friends :(
 **`TeamPVPBannedItemList.cfg`**  
 
 
-| Default banned items |
-| -------------------- |
-| Behemoth             |
-| NovaOnHeal           |
-| ShockNearby          |
-| SprintWisp           |
-| Thorns               |
-| Tonic                |
-| Meteor               |
-| BurnNearby           |
-| BFG                  |
-| Blackhole            |
-| Lightning            |
-| CommandMissile       |
-| FireBallDash         |
-| GoldGat              |
-| DroneBackup          |
+| Default banned items    |
+| ----------------------- |
+| Behemoth                |
+| NovaOnHeal              |
+| ShockNearby             |
+| SprintWisp              |
+| Thorns                  |
+| LunarUtilityReplacement |
+| Tonic                   |
+| Meteor                  |
+| BurnNearby              |
+| BFG                     |
+| Blackhole               |
+| Lightning               |
+| CommandMissile          |
+| FireBallDash            |
+| GoldGat                 |
+| DroneBackup             |
+| DeathProjectile         |
 
 
 **`TeamPVPCustomPlayableCharacters.cfg`**  
