@@ -41,7 +41,7 @@ Feel free to submit an issue here on my [github](https://github.com/tung362/RoR2
 - **Ability to ban items and equipments**
   - configurable banning of items, list of items included!
   
-  - **Ability to go through a wider selection of stages before looping**
+- **Ability to go through a wider selection of stages before looping**
   - randomized stage progression with a wider selection
   
 - **Includes 4 config files to balance your game as you see fit**
