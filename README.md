@@ -41,6 +41,9 @@ Feel free to submit an issue here on my [github](https://github.com/tung362/RoR2
 - **Ability to ban items and equipments**
   - configurable banning of items, list of items included!
   
+  - **Ability to go through a wider selection of stages before looping**
+  - randomized stage progression with a wider selection
+  
 - **Includes 4 config files to balance your game as you see fit**
   - TeamPVP.cfg
   - TeamPVPCustomPlayableCharacters.cfg
@@ -109,12 +112,12 @@ Friends :(
 
 | Character slots | Default custom characters |
 | --------------- | ------------------------- |
-| Commando slot   |             CommandoBody  |
-| Huntress slot   |             CommandoBody  |
-| MUL-T slot      |             CommandoBody  |
+| Commando slot   |               BanditBody  |
+| Huntress slot   |               BanditBody  |
+| MUL-T slot      |               BanditBody  |
 | Engineer slot   |               BanditBody  |
 | Artificer slot  |               BanditBody  |
-| Mercenary slot  |               BanditBody  |
+| Mercenary slot  |               SniperBody  |
 | REX slot        |               SniperBody  |
 | Loader slot     |               SniperBody  |
 | Acrid slot      |               SniperBody  |
@@ -187,7 +190,19 @@ Special thanks to my friend Riley for helping me test https://github.com/SimpleM
 Special thanks to my friend Justin for helping me test https://github.com/Sethix  
 
 ### Change log:  
-**1.4.0 (Current)**  
+**1.4.3 (Current)**  
+- Added logo to the title screen  
+- Added "Wider stage transition" to the votable config system  
+- Added a wider selection of stage transitions
+- Added item "Strides of Heresy" to the default item ban list  
+- Added equipment "Forgive Me Please" to the default item ban list  
+- Added a second teleporter to the stage "skymeadow" so that players can loop stages instead of being forced to fight Mithrix ending the run  
+- Added stage "arena" to the list of safe zones  
+- Removed commando from the default custom playable characters (too powerful)  
+- Removed stage "goldshores" from the list of safe zones  
+- Fixed filtering of disconnected and dead players from the team shuffle  
+- Fixed frozen screen on game over when playing with a vanilla host  
+**1.4.0**  
 - Updated to BepInExPack 5.3.1 and R2API 2.5.14  
 - Added character slot "Captain" to the Custom Playable Characters config  
 - Added the ability to unlock all characters and loadouts temporarily (configurable in TeamPVP.cfg)  
