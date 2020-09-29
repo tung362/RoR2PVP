@@ -8,8 +8,13 @@ Note: Everything is server sided, so only host needs this mod installed
 Also unlocks all artifacts  
 ![alt text](https://i.imgur.com/SQzJkPB.png)  
 
-### Old video example of mod in action (NOTE: a lot has been improved since):  
-https://youtu.be/UEWw_pyDfuM
+### videos of mod in action:  
+**Team PVP Mod With PlayerBots Mod**  
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/a9G1v51GITQ/0.jpg)](https://youtu.be/a9G1v51GITQ)  
+**Vanilla Characters**  
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/H9WwMHg8jIE/0.jpg)](https://youtu.be/H9WwMHg8jIE)  
+**Bandit and Sniper Only (Old)**  
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/UEWw_pyDfuM/0.jpg)](https://youtu.be/UEWw_pyDfuM)  
 
 ### Found a bug? Want a feature added?:  
 Feel free to submit an issue here on my [github](https://github.com/tung362/RoR2PVP/issues)!  
@@ -192,7 +197,13 @@ Special thanks to my friend Riley for helping me test https://github.com/SimpleM
 Special thanks to my friend Justin for helping me test https://github.com/Sethix  
 
 ### Change log:  
-**1.4.3 (Current)**  
+**1.4.5 (Current)**  
+- Now compatible with PlayerBots mod (https://thunderstore.io/package/Meledy/PlayerBots/)  
+  - https://youtu.be/a9G1v51GITQ  
+- Added banned item enforce, preventing mods from giving banned items  
+- Added banned equipment enforce, preventing mods from giving banned equipments  
+- Fixed maps not randomizing before the first full loop when "Wider stage transition" is turned on  
+**1.4.3**  
 - Added logo to the title screen  
 - Added "Wider stage transition" to the votable config system  
 - Added a wider selection of stage transitions
