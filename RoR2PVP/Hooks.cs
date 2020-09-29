@@ -92,6 +92,7 @@ namespace RoR2PVP
             On.RoR2.Stage.Start += PVPReset;
             On.RoR2.Stage.FixedUpdate += PVPTick;
             On.RoR2.TeleporterInteraction.OnInteractionBegin += InstantTeleport;
+            On.RoR2.Run.BeginGameOver += PreventGameOver;
         }
 
         public static void UnsetCoreHooks()
@@ -99,6 +100,7 @@ namespace RoR2PVP
             On.RoR2.Stage.Start -= PVPReset;
             On.RoR2.Stage.FixedUpdate -= PVPTick;
             On.RoR2.TeleporterInteraction.OnInteractionBegin -= InstantTeleport;
+            On.RoR2.Run.BeginGameOver -= PreventGameOver;
         }
 
         public static void SetExtraHooks()
@@ -116,6 +118,8 @@ namespace RoR2PVP
             On.RoR2.Run.BuildDropTable += BanItems;
             On.RoR2.GlobalEventManager.OnInteractionBegin += PreventTeleporterFireworks;
             On.RoR2.CharacterAI.BaseAI.FindEnemyHurtBox += CustomAITargetFilter;
+            On.RoR2.Inventory.GiveItem += EnforceBannedItems;
+            On.RoR2.Inventory.SetEquipmentInternal += EnforceBannedEquipments;
         }
 
         public static void UnsetExtraHooks()
@@ -133,6 +137,8 @@ namespace RoR2PVP
             On.RoR2.Run.BuildDropTable -= BanItems;
             On.RoR2.GlobalEventManager.OnInteractionBegin -= PreventTeleporterFireworks;
             On.RoR2.CharacterAI.BaseAI.FindEnemyHurtBox -= CustomAITargetFilter;
+            On.RoR2.Inventory.GiveItem -= EnforceBannedItems;
+            On.RoR2.Inventory.SetEquipmentInternal -= EnforceBannedEquipments;
         }
 
         #region Init
@@ -244,6 +250,7 @@ namespace RoR2PVP
             if (VoteAPI.VoteResults.HasVote(Settings.TeamPVPToggle.Item2))
             {
                 PVPMode.LoadDestinations();
+                Tools.Shuffle<SceneDef>(PVPMode.Destinations);
                 SetCoreHooks();
                 SetExtraHooks();
             }
@@ -277,6 +284,11 @@ namespace RoR2PVP
         {
             if (NetworkServer.active) PVPMode.Teleport(self);
             else orig(self, activator);
+        }
+
+        static void PreventGameOver(On.RoR2.Run.orig_BeginGameOver orig, Run self, GameEndingDef gameEndingDef)
+        {
+            if(!PVPMode.PreventGameOver) orig(self, gameEndingDef);
         }
         #endregion
 
@@ -508,15 +520,8 @@ namespace RoR2PVP
             {
                 if(VoteAPI.VoteResults.HasVote(Settings.BanItems.Item2))
                 {
-                    ItemIndex itemToRemove;
-                    EquipmentIndex equipmentToRemove;
-
-                    //Remove all items and equipments that is mentioned in the ban list
-                    for (int i = 0; i < Settings.BannedItemList.Count; i++)
-                    {
-                        if (Enum.TryParse(Settings.BannedItemList[i], out itemToRemove)) Run.instance.availableItems.Remove(itemToRemove);
-                        if (Enum.TryParse(Settings.BannedItemList[i], out equipmentToRemove)) Run.instance.availableEquipment.Remove(equipmentToRemove);
-                    }
+                    foreach (ItemIndex itemIndex in Settings.BannedItems.Values) Run.instance.availableItems.Remove(itemIndex);
+                    foreach (EquipmentIndex equipmentIndex in Settings.BannedEquipments.Values) Run.instance.availableEquipment.Remove(equipmentIndex);
                 }
             }
             orig(self);
@@ -544,6 +549,125 @@ namespace RoR2PVP
             enemySearch.filterByLoS = filterByLoS;
             enemySearch.RefreshCandidates();
             return enemySearch.GetResults().FirstOrDefault<HurtBox>();
+        }
+
+        static void EnforceBannedItems(On.RoR2.Inventory.orig_GiveItem orig, Inventory self, ItemIndex itemIndex, int count)
+        {
+            ItemIndex item = itemIndex;
+            if (NetworkServer.active)
+            {
+                //Ban check
+                bool isBanned = Settings.BannedItems.ContainsKey(item) ? true : false;
+
+                //Reroll if banned
+                if (isBanned)
+                {
+                    Chat.SendBroadcastChat(new Chat.SimpleChatMessage
+                    {
+                        baseToken = Util.GenerateColoredString("Banned item detected! rerolling...", new Color32(255, 106, 0, 255))
+                    });
+
+                    ItemDef itemDef = ItemCatalog.GetItemDef(item);
+                    bool assigned = false;
+                    if (itemDef != null)
+                    {
+                        if (itemDef.tier == ItemTier.Tier1)
+                        {
+                            if (Run.instance.availableTier1DropList.Count != 0)
+                            {
+                                item = Tools.TryGetRandomItem(Run.instance.availableTier1DropList, Run.instance.treasureRng);
+                                assigned = true;
+                            }
+                        }
+                        else if (itemDef.tier == ItemTier.Tier2)
+                        {
+                            if (Run.instance.availableTier2DropList.Count != 0)
+                            {
+                                item = Tools.TryGetRandomItem(Run.instance.availableTier2DropList, Run.instance.treasureRng);
+                                assigned = true;
+                            }
+                        }
+                        else if (itemDef.tier == ItemTier.Tier3)
+                        {
+                            if (Run.instance.availableTier3DropList.Count != 0)
+                            {
+                                item = Tools.TryGetRandomItem(Run.instance.availableTier3DropList, Run.instance.treasureRng);
+                                assigned = true;
+                            }
+                        }
+                        else if (itemDef.tier == ItemTier.Lunar)
+                        {
+                            if (Run.instance.availableLunarDropList.Count != 0)
+                            {
+                                item = Tools.TryGetRandomItem(Run.instance.availableLunarDropList, Run.instance.treasureRng);
+                                assigned = true;
+                            }
+                        }
+                        else if (itemDef.tier == ItemTier.Boss)
+                        {
+                            if (Run.instance.availableBossDropList.Count != 0)
+                            {
+                                item = Tools.TryGetRandomItem(Run.instance.availableBossDropList, Run.instance.treasureRng);
+                                assigned = true;
+                            }
+                        }
+                        else
+                        {
+                            List<ItemIndex> items = Run.instance.availableItems.ToList();
+                            item = items[Run.instance.treasureRng.RangeInt(0, items.Count)];
+                            assigned = true;
+                        }
+                    }
+
+                    if (!assigned) item = ItemIndex.None;
+                }
+            }
+            orig(self, item, count);
+        }
+
+        static bool EnforceBannedEquipments(On.RoR2.Inventory.orig_SetEquipmentInternal orig, Inventory self, EquipmentState equipmentState, uint slot)
+        {
+            EquipmentState equipment = equipmentState;
+            if(NetworkServer.active)
+            {
+                //Ban check
+                bool isBanned = Settings.BannedEquipments.ContainsKey(equipment.equipmentIndex) ? true : false;
+
+                //Reroll if banned
+                if (isBanned)
+                {
+                    Chat.SendBroadcastChat(new Chat.SimpleChatMessage
+                    {
+                        baseToken = Util.GenerateColoredString("Banned equipment detected! rerolling...", new Color32(255, 106, 0, 255))
+                    });
+
+                    bool assigned = false;
+                    if(equipment.equipmentDef != null)
+                    {
+                        if (equipment.equipmentDef.isLunar)
+                        {
+                            if (Run.instance.availableLunarEquipmentDropList.Count != 0)
+                            {
+                                EquipmentIndex equipmentIndex = Tools.TryGetRandomEquipment(Run.instance.availableLunarEquipmentDropList, Run.instance.treasureRng);
+                                equipment = new EquipmentState(equipmentIndex, equipment.chargeFinishTime, equipment.charges);
+                                assigned = true;
+                            }
+                        }
+                        else
+                        {
+                            if (Run.instance.availableNormalEquipmentDropList.Count != 0)
+                            {
+                                EquipmentIndex equipmentIndex = Tools.TryGetRandomEquipment(Run.instance.availableNormalEquipmentDropList, Run.instance.treasureRng);
+                                equipment = new EquipmentState(equipmentIndex, equipment.chargeFinishTime, equipment.charges);
+                                assigned = true;
+                            }
+                        }
+                    }
+
+                    if(!assigned) equipment = EquipmentState.empty;
+                }
+            }
+            return orig(self, equipment, slot);
         }
         #endregion
     }

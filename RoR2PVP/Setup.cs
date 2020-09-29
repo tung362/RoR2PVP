@@ -16,7 +16,7 @@ using APIExtension.VoteAPI;
 
 namespace RoR2PVP
 {
-    [BepInPlugin("TeamPVP", "Team PVP Mode", "1.4.3")]
+    [BepInPlugin("TeamPVP", "Team PVP Mode", "1.4.5")]
     [NetworkCompatibility(CompatibilityLevel.NoNeedForSync)]
     [R2APISubmoduleDependency(new string[]
     {

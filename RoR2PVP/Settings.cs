@@ -49,7 +49,8 @@ namespace RoR2PVP
         public static List<string> PlayableCharactersList = new List<string>();
 
         //Ban item settings
-        public static List<string> BannedItemList = new List<string>();
+        public static Dictionary<ItemIndex, ItemIndex> BannedItems = new Dictionary<ItemIndex, ItemIndex>();
+        public static Dictionary<EquipmentIndex, EquipmentIndex> BannedEquipments = new Dictionary<EquipmentIndex, EquipmentIndex>();
 
         //Interactables Spawner Settings
         //Drones
@@ -268,7 +269,11 @@ namespace RoR2PVP
                 if(configLines[i].Length != 0)
                 {
                     //If not a comment
-                    if (configLines[i][0] != '#') BannedItemList.Add(configLines[i]);
+                    if (configLines[i][0] != '#')
+                    {
+                        if (Enum.TryParse(configLines[i], out ItemIndex itemIndex)) BannedItems.Add(itemIndex, itemIndex);
+                        if (Enum.TryParse(configLines[i], out EquipmentIndex equipmentIndex)) BannedEquipments.Add(equipmentIndex, equipmentIndex);
+                    }
                 }
             }
         }

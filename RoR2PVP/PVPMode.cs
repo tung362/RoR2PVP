@@ -26,6 +26,7 @@ namespace RoR2PVP
         public static float CurrentGraceTimeReminder;
         public static bool PVPEnded = false;
         public static bool UsedTeleporter = false;
+        public static bool PreventGameOver = false;
         public static TeleporterInteraction SecondaryTeleporter;
 
         public static List<SceneDef> Destinations = new List<SceneDef>();
@@ -42,6 +43,7 @@ namespace RoR2PVP
             CurrentGraceTimeReminder = GraceTimer;
             PVPEnded = false;
             UsedTeleporter = false;
+            PreventGameOver = false;
             SecondaryTeleporter = null;
             PVPTeams.Clear();
 
@@ -90,7 +92,7 @@ namespace RoR2PVP
                         List<PlayerCharacterMasterController> players = Enumerable.ToList<PlayerCharacterMasterController>(PlayerCharacterMasterController.instances);
                         FilterDCedPlayers(players);
                         //Shuffle teams, grant respawn items, and reset money count
-                        if(VoteAPI.VoteResults.HasVote(Settings.RandomTeams.Item2)) Shuffle<PlayerCharacterMasterController>(players);
+                        if(VoteAPI.VoteResults.HasVote(Settings.RandomTeams.Item2)) Tools.Shuffle<PlayerCharacterMasterController>(players);
                         for (int i = 0; i < players.Count; i++)
                         {
                             if (!players[i].master.IsDeadAndOutOfLivesServer() && players[i].master.GetBody() != null)
@@ -131,15 +133,30 @@ namespace RoR2PVP
                     /*PVP period*/
                     if (!PVPEnded)
                     {
-                        TeamIndex survivingTeamIndex;
-
                         //Check for surviving teams
-                        if (DeathCheck(out survivingTeamIndex))
+                        if (DeathCheck(out TeamIndex survivingTeamIndex))
                         {
                             AnnounceWinningTeam(survivingTeamIndex);
                             ChangeTeams(TeamIndex.Player);
                             UpdateCompanionTeams();
                             CustomStageTransition();
+
+                            bool teleportCheck = survivingTeamIndex == TeamIndex.None || survivingTeamIndex == TeamIndex.Count ? false : true;
+                            if (SecondaryTeleporter)
+                            {
+                                Type chargingState = typeof(TeleporterInteraction).GetNestedType("ChargingState", BindingFlags.NonPublic);
+                                object chargingStateInstance = Activator.CreateInstance(chargingState);
+                                SecondaryTeleporter.mainStateMachine.state.outer.SetNextState((EntityState)chargingStateInstance);
+                                SecondaryTeleporter.holdoutZoneController.Network_charge = 0.98f;
+                                SecondaryTeleporter.bonusDirector = null;
+                                SecondaryTeleporter.bossDirector = null;
+
+                                if (SecondaryTeleporter.sceneExitController && !teleportCheck)
+                                {
+                                    SecondaryTeleporter.sceneExitController.Begin();
+                                    teleportCheck = true;
+                                }
+                            }
                             if (TeleporterInteraction.instance)
                             {
                                 Type chargingState = typeof(TeleporterInteraction).GetNestedType("ChargingState", BindingFlags.NonPublic);
@@ -148,16 +165,15 @@ namespace RoR2PVP
                                 TeleporterInteraction.instance.holdoutZoneController.Network_charge = 0.98f;
                                 TeleporterInteraction.instance.bonusDirector = null;
                                 TeleporterInteraction.instance.bossDirector = null;
+
+                                if (TeleporterInteraction.instance.sceneExitController && !teleportCheck)
+                                {
+                                    TeleporterInteraction.instance.sceneExitController.Begin();
+                                    teleportCheck = true;
+                                }
                             }
-                            if(SecondaryTeleporter)
-                            {
-                                Type chargingState = typeof(TeleporterInteraction).GetNestedType("ChargingState", BindingFlags.NonPublic);
-                                object chargingStateInstance = Activator.CreateInstance(chargingState);
-                                SecondaryTeleporter.mainStateMachine.state.outer.SetNextState((EntityState)chargingStateInstance);
-                                SecondaryTeleporter.holdoutZoneController.Network_charge = 0.98f;
-                                SecondaryTeleporter.bonusDirector = null;
-                                SecondaryTeleporter.bossDirector = null;
-                            }
+                            //If teleporter failed then manually switch stages
+                            if (!teleportCheck) Run.instance.AdvanceStage(Run.instance.nextStageScene);
                             PVPEnded = true;
                         }
                     }
@@ -214,7 +230,7 @@ namespace RoR2PVP
                     if (Destinations.Count == 0)
                     {
                         LoadDestinations();
-                        Shuffle<SceneDef>(Destinations);
+                        Tools.Shuffle<SceneDef>(Destinations);
                         if (FinalDestination)
                         {
                             Run.instance.nextStageScene = FinalDestination;
@@ -286,10 +302,13 @@ namespace RoR2PVP
                         }
                     }
                     if (text == Util.GenerateColoredString("Your allies: ", new Color32(0, 255, 255, 255))) text += "None";
-                    Tools.SendPM(PlayerCharacterMasterController.instances[i].master.networkIdentity.clientAuthorityOwner, new Chat.SimpleChatMessage
+                    if(PlayerCharacterMasterController.instances[i].master.networkIdentity.clientAuthorityOwner != null)
                     {
-                        baseToken = text
-                    });
+                        Tools.SendPM(PlayerCharacterMasterController.instances[i].master.networkIdentity.clientAuthorityOwner, new Chat.SimpleChatMessage
+                        {
+                            baseToken = text
+                        });
+                    }
                 }
             }
         }
@@ -323,13 +342,17 @@ namespace RoR2PVP
             AIOwnership[] companions = GameObject.FindObjectsOfType<AIOwnership>();
             for (int i = 0; i < companions.Length; i++)
             {
-                if (companions[i].ownerMaster && companions[i].GetComponent<CharacterMaster>() != null)
+                CharacterMaster master = companions[i].GetComponent<CharacterMaster>();
+                if (companions[i].ownerMaster && master != null)
                 {
-                    CharacterBody companion = companions[i].GetComponent<CharacterMaster>().GetBody();
-                    CharacterBody player = companions[i].ownerMaster.GetBody();
+                    if(master.playerCharacterMasterController == null)
+                    {
+                        CharacterBody companion = master.GetBody();
+                        CharacterBody player = companions[i].ownerMaster.GetBody();
 
-                    companions[i].GetComponent<CharacterMaster>().teamIndex = companions[i].ownerMaster.teamIndex;
-                    if (companion != null && player != null) companion.teamComponent.teamIndex = player.teamComponent.teamIndex;
+                        master.teamIndex = companions[i].ownerMaster.teamIndex;
+                        if (companion != null && player != null) companion.teamComponent.teamIndex = player.teamComponent.teamIndex;
+                    }
                 }
             }
         }
@@ -351,55 +374,69 @@ namespace RoR2PVP
         static bool DeathCheck(out TeamIndex teamIndexOutput)
         {
             TeamIndex survivingTeamIndex = TeamIndex.None;
-            bool allDead = true;
+            bool allTeammatesDead = true;
+            bool allRealPlayersDead = true;
+            bool EveryoneIsDead = true;
 
             for (int i = 0; i < PlayerCharacterMasterController.instances.Count; i++)
             {
-                //GetBody() null on dc
-                //Master still exists even after dc
-                //Isalive is false when player dc or full dead
+                //Checks if any team members are still alive (both real players and bots)
                 if (!PlayerCharacterMasterController.instances[i].master.IsDeadAndOutOfLivesServer() && PlayerCharacterMasterController.instances[i].master.GetBody())
                 {
+                    EveryoneIsDead = false;
+                    //Checks if any real players are still alive
+                    if (PlayerCharacterMasterController.instances[i].master.networkIdentity.clientAuthorityOwner != null) allRealPlayersDead = false;
+
+                    //Checks if any team member are still alive
                     if (survivingTeamIndex == TeamIndex.None) survivingTeamIndex = PlayerCharacterMasterController.instances[i].master.teamIndex;
                     else
                     {
-                        if (survivingTeamIndex != PlayerCharacterMasterController.instances[i].master.teamIndex)
-                        {
-                            allDead = false;
-                            break;
-                        }
+                        if (survivingTeamIndex != PlayerCharacterMasterController.instances[i].master.teamIndex) allTeammatesDead = false;
                     }
                 }
             }
+
+            //If all real players are dead but there's still bots that's alive, prevent a game over and declare a draw
+            if (allRealPlayersDead && !EveryoneIsDead)
+            {
+                PreventGameOver = true;
+                survivingTeamIndex = TeamIndex.None;
+            }
+
             teamIndexOutput = survivingTeamIndex;
-            return allDead;
+            return allTeammatesDead || allRealPlayersDead ? true : false;
         }
 
         static void AnnounceWinningTeam(TeamIndex teamIndex)
         {
-            string str = "";
+            string teamText = "";
+            string resultText = "But can they keep it up?";
+            string conclusionText = "Head towards the teleporter for the next round.";
             switch (teamIndex)
             {
                 case TeamIndex.Player:
-                    str = "Team 1";
+                    teamText = "Team 1";
                     break;
                 case TeamIndex.Neutral:
-                    str = "Team 2";
+                    teamText = "Team 2";
                     break;
                 case TeamIndex.Monster:
-                    str = "Team 3";
+                    teamText = "Team 3";
                     break;
                 default:
-                    str = "Team 4";
+                    teamText = "No real player";
+                    resultText = "It's a draw!";
+                    conclusionText = "Teleporting...";
                     break;
             }
+
             Chat.SendBroadcastChat(new Chat.SimpleChatMessage
             {
-                baseToken = Util.GenerateColoredString(str, new Color32(76, byte.MaxValue, 0, byte.MaxValue)) + " has survived... But can they keep it up?"
+                baseToken = Util.GenerateColoredString(teamText, new Color32(76, byte.MaxValue, 0, byte.MaxValue)) + " has survived... " + resultText
             });
             Chat.SendBroadcastChat(new Chat.SimpleChatMessage
             {
-                baseToken = Util.GenerateColoredString("Head towards the teleporter for the next round.", new Color32(0, 255, 255, 255))
+                baseToken = Util.GenerateColoredString(conclusionText, new Color32(0, 255, 255, 255))
             });
         }
 
@@ -449,21 +486,6 @@ namespace RoR2PVP
                 {
                     if(PlayerCharacterMasterController.instances[i].master.GetBody().transform.position.y <= -2200) PlayerCharacterMasterController.instances[i].master.GetBody().healthComponent.Suicide();
                 }
-            }
-        }
-
-        //Shuffles the players
-        static void Shuffle<T>(List<T> list)
-        {
-            System.Random random = new System.Random();
-            int i = list.Count;
-            while (i > 1)
-            {
-                int index = random.Next(i);
-                i--;
-                T value = list[index];
-                list[index] = list[i];
-                list[i] = value;
             }
         }
         #endregion

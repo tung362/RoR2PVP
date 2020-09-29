@@ -127,6 +127,45 @@ namespace RoR2PVP
             return localUser.currentNetworkUser;
         }
 
+        public static ItemIndex TryGetRandomItem(List<PickupIndex> list, Xoroshiro128Plus rng)
+        {
+            int tries = 0;
+            while (tries < 10)
+            {
+                ItemIndex index = PickupCatalog.GetPickupDef(list[rng.RangeInt(0, list.Count)]).itemIndex;
+                if (index != ItemIndex.None) return index;
+                else tries++;
+            }
+            return ItemIndex.None;
+        }
+
+        public static EquipmentIndex TryGetRandomEquipment(List<PickupIndex> list, Xoroshiro128Plus rng)
+        {
+            int tries = 0;
+            while (tries < 10)
+            {
+                EquipmentIndex index = PickupCatalog.GetPickupDef(list[rng.RangeInt(0, list.Count)]).equipmentIndex;
+                if (index != EquipmentIndex.None) return index;
+                else tries++;
+            }
+            return EquipmentIndex.None;
+        }
+
+        //Shuffles a list
+        public static void Shuffle<T>(List<T> list)
+        {
+            System.Random random = new System.Random();
+            int i = list.Count;
+            while (i > 1)
+            {
+                int index = random.Next(i);
+                i--;
+                T value = list[index];
+                list[index] = list[i];
+                list[i] = value;
+            }
+        }
+
         //public static void SendCustomPing(NetworkConnection conn, NetworkIdentity networkIdentity, GameObject self, PingerController.PingInfo incomingPing)
         //{
         //    NetworkWriter networkWriter = new NetworkWriter();
