@@ -3,7 +3,7 @@ RoR2PVP is a mod that adds a free for all and team PVP game mode to the game Ris
 Note: Everything is server sided, so only host needs this mod installed
 
 (Optional: non host players can also vote on settings if they have the mod installed but isn't needed necessarily to play)  
-![alt text](https://i.imgur.com/2871Zif.png)  
+![alt text](https://i.imgur.com/vksJWY8.png)  
 
 Menus  
 ![alt text](https://i.imgur.com/onUtK43.png)  
@@ -15,7 +15,7 @@ Also unlocks all artifacts
 ![alt text](https://i.imgur.com/SQzJkPB.png)  
 
 ### Videos of mod in action:  
-**Team PVP Mod With PlayerBots Mod**  
+**PVP Mod With PlayerBots Mod**  
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/a9G1v51GITQ/0.jpg)](https://youtu.be/a9G1v51GITQ)  
 **Vanilla Characters**  
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/H9WwMHg8jIE/0.jpg)](https://youtu.be/H9WwMHg8jIE)  
@@ -49,14 +49,14 @@ Feel free to submit an issue here on my [github](https://github.com/tung362/RoR2
   - Config entries for changing game mode settings
   
 - **Extras**
-  - unlocking of all artifacts
-  - unlocking of all vanilla characters and loadouts
+  - Unlocking of all artifacts
+  - Unlocking of all vanilla characters and loadouts
   
 - **Includes 4 config files to balance your game as you see fit**
-  - TeamPVP.cfg
-  - TeamPVPCustomPlayableCharacters.cfg
-  - TeamPVPBannedItemList.cfg
-  - TeamPVPCustomInteractablesSpawner.cfg
+  - PVP.cfg
+  - PVPCustomPlayableCharacters.cfg
+  - PVPBannedItemList.cfg
+  - PVPCustomInteractablesSpawner.cfg
 
 ### Requirements:  
 [BepInExPack 5.3.1](https://thunderstore.io/package/download/bbepis/BepInExPack/5.3.1/)  
@@ -66,20 +66,20 @@ Friends :(
 ### Installation:  
 1. Install BepInExPack (Version is provided above)
 2. Install R2API (Version is provided above)
-3. Download and unzip RoR2TeamPVP (From releases or on thunderstore.io)
+3. Download and unzip RoR2PVP (From releases or on thunderstore.io)
 4. Place `RoR2PVP.dll` into your `\Risk of Rain 2\BepInEx\plugins\` folder
 
 ### Configuration:  
-1. Run your game at least once with the RoR2TeamPVP mod installed
+1. Run your game at least once with the RoR2PVP mod installed
 2. Navigate to `\Risk of Rain 2\BepInEx\config`
-3. Open `TeamPVP.cfg` with any text editor
-5. Open `TeamPVPBannedItemList.cfg` with any text editor
-6. Open `TeamPVPCustomPlayableCharacters.cfg` with any text editor
-7. Open `TeamPVPCustomInteractablesSpawner.cfg` with any text editor
+3. Open `PVP.cfg` with any text editor
+5. Open `PVPBannedItemList.cfg` with any text editor
+6. Open `PVPCustomPlayableCharacters.cfg` with any text editor
+7. Open `PVPCustomInteractablesSpawner.cfg` with any text editor
 8. Edit the configs as you see fit
 
 **Default Config Values**  
-**`TeamPVP.cfg`**  
+**`PVP.cfg`**  
 
 | Keys                          | Default values |
 | ----------------------------- | -------------- |
@@ -91,7 +91,7 @@ Friends :(
 | Modded                        |          true  |
 | Unlock All                    |         false  |
 
-**`TeamPVPBannedItemList.cfg`**  
+**`PVPBannedItemList.cfg`**  
 
 
 | Default banned items    |
@@ -115,7 +115,7 @@ Friends :(
 | DeathProjectile         |
 
 
-**`TeamPVPCustomPlayableCharacters.cfg`**  
+**`PVPCustomPlayableCharacters.cfg`**  
 
 | Character slots | Default custom characters   |
 | --------------- | --------------------------- |
@@ -131,7 +131,7 @@ Friends :(
 | Captain slot    |               SniperBody    |
 
 
-**`TeamPVPCustomInteractablesSpawner.cfg`**  
+**`PVPCustomInteractablesSpawner.cfg`**  
 
 | keys                        | Default Values |
 | --------------------------- | -------------- |
@@ -199,7 +199,7 @@ Special thanks to my friend Justin for helping me test https://github.com/Sethix
 ### Change log:  
 **1.5.0 (Current)**  
 - Added a Free For All game mode  
-- https://imgur.com/a/VNruxmN  
+- https://imgur.com/PRBt3AP  
 - Added a Team Picker menu to the lobby room, host can now pick people's teams in-game  
 - Added a Item Banner menu to the lobby room, host can now ban items in-game without needing to edit the config and restarting the game  
 - Added a Custom Playable Characters menu to the lobby room, host can now choose custom characters for everyone without needing to edit the config and restarting the game  
