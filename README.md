@@ -14,7 +14,7 @@ Menus
 Also unlocks all artifacts  
 ![alt text](https://i.imgur.com/SQzJkPB.png)  
 
-### videos of mod in action:  
+### Videos of mod in action:  
 **Team PVP Mod With PlayerBots Mod**  
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/a9G1v51GITQ/0.jpg)](https://youtu.be/a9G1v51GITQ)  
 **Vanilla Characters**  
