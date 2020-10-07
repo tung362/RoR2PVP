@@ -16,7 +16,7 @@ using RoR2.UI;
 
 namespace RoR2PVP
 {
-    class Tools
+    public static class Tools
     {
         public static void CustomGenerate(string prefabPath, int amountToTrySpawn, int Price, Xoroshiro128Plus rng)
         {
@@ -129,24 +129,30 @@ namespace RoR2PVP
 
         public static ItemIndex TryGetRandomItem(List<PickupIndex> list, Xoroshiro128Plus rng)
         {
-            int tries = 0;
-            while (tries < 10)
+            if(list.Count != 0)
             {
-                ItemIndex index = PickupCatalog.GetPickupDef(list[rng.RangeInt(0, list.Count)]).itemIndex;
-                if (index != ItemIndex.None) return index;
-                else tries++;
+                int tries = 0;
+                while (tries < 10)
+                {
+                    ItemIndex index = PickupCatalog.GetPickupDef(list[rng.RangeInt(0, list.Count)]).itemIndex;
+                    if (index != ItemIndex.None) return index;
+                    else tries++;
+                }
             }
             return ItemIndex.None;
         }
 
         public static EquipmentIndex TryGetRandomEquipment(List<PickupIndex> list, Xoroshiro128Plus rng)
         {
-            int tries = 0;
-            while (tries < 10)
+            if(list.Count != 0)
             {
-                EquipmentIndex index = PickupCatalog.GetPickupDef(list[rng.RangeInt(0, list.Count)]).equipmentIndex;
-                if (index != EquipmentIndex.None) return index;
-                else tries++;
+                int tries = 0;
+                while (tries < 10)
+                {
+                    EquipmentIndex index = PickupCatalog.GetPickupDef(list[rng.RangeInt(0, list.Count)]).equipmentIndex;
+                    if (index != EquipmentIndex.None) return index;
+                    else tries++;
+                }
             }
             return EquipmentIndex.None;
         }

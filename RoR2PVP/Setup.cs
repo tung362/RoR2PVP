@@ -10,13 +10,15 @@ using UnityEngine.EventSystems;
 using TMPro;
 using BepInEx;
 using BepInEx.Configuration;
+using Mono.Cecil.Cil;
 using R2API.Utils;
 using RoR2;
 using APIExtension.VoteAPI;
 
 namespace RoR2PVP
 {
-    [BepInPlugin("TeamPVP", "Team PVP Mode", "1.4.5")]
+    [BepInDependency("com.bepis.r2api")]
+    [BepInPlugin("PVP", "PVP Mode", "1.5.0")]
     [NetworkCompatibility(CompatibilityLevel.NoNeedForSync)]
     [R2APISubmoduleDependency(new string[]
     {
@@ -31,11 +33,12 @@ namespace RoR2PVP
         {
             //Get root path
             ConfigRootPath = Config.ConfigFilePath;
-            ConfigRootPath = ConfigRootPath.Remove(Config.ConfigFilePath.Count() - "TeamPVP.cfg".Length);
+            ConfigRootPath = ConfigRootPath.Remove(Config.ConfigFilePath.Count() - "PVP.cfg".Length);
+
+            /*Compatibility*/
 
             /*API Extenstions*/
             VoteAPI.SetHook();
-
             /*Mod menu options*/
             Hooks.Init();
         }
@@ -44,9 +47,9 @@ namespace RoR2PVP
         {
             /*Loads Config Settings*/
             Settings.LoadConfig(Config);
-            Settings.LoadCustomPlayableCharactersConfig(ConfigRootPath + "TeamPVPCustomPlayableCharacters.cfg");
-            Settings.LoadBannedItemListConfig(ConfigRootPath + "TeamPVPBannedItemList.cfg");
-            Settings.LoadCustomInteractablesSpawnerConfig(new ConfigFile(ConfigRootPath + "TeamPVPCustomInteractablesSpawner.cfg", true));
+            Settings.LoadCustomPlayableCharactersConfig(ConfigRootPath + "PVPCustomPlayableCharacters.cfg");
+            Settings.LoadBannedItemListConfig(ConfigRootPath + "PVPBannedItemList.cfg");
+            Settings.LoadCustomInteractablesSpawnerConfig(new ConfigFile(ConfigRootPath + "PVPCustomInteractablesSpawner.cfg", true));
             /*Setup*/
             Hooks.SetupHook();
         }

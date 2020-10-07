@@ -12,13 +12,15 @@ using BepInEx;
 using R2API;
 using R2API.Utils;
 using RoR2;
+using RoR2.CharacterAI;
 using RoR2.Networking;
 using EntityStates;
 using APIExtension.VoteAPI;
+using RoR2PVP.UI;
 
 namespace RoR2PVP
 {
-    class Hooks
+    public static class Hooks
     {
         public static void Init()
         {
@@ -27,42 +29,43 @@ namespace RoR2PVP
 
             /*Options menu for lobby*/
             //Header
-            RuleCategoryDef teamPVPHeader = VoteAPI.AddVoteHeader("Team PVP", new Color(1.0f, 0.0f, 0.0f, 1.0f), false);
+            RuleCategoryDef PVPHeader = VoteAPI.AddVoteHeader("PVP", new Color(1.0f, 0.0f, 0.0f, 1.0f), false);
 
             //Selection
-            RuleDef teamPVPSelection = VoteAPI.AddVoteSelection(teamPVPHeader, "Team PVP", new ChoiceMenu("Team PVP On", new Color(0.0f, 1.0f, 0.0f, 0.4f), "Enables Mod", Color.black, "@TeamPVP:Assets/Resources/UI/TeamPVPSelected.png", "artifact_teampvp", Settings.TeamPVPToggle.Item2));
-            VoteAPI.AddVoteChoice(teamPVPSelection, new ChoiceMenu("Team PVP Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Disables Mod", Color.black, "@TeamPVP:Assets/Resources/UI/TeamPVPDeselected.png", "artifact_teampvp", -1));
-            teamPVPSelection.defaultChoiceIndex = Settings.TeamPVPToggle.Item1 ? 0 : 1;
+            RuleDef PVPSelection = VoteAPI.AddVoteSelection(PVPHeader, "PVP", new ChoiceMenu("Free For All PVP On", new Color(0.0f, 1.0f, 0.0f, 0.4f), "Enables free for all game mode", Color.black, "@TeamPVP:Assets/Resources/UI/FreeForAllPVPSelected.png", "artifact_teampvp", Settings.FreeForAllPVPToggle.Item2));
+            VoteAPI.AddVoteChoice(PVPSelection, new ChoiceMenu("Team PVP On", new Color(0.0f, 1.0f, 0.0f, 0.4f), "Enables team pvp game mode", Color.black, "@TeamPVP:Assets/Resources/UI/TeamPVPSelected.png", "artifact_teampvp", Settings.TeamPVPToggle.Item2));
+            VoteAPI.AddVoteChoice(PVPSelection, new ChoiceMenu("PVP Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Disables Mod", Color.black, "@TeamPVP:Assets/Resources/UI/TeamPVPDeselected.png", "artifact_teampvp", -1));
+            PVPSelection.defaultChoiceIndex = 2;
 
-            RuleDef randomTeamsSelection = VoteAPI.AddVoteSelection(teamPVPHeader, "Random Teams", new ChoiceMenu("Random Teams On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Teams will be shuffled every round", Color.black, "@TeamPVP:Assets/Resources/UI/RandomTeamsSelected.png", "artifact_teampvp", Settings.RandomTeams.Item2));
-            VoteAPI.AddVoteChoice(randomTeamsSelection, new ChoiceMenu("Random Teams Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Teams will stay the same every round", Color.black, "@TeamPVP:Assets/Resources/UI/RandomTeamsDeselected.png", "artifact_teampvp", -1));
+            RuleDef randomTeamsSelection = VoteAPI.AddVoteSelection(PVPHeader, "Random Teams", new ChoiceMenu("Random Teams On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Teams will be shuffled every round (only for team pvp game mode)", Color.black, "@TeamPVP:Assets/Resources/UI/RandomTeamsSelected.png", "artifact_teampvp", Settings.RandomTeams.Item2));
+            VoteAPI.AddVoteChoice(randomTeamsSelection, new ChoiceMenu("Random Teams Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Teams will stay the same every round (only for team pvp game mode)", Color.black, "@TeamPVP:Assets/Resources/UI/RandomTeamsDeselected.png", "artifact_teampvp", -1));
             randomTeamsSelection.defaultChoiceIndex = Settings.RandomTeams.Item1 ? 0 : 1;
 
-            RuleDef mobSpawnSelection = VoteAPI.AddVoteSelection(teamPVPHeader, "Mob Spawn", new ChoiceMenu("Mob Spawn On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Mobs will spawn", Color.black, "@TeamPVP:Assets/Resources/UI/MobSpawnSelected.png", "artifact_teampvp", Settings.MobSpawn.Item2));
+            RuleDef mobSpawnSelection = VoteAPI.AddVoteSelection(PVPHeader, "Mob Spawn", new ChoiceMenu("Mob Spawn On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Mobs will spawn", Color.black, "@TeamPVP:Assets/Resources/UI/MobSpawnSelected.png", "artifact_teampvp", Settings.MobSpawn.Item2));
             VoteAPI.AddVoteChoice(mobSpawnSelection, new ChoiceMenu("Mob Spawn Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Mobs will not spawn", Color.black, "@TeamPVP:Assets/Resources/UI/MobSpawnDeselected.png", "artifact_teampvp", -1));
             mobSpawnSelection.defaultChoiceIndex = Settings.MobSpawn.Item1 ? 0 : 1;
 
-            RuleDef banItemsSelection = VoteAPI.AddVoteSelection(teamPVPHeader, "Ban Items", new ChoiceMenu("Ban Items On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Banned items configured in the config will be blacklisted", Color.black, "@TeamPVP:Assets/Resources/UI/BanItemsSelected.png", "artifact_teampvp", Settings.BanItems.Item2));
+            RuleDef banItemsSelection = VoteAPI.AddVoteSelection(PVPHeader, "Ban Items", new ChoiceMenu("Ban Items On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Banned items configured in the config will be blacklisted", Color.black, "@TeamPVP:Assets/Resources/UI/BanItemsSelected.png", "artifact_teampvp", Settings.BanItems.Item2));
             VoteAPI.AddVoteChoice(banItemsSelection, new ChoiceMenu("Ban Items Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Banned Items will not be blacklisted", Color.black, "@TeamPVP:Assets/Resources/UI/BanItemsDeselected.png", "artifact_teampvp", -1));
             banItemsSelection.defaultChoiceIndex = Settings.BanItems.Item1 ? 0 : 1;
 
-            RuleDef companionsShareItemsSelection = VoteAPI.AddVoteSelection(teamPVPHeader, "Companions Share Items", new ChoiceMenu("Companions Share Items On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Items picked up by the player will be shared with their drones etc", Color.black, "@TeamPVP:Assets/Resources/UI/CompanionsShareItemsSelected.png", "artifact_teampvp", Settings.CompanionsShareItems.Item2));
+            RuleDef companionsShareItemsSelection = VoteAPI.AddVoteSelection(PVPHeader, "Companions Share Items", new ChoiceMenu("Companions Share Items On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Items picked up by the player will be shared with their drones etc", Color.black, "@TeamPVP:Assets/Resources/UI/CompanionsShareItemsSelected.png", "artifact_teampvp", Settings.CompanionsShareItems.Item2));
             VoteAPI.AddVoteChoice(companionsShareItemsSelection, new ChoiceMenu("Companions Share Items Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Items will not be shared with drones etc", Color.black, "@TeamPVP:Assets/Resources/UI/CompanionsShareItemsDeselected.png", "artifact_teampvp", -1));
             companionsShareItemsSelection.defaultChoiceIndex = Settings.CompanionsShareItems.Item1 ? 0 : 1;
 
-            RuleDef customPlayableCharactersSelection = VoteAPI.AddVoteSelection(teamPVPHeader, "Custom Playable Characters", new ChoiceMenu("Custom Playable Characters On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Play custom characters configured in the config", Color.black, "@TeamPVP:Assets/Resources/UI/CustomPlayableCharactersSelected.png", "artifact_teampvp", Settings.CustomPlayableCharacters.Item2));
+            RuleDef customPlayableCharactersSelection = VoteAPI.AddVoteSelection(PVPHeader, "Custom Playable Characters", new ChoiceMenu("Custom Playable Characters On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Play custom characters configured in the config", Color.black, "@TeamPVP:Assets/Resources/UI/CustomPlayableCharactersSelected.png", "artifact_teampvp", Settings.CustomPlayableCharacters.Item2));
             VoteAPI.AddVoteChoice(customPlayableCharactersSelection, new ChoiceMenu("Custom Playable Characters Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Play the default vanilla characters (unbalanced)", Color.black, "@TeamPVP:Assets/Resources/UI/CustomPlayableCharactersDeselected.png", "artifact_teampvp", -1));
             customPlayableCharactersSelection.defaultChoiceIndex = Settings.CustomPlayableCharacters.Item1 ? 0 : 1;
 
-            RuleDef customInteractablesSpawnerSelection = VoteAPI.AddVoteSelection(teamPVPHeader, "Custom Interactables Spawner", new ChoiceMenu("Custom Interactables Spawner On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Spawn custom objects(chests, drones, etc) at custom rates configured in the config", Color.black, "@TeamPVP:Assets/Resources/UI/CustomInteractablesSpawnerSelected.png", "artifact_teampvp", Settings.CustomInteractablesSpawner.Item2));
-            VoteAPI.AddVoteChoice(customInteractablesSpawnerSelection, new ChoiceMenu("Custom Interactables Spawner Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Spawn objects(chests, drones, etc) normally as vanilla", Color.black, "@TeamPVP:Assets/Resources/UI/CustomInteractablesSpawnerDeselected.png", "artifact_teampvp", -1));
+            RuleDef customInteractablesSpawnerSelection = VoteAPI.AddVoteSelection(PVPHeader, "Custom Interactables Spawner", new ChoiceMenu("Custom Interactables Spawner On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Spawn custom objects (chests, drones, etc) at custom rates configured in the config", Color.black, "@TeamPVP:Assets/Resources/UI/CustomInteractablesSpawnerSelected.png", "artifact_teampvp", Settings.CustomInteractablesSpawner.Item2));
+            VoteAPI.AddVoteChoice(customInteractablesSpawnerSelection, new ChoiceMenu("Custom Interactables Spawner Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Spawn objects (chests, drones, etc) normally as vanilla", Color.black, "@TeamPVP:Assets/Resources/UI/CustomInteractablesSpawnerDeselected.png", "artifact_teampvp", -1));
             customInteractablesSpawnerSelection.defaultChoiceIndex = Settings.CustomInteractablesSpawner.Item1 ? 0 : 1;
 
-            RuleDef useDeathPlaneFailsafeSelection = VoteAPI.AddVoteSelection(teamPVPHeader, "Use Death Plane Failsafe", new ChoiceMenu("Use Death Plane Failsafe On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Force players to die should they fall off the map to prevent softlock", Color.black, "@TeamPVP:Assets/Resources/UI/UseDeathPlaneFailsafeSelected.png", "artifact_teampvp", Settings.UseDeathPlaneFailsafe.Item2));
+            RuleDef useDeathPlaneFailsafeSelection = VoteAPI.AddVoteSelection(PVPHeader, "Use Death Plane Failsafe", new ChoiceMenu("Use Death Plane Failsafe On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Force players to die should they fall off the map to prevent softlock", Color.black, "@TeamPVP:Assets/Resources/UI/UseDeathPlaneFailsafeSelected.png", "artifact_teampvp", Settings.UseDeathPlaneFailsafe.Item2));
             VoteAPI.AddVoteChoice(useDeathPlaneFailsafeSelection, new ChoiceMenu("Use Death Plane Failsafe Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Disables the death plane. Only turn off if your using a custom map!", Color.black, "@TeamPVP:Assets/Resources/UI/UseDeathPlaneFailsafeDeselected.png", "artifact_teampvp", -1));
             useDeathPlaneFailsafeSelection.defaultChoiceIndex = Settings.UseDeathPlaneFailsafe.Item1 ? 0 : 1;
 
-            RuleDef widerStageTransitionsSelection = VoteAPI.AddVoteSelection(teamPVPHeader, "Wider Stage Transitions", new ChoiceMenu("Wider Stage Transitions On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Transitions through a wider selection of stages when using the teleporter", Color.black, "@TeamPVP:Assets/Resources/UI/WiderStageTransitionsSelected.png", "artifact_teampvp", Settings.WiderStageTransitions.Item2));
+            RuleDef widerStageTransitionsSelection = VoteAPI.AddVoteSelection(PVPHeader, "Wider Stage Transitions", new ChoiceMenu("Wider Stage Transitions On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Transitions through a wider selection of stages when using the teleporter", Color.black, "@TeamPVP:Assets/Resources/UI/WiderStageTransitionsSelected.png", "artifact_teampvp", Settings.WiderStageTransitions.Item2));
             VoteAPI.AddVoteChoice(widerStageTransitionsSelection, new ChoiceMenu("Wider Stage Transitions Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Vanilla stage transitions. Also turn off when using custom stages", Color.black, "@TeamPVP:Assets/Resources/UI/WiderStageTransitionsDeselected.png", "artifact_teampvp", -1));
             widerStageTransitionsSelection.defaultChoiceIndex = Settings.WiderStageTransitions.Item1 ? 0 : 1;
         }
@@ -79,10 +82,12 @@ namespace RoR2PVP
             if (!Settings.Modded) typeof(RoR2Application).GetField("isModded", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy | BindingFlags.Static).SetValue(null, false);
 
             //Start mod
-            On.RoR2.UI.UIJuice.Awake += ApplyLogo;
+            On.RoR2.UI.UIJuice.Awake += ApplyCustomUI;
             On.RoR2.Networking.GameNetworkManager.OnServerAddPlayerInternal += DisplayCustomCharacters;
             On.RoR2.PreGameController.ResolveChoiceMask += DisplayArtifacts;
             On.RoR2.Stats.StatSheet.HasUnlockable += UnlockAll;
+            On.RoR2.Chat.SendPlayerConnectedMessage += AddToTeamPicker;
+            On.RoR2.Chat.SendPlayerDisconnectedMessage += RemoveFromTeamPicker;
             On.RoR2.Run.Start += GameStart;
             RoR2.Run.onRunDestroyGlobal += GameEnd;
         }
@@ -154,13 +159,25 @@ namespace RoR2PVP
         #endregion
 
         #region Startup
-        static void ApplyLogo(On.RoR2.UI.UIJuice.orig_Awake orig, RoR2.UI.UIJuice self)
+        static void ApplyCustomUI(On.RoR2.UI.UIJuice.orig_Awake orig, RoR2.UI.UIJuice self)
         {
             if (self.name == "ImagePanel (JUICED)")
             {
                 GameObject skull = GameObject.Instantiate((GameObject)Resources.Load("@TeamPVP:Assets/Resources/Prefabs/TeamPVPSkull.prefab"), self.transform);
                 RectTransform skullTransform = skull.GetComponent<RectTransform>();
-                skullTransform.anchoredPosition = new Vector2(55, -385);
+                skullTransform.anchoredPosition = new Vector2(90, -385);
+            }
+            if (NetworkServer.active)
+            {
+                if (self.name == "RightHandPanel")
+                {
+                    GameObject pvpMenu = GameObject.Instantiate((GameObject)Resources.Load("@TeamPVP:Assets/Resources/Prefabs/PVPMenu.prefab"), self.transform);
+                    pvpMenu.AddComponent<TeamPicker>();
+                    pvpMenu.AddComponent<ItemBanner>();
+                    pvpMenu.AddComponent<CharacterPicker>();
+                    RectTransform pvpMenuTransform = pvpMenu.GetComponent<RectTransform>();
+                    pvpMenuTransform.anchoredPosition = new Vector2(-312, -64);
+                }
             }
             orig(self);
         }
@@ -238,28 +255,61 @@ namespace RoR2PVP
             orig(self);
         }
 
-        private static bool UnlockAll(On.RoR2.Stats.StatSheet.orig_HasUnlockable orig, RoR2.Stats.StatSheet self, UnlockableDef unlockableDef)
+        static bool UnlockAll(On.RoR2.Stats.StatSheet.orig_HasUnlockable orig, RoR2.Stats.StatSheet self, UnlockableDef unlockableDef)
         {
             if (Settings.UnlockAll) return true;
             return orig(self, unlockableDef);
         }
 
+        static void AddToTeamPicker(On.RoR2.Chat.orig_SendPlayerConnectedMessage orig, NetworkUser user)
+        {
+            if (TeamPicker.instance) TeamPicker.instance.AddPlayer(user);
+            else
+            {
+                if(!TeamPicker.PlayerStates.ContainsKey(user)) TeamPicker.PlayerStates.Add(user, new TeamPicker.Slot(TeamPicker.StateType.Unassigned, -1));
+            }
+            orig(user);
+        }
+
+        static void RemoveFromTeamPicker(On.RoR2.Chat.orig_SendPlayerDisconnectedMessage orig, NetworkUser user)
+        {
+            if(TeamPicker.instance) TeamPicker.instance.RemovePlayer(user);
+            else
+            {
+                if (TeamPicker.PlayerStates.ContainsKey(user)) TeamPicker.PlayerStates.Remove(user);
+            }
+            orig(user);
+        }
+
         static void GameStart(On.RoR2.Run.orig_Start orig, Run self)
         {
-            //Run mod if mod was enabled in the lobby menu
-            if (VoteAPI.VoteResults.HasVote(Settings.TeamPVPToggle.Item2))
+            //Pre-start
+            if (NetworkServer.active)
             {
-                PVPMode.LoadDestinations();
-                Tools.Shuffle<SceneDef>(PVPMode.Destinations);
-                SetCoreHooks();
-                SetExtraHooks();
+                //Run mod if mod was enabled in the lobby menu
+                if (VoteAPI.VoteResults.HasVote(Settings.FreeForAllPVPToggle.Item2) || VoteAPI.VoteResults.HasVote(Settings.TeamPVPToggle.Item2))
+                {
+                    PVPMode.LoadDestinations();
+                    Tools.Shuffle<SceneDef>(PVPMode.Destinations);
+                    SetCoreHooks();
+                    SetExtraHooks();
+                }
             }
             orig(self);
+            //Post-start
+            if (NetworkServer.active)
+            {
+                //Run mod if mod was enabled in the lobby menu
+                if (VoteAPI.VoteResults.HasVote(Settings.FreeForAllPVPToggle.Item2) || VoteAPI.VoteResults.HasVote(Settings.TeamPVPToggle.Item2))
+                {
+                    PVPMode.LoadFixedTeams();
+                }
+            }
         }
 
         static void GameEnd(Run self)
         {
-            if (VoteAPI.VoteResults.HasVote(Settings.TeamPVPToggle.Item2))
+            if (VoteAPI.VoteResults.HasVote(Settings.FreeForAllPVPToggle.Item2) || VoteAPI.VoteResults.HasVote(Settings.TeamPVPToggle.Item2))
             {
                 UnsetCoreHooks();
                 UnsetExtraHooks();
@@ -525,6 +575,16 @@ namespace RoR2PVP
                 }
             }
             orig(self);
+
+            //Lists causes errors if left empty so add junk item to empty list
+            if(self.availableTier1DropList.Count == 0) self.availableTier1DropList.Add(PickupCatalog.FindPickupIndex(ItemIndex.ExtraLifeConsumed));
+            if (self.availableTier2DropList.Count == 0) self.availableTier2DropList.Add(PickupCatalog.FindPickupIndex(ItemIndex.ExtraLifeConsumed));
+            if (self.availableTier3DropList.Count == 0) self.availableTier3DropList.Add(PickupCatalog.FindPickupIndex(ItemIndex.ExtraLifeConsumed));
+            if (self.availableLunarDropList.Count == 0) self.availableLunarDropList.Add(PickupCatalog.FindPickupIndex(ItemIndex.ExtraLifeConsumed));
+            if (self.availableEquipmentDropList.Count == 0) self.availableEquipmentDropList.Add(PickupCatalog.FindPickupIndex(ItemIndex.ExtraLifeConsumed));
+            if (self.availableBossDropList.Count == 0) self.availableBossDropList.Add(PickupCatalog.FindPickupIndex(ItemIndex.ExtraLifeConsumed));
+            if (self.availableLunarEquipmentDropList.Count == 0) self.availableLunarEquipmentDropList.Add(PickupCatalog.FindPickupIndex(ItemIndex.ExtraLifeConsumed));
+            if (self.availableNormalEquipmentDropList.Count == 0) self.availableNormalEquipmentDropList.Add(PickupCatalog.FindPickupIndex(ItemIndex.ExtraLifeConsumed));
         }
 
         static void PreventTeleporterFireworks(On.RoR2.GlobalEventManager.orig_OnInteractionBegin orig, GlobalEventManager self, Interactor interactor, IInteractable interactable, GameObject interactableObject)
@@ -537,17 +597,38 @@ namespace RoR2PVP
         {
             if (!self.body) return null;
             BullseyeSearch enemySearch = self.GetFieldValue<BullseyeSearch>("enemySearch");
-            enemySearch.viewer = self.body;
-            enemySearch.teamMaskFilter = TeamMask.all;
-            enemySearch.teamMaskFilter.RemoveTeam(self.master.teamIndex);
-            enemySearch.sortMode = BullseyeSearch.SortMode.Distance;
-            enemySearch.minDistanceFilter = 0f;
-            enemySearch.maxDistanceFilter = maxDistance;
-            enemySearch.searchOrigin = self.bodyInputBank.aimOrigin;
-            enemySearch.searchDirection = self.bodyInputBank.aimDirection;
-            enemySearch.maxAngleFilter = (full360Vision ? 180f : 90f);
-            enemySearch.filterByLoS = filterByLoS;
-            enemySearch.RefreshCandidates();
+
+            //Free for all pvp and player bot AI
+            if (VoteAPI.VoteResults.HasVote(Settings.FreeForAllPVPToggle.Item2) && self.master.playerCharacterMasterController)
+            {
+                enemySearch.viewer = self.body;
+                enemySearch.teamMaskFilter = TeamMask.all;
+                if (PVPMode.IsGracePeriod) enemySearch.teamMaskFilter.RemoveTeam(self.master.teamIndex);
+                enemySearch.sortMode = BullseyeSearch.SortMode.Distance;
+                enemySearch.minDistanceFilter = 0f;
+                enemySearch.maxDistanceFilter = maxDistance;
+                enemySearch.searchOrigin = self.bodyInputBank.aimOrigin;
+                enemySearch.searchDirection = self.bodyInputBank.aimDirection;
+                enemySearch.maxAngleFilter = (full360Vision ? 180f : 90f);
+                enemySearch.filterByLoS = filterByLoS;
+                enemySearch.RefreshCandidates();
+                enemySearch.FilterOutGameObject(self.body.gameObject);
+            }
+            //Team pvp or regular mobs AI
+            else
+            {
+                enemySearch.viewer = self.body;
+                enemySearch.teamMaskFilter = TeamMask.all;
+                enemySearch.teamMaskFilter.RemoveTeam(self.master.teamIndex);
+                enemySearch.sortMode = BullseyeSearch.SortMode.Distance;
+                enemySearch.minDistanceFilter = 0f;
+                enemySearch.maxDistanceFilter = maxDistance;
+                enemySearch.searchOrigin = self.bodyInputBank.aimOrigin;
+                enemySearch.searchDirection = self.bodyInputBank.aimDirection;
+                enemySearch.maxAngleFilter = (full360Vision ? 180f : 90f);
+                enemySearch.filterByLoS = filterByLoS;
+                enemySearch.RefreshCandidates();
+            }
             return enemySearch.GetResults().FirstOrDefault<HurtBox>();
         }
 
@@ -567,8 +648,8 @@ namespace RoR2PVP
                         baseToken = Util.GenerateColoredString("Banned item detected! rerolling...", new Color32(255, 106, 0, 255))
                     });
 
-                    ItemDef itemDef = ItemCatalog.GetItemDef(item);
                     bool assigned = false;
+                    ItemDef itemDef = ItemCatalog.GetItemDef(item);
                     if (itemDef != null)
                     {
                         if (itemDef.tier == ItemTier.Tier1)
@@ -613,15 +694,14 @@ namespace RoR2PVP
                         }
                         else
                         {
-                            List<ItemIndex> items = Run.instance.availableItems.ToList();
-                            item = items[Run.instance.treasureRng.RangeInt(0, items.Count)];
+                            item = ItemIndex.None;
                             assigned = true;
                         }
                     }
-
                     if (!assigned) item = ItemIndex.None;
                 }
             }
+            if (item == ItemIndex.None) return;
             orig(self, item, count);
         }
 
@@ -663,7 +743,6 @@ namespace RoR2PVP
                             }
                         }
                     }
-
                     if(!assigned) equipment = EquipmentState.empty;
                 }
             }

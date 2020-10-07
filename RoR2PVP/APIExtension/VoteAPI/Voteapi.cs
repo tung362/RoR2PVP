@@ -9,12 +9,12 @@ using RoR2;
 namespace APIExtension.VoteAPI
 {
     /// <summary>
-    /// Unofficial api implementing a voting system to multiplayer and singleplayer lobbies created for ror2teampvp
+    /// Unofficial api implementing a voting system to multiplayer and singleplayer lobbies created for RoR2PVP
     /// Works regardless of other players having vanilla or modded clients over the network with no desync errors
     /// Send me a message if you'd like a public version for your mod on https://github.com/tung362
     /// Does not yet fully support other mods
     /// </summary>
-    class VoteAPI
+    public static class VoteAPI
     {
         /*Result*/
         public static VoteMask VoteResults;

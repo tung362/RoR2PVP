@@ -14,22 +14,23 @@ using RoR2;
 
 namespace RoR2PVP
 {
-    class Settings
+    public static class Settings
     {
         /*Assets*/
         public static AssetBundle Assets;
         public static AssetBundleResourcesProvider Provider;
 
         /*Default values and registered vote indexes for voteable mod options*/
-        public static readonly Tuple<bool, int> TeamPVPToggle = Tuple.Create(false, 100);
-        public static readonly Tuple<bool, int> RandomTeams = Tuple.Create(true, 101);
-        public static readonly Tuple<bool, int> MobSpawn = Tuple.Create(false, 102);
-        public static readonly Tuple<bool, int> BanItems = Tuple.Create(true, 103);
-        public static readonly Tuple<bool, int> CompanionsShareItems = Tuple.Create(true, 104);
-        public static readonly Tuple<bool, int> CustomPlayableCharacters = Tuple.Create(true, 105);
-        public static readonly Tuple<bool, int> CustomInteractablesSpawner = Tuple.Create(true, 106);
-        public static readonly Tuple<bool, int> UseDeathPlaneFailsafe = Tuple.Create(true, 107);
-        public static readonly Tuple<bool, int> WiderStageTransitions = Tuple.Create(false, 108);
+        public static readonly Tuple<bool, int> FreeForAllPVPToggle = Tuple.Create(false, 100);
+        public static readonly Tuple<bool, int> TeamPVPToggle = Tuple.Create(false, 101);
+        public static readonly Tuple<bool, int> RandomTeams = Tuple.Create(true, 102);
+        public static readonly Tuple<bool, int> MobSpawn = Tuple.Create(false, 103);
+        public static readonly Tuple<bool, int> BanItems = Tuple.Create(true, 104);
+        public static readonly Tuple<bool, int> CompanionsShareItems = Tuple.Create(true, 105);
+        public static readonly Tuple<bool, int> CustomPlayableCharacters = Tuple.Create(true, 106);
+        public static readonly Tuple<bool, int> CustomInteractablesSpawner = Tuple.Create(true, 107);
+        public static readonly Tuple<bool, int> UseDeathPlaneFailsafe = Tuple.Create(true, 108);
+        public static readonly Tuple<bool, int> WiderStageTransitions = Tuple.Create(false, 109);
 
         /*Config*/
         //Multiplayer settings
@@ -37,7 +38,7 @@ namespace RoR2PVP
         public static bool Modded = true;
 
         //PVP settings
-        public static float GraceTimerDuration = 120;
+        public static float GraceTimerDuration = 60;
         public static float CashDelay = 10;
         public static uint CashGrantAmount = 50u;
         public static int RespawnsPerRound = 2;
@@ -114,13 +115,13 @@ namespace RoR2PVP
             List<string> bodiesList = new List<string>();
             //Character slots
             bodiesList.Add("# Custom playable character for Commando slot");
-            bodiesList.Add("BanditBody");
+            bodiesList.Add("AssassinBody");
             bodiesList.Add("");
             bodiesList.Add("# Custom playable character for Huntress slot");
-            bodiesList.Add("BanditBody");
+            bodiesList.Add("AssassinBody");
             bodiesList.Add("");
             bodiesList.Add("# Custom playable character for MUL-T slot");
-            bodiesList.Add("BanditBody");
+            bodiesList.Add("AssassinBody");
             bodiesList.Add("");
             bodiesList.Add("# Custom playable character for Engineer slot");
             bodiesList.Add("BanditBody");
@@ -129,7 +130,7 @@ namespace RoR2PVP
             bodiesList.Add("BanditBody");
             bodiesList.Add("");
             bodiesList.Add("# Custom playable character for Mercenary slot");
-            bodiesList.Add("SniperBody");
+            bodiesList.Add("BanditBody");
             bodiesList.Add("");
             bodiesList.Add("# Custom playable character for REX slot");
             bodiesList.Add("SniperBody");
@@ -271,8 +272,14 @@ namespace RoR2PVP
                     //If not a comment
                     if (configLines[i][0] != '#')
                     {
-                        if (Enum.TryParse(configLines[i], out ItemIndex itemIndex)) BannedItems.Add(itemIndex, itemIndex);
-                        if (Enum.TryParse(configLines[i], out EquipmentIndex equipmentIndex)) BannedEquipments.Add(equipmentIndex, equipmentIndex);
+                        if (Enum.TryParse(configLines[i], out ItemIndex itemIndex))
+                        {
+                            if (!BannedItems.ContainsKey(itemIndex)) BannedItems.Add(itemIndex, itemIndex);
+                        }
+                        if (Enum.TryParse(configLines[i], out EquipmentIndex equipmentIndex))
+                        {
+                            if (!BannedEquipments.ContainsKey(equipmentIndex)) BannedEquipments.Add(equipmentIndex, equipmentIndex);
+                        }
                     }
                 }
             }

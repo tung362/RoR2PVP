@@ -38,20 +38,26 @@
     <Compile Include="APIExtension\VoteAPI\VoteChoiceDef.cs" />
     <Compile Include="APIExtension\VoteAPI\VoteData.cs" />
     <Compile Include="APIExtension\VoteAPI\VoteMask.cs" />
+    <Compile Include="AssetBundleScripts\CharacterPicker.cs" />
+    <Compile Include="AssetBundleScripts\CharacterPickerSlot.cs" />
+    <Compile Include="AssetBundleScripts\ItemBanner.cs" />
+    <Compile Include="AssetBundleScripts\ItemBannerCategorySlot.cs" />
+    <Compile Include="AssetBundleScripts\ItemBannerItemSlot.cs" />
+    <Compile Include="AssetBundleScripts\TeamPicker.cs" />
+    <Compile Include="AssetBundleScripts\TeamPickerSlot.cs" />
     <Compile Include="Hooks.cs" />
     <Compile Include="PVPMode.cs" />
-    <Compile Include="PVPModeData.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Tools.cs" />
-    <Compile Include="UnityScripts\RoR2TeamPVPDeathPlane.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Assets\teampvp.ui" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="APIExtension\TeamAPI\" />
+    <Folder Include="Compatibility\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
