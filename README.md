@@ -7,7 +7,7 @@ Note: Everything is server sided, so only host needs this mod installed
 
 Menus  
 ![alt text](https://i.imgur.com/onUtK43.png)  
-![alt text](https://cdn.discordapp.com/attachments/332391424072876033/763493889939734558/gfkhhjj.gif)  
+![alt text](https://i.imgur.com/BSXNwk0.gif)  
 ![alt text](https://i.imgur.com/9wwsxXW.png)  
 ![alt text](https://i.imgur.com/yslNCEw.png)  
 
