@@ -1,9 +1,15 @@
-# RoR2TeamPVP
-RoR2TeamPVP is a mod that adds a team PVP game mode to the game Risk of Rain 2.  
+# RoR2PVP
+RoR2PVP is a mod that adds a free for all and team PVP game mode to the game Risk of Rain 2.  
 Note: Everything is server sided, so only host needs this mod installed
 
 (Optional: non host players can also vote on settings if they have the mod installed but isn't needed necessarily to play)  
 ![alt text](https://i.imgur.com/2871Zif.png)  
+
+Menus  
+![alt text](https://i.imgur.com/onUtK43.png)  
+![alt text](https://cdn.discordapp.com/attachments/332391424072876033/763493889939734558/gfkhhjj.gif)  
+![alt text](https://i.imgur.com/9wwsxXW.png)  
+![alt text](https://i.imgur.com/yslNCEw.png)  
 
 Also unlocks all artifacts  
 ![alt text](https://i.imgur.com/SQzJkPB.png)  
@@ -20,43 +26,37 @@ Also unlocks all artifacts
 Feel free to submit an issue here on my [github](https://github.com/tung362/RoR2PVP/issues)!  
 
 ### Features:  
-- **Custom Team PVP game mode**
-  - PVP
-  - lobby rule voting system
+- **Vanilla and Modded client compatibility**
+  - Can be played with both vanilla and modded players should the host have the mod installed
+  
+- **PVP game modes**
+  - Free For All PVP game mode
+  - Team PVP game mode
+  - Game mode rule voting system while in the lobby menu
+    - Free For All/Team/Vanilla gamemodes
+    - Enable/Disable randomized or fixed teams
+    - Enable/Disable mob spawns
+    - Enable/Disable banning of items
+    - Enable/Disable companion item share
+    - Enable/Disable custom characters
+    - Enable/Disable custom loot generation
+    - Enable/Disable extra death planes
+    - Enable/Disable randomized stage progression with a wider selection
+  - In-game menu and config entry for banning items and equipments (includes loading and saving presets)
+  - In-game menu and config entry for playing custom characters, you and others can even play as mobs and hidden characters! (includes loading and saving presets)
+  - Config entry for changing to vanilla version number, can be used to host vanilla lobbies
+  - Config entry for setting the multiplayer limit, can play with up to 16 players!
+  - Config entries for changing game mode settings
+  
+- **Extras**
   - unlocking of all artifacts
-  - configurable unlocking of all characters and loadouts
-  - configurable randomized or fixed teams
-  - configurable grace time until pvp starts
-  - configurable periodic money gain during grace period
-  - configurable respawn amount per match
-  
-- **Custom Playable Characters**
-  - configurable playable characters while in the character select screen, list of characters included!
-  
-- **Custom map generation**
-  - configurable custom map generation or vanilla
-  - configurable disable or enable mob spawns
-  
-- **Ability to increase multiplayer limit**
-  - configurable multiplayer limit for if you want to play with more people
-  
-- **Ability for companions to share items**
-  - configurable giving of items to your companions
-  
-- **Ability to ban items and equipments**
-  - configurable banning of items, list of items included!
-  
-- **Ability to go through a wider selection of stages before looping**
-  - randomized stage progression with a wider selection
+  - unlocking of all vanilla characters and loadouts
   
 - **Includes 4 config files to balance your game as you see fit**
   - TeamPVP.cfg
   - TeamPVPCustomPlayableCharacters.cfg
   - TeamPVPBannedItemList.cfg
   - TeamPVPCustomInteractablesSpawner.cfg
-  
-- **Extra features for you to find**
-  - Uka Uka Ouuu?
 
 ### Requirements:  
 [BepInExPack 5.3.1](https://thunderstore.io/package/download/bbepis/BepInExPack/5.3.1/)  
@@ -117,18 +117,18 @@ Friends :(
 
 **`TeamPVPCustomPlayableCharacters.cfg`**  
 
-| Character slots | Default custom characters |
-| --------------- | ------------------------- |
-| Commando slot   |               BanditBody  |
-| Huntress slot   |               BanditBody  |
-| MUL-T slot      |               BanditBody  |
-| Engineer slot   |               BanditBody  |
-| Artificer slot  |               BanditBody  |
-| Mercenary slot  |               SniperBody  |
-| REX slot        |               SniperBody  |
-| Loader slot     |               SniperBody  |
-| Acrid slot      |               SniperBody  |
-| Captain slot    |               SniperBody  |
+| Character slots | Default custom characters   |
+| --------------- | --------------------------- |
+| Commando slot   |               AssassinBody  |
+| Huntress slot   |               AssassinBody  |
+| MUL-T slot      |               AssassinBody  |
+| Engineer slot   |               BanditBody    |
+| Artificer slot  |               BanditBody    |
+| Mercenary slot  |               BanditBody    |
+| REX slot        |               SniperBody    |
+| Loader slot     |               SniperBody    |
+| Acrid slot      |               SniperBody    |
+| Captain slot    |               SniperBody    |
 
 
 **`TeamPVPCustomInteractablesSpawner.cfg`**  
@@ -187,17 +187,28 @@ Friends :(
 | Lunar Chest Amount          |             4  |
 
 ### Compatibility: 
-- If you have any custom character mods that conflicts with this mod set `Custom Playable Characters` to false in `TeamPVP.cfg`
-- If you have any custom companion item giving mods that conflicts with this mod set `Companions Share Items` to false in `TeamPVP.cfg`
-- If you have any custom maps/generation mods that conflicts with this mod set `Custom Interactables Spawner` to false in `TeamPVP.cfg`
-- Note to modders with custom maps: In this mod a failsafe kill zone is generated at y coord -2200 if that is a problem set `Use Death Plane Failsafe` to false in `TeamPVP.cfg`. Just keep in mind that there will be no failsafes should this be disabled.
+- If you have any custom character mods that conflicts with this mod set `Custom Playable Characters` to off in the lobby menu
+- If you have any custom companion item giving mods that conflicts with this mod set `Companions Share Items` to off in the lobby menu
+- If you have any custom maps/generation mods that conflicts with this mod set `Custom Interactables Spawner` to off in the lobby menu
+- Note to modders with custom maps: In this mod a failsafe kill zone is generated at y coord -2200 if that is a problem set `Use Death Plane Failsafe` to off in the lobby menu, just keep in mind that there will be no failsafes should this be disabled.
 
 ### Credits:  
 Special thanks to my friend Riley for helping me test https://github.com/SimpleManGames  
 Special thanks to my friend Justin for helping me test https://github.com/Sethix  
 
 ### Change log:  
-**1.4.5 (Current)**  
+**1.5.0 (Current)**  
+- Added a Free For All game mode  
+- https://imgur.com/a/VNruxmN  
+- Added a Team Picker menu to the lobby room, host can now pick people's teams in-game  
+- Added a Item Banner menu to the lobby room, host can now ban items in-game without needing to edit the config and restarting the game  
+- Added a Custom Playable Characters menu to the lobby room, host can now choose custom characters for everyone without needing to edit the config and restarting the game  
+- Added Assassin to the default custom playable characters  
+- Changed default grace time to 60 seconds instead of 120 seconds, less looting more fighting!  
+- Fixed bug where mod would still run even when joining a vanilla lobby if hosted with mod enabled before joining  
+- Fixed bug where duplicate entries in PVPBannedItemList.cfg would cause errors  
+- Fixed bug where giving an empty item would cause errors  
+**1.4.5**  
 - Now compatible with PlayerBots mod (https://thunderstore.io/package/Meledy/PlayerBots/)  
   - https://youtu.be/a9G1v51GITQ  
 - Added banned item enforce, preventing mods from giving banned items  
