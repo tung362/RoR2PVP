@@ -26,8 +26,8 @@ Also unlocks all artifacts
 Feel free to submit an issue here on my [github](https://github.com/tung362/RoR2PVP/issues)!  
 
 ### To do:  
-- **~~Teams~~**
-- **~~Free for all~~**
+- **~~Teams~~ ✔️**
+- **~~Free for all~~ ✔️**
 - **King of the hill**
 - **Capture the flag**
 
