@@ -1,7 +1,8 @@
-R2API 2.5.14
+R2API 2.5.28
 BepInExPack 5.3.1
 
-free for all
+Capture the flag
+King of the hill
 
 TeamComponent - sets the teams for players
 TeamManager - keeps track of team's data

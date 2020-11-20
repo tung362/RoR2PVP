@@ -25,6 +25,12 @@ Also unlocks all artifacts
 ### Found a bug? Want a feature added?:  
 Feel free to submit an issue here on my [github](https://github.com/tung362/RoR2PVP/issues)!  
 
+### To do:  
+- **~~Teams~~ ✔️**
+- **~~Free for all~~ ✔️**
+- **King of the hill**
+- **Capture the flag**
+
 ### Features:  
 - **Vanilla and Modded client compatibility**
   - Can be played with both vanilla and modded players should the host have the mod installed
@@ -60,7 +66,7 @@ Feel free to submit an issue here on my [github](https://github.com/tung362/RoR2
 
 ### Requirements:  
 [BepInExPack 5.3.1](https://thunderstore.io/package/download/bbepis/BepInExPack/5.3.1/)  
-[R2API 2.5.14](https://thunderstore.io/package/download/tristanmcpherson/R2API/2.5.14/)  
+[R2API 2.5.28](https://thunderstore.io/package/download/tristanmcpherson/R2API/2.5.28/)  
 Friends :(  
 
 ### Installation:  
@@ -78,14 +84,14 @@ Friends :(
 7. Open `PVPCustomInteractablesSpawner.cfg` with any text editor
 8. Edit the configs as you see fit
 
-**Default Config Values**  
+**Default config values**  
 **`PVP.cfg`**  
 
 | Keys                          | Default values |
 | ----------------------------- | -------------- |
-| Grace Timer Duration          |           120  |
+| Grace Timer Duration          |            60  |
 | Cash Delay                    |            10  |
-| Cash Grant Amount             |            50  |
+| Cash Grant Amount             |            70  |
 | Respawns Per Round            |             2  |
 | Max Multiplayer Count         |             4  |
 | Modded                        |          true  |
@@ -166,7 +172,7 @@ Friends :(
 | Duplicator Large Amount     |             1  |
 | Duplicator Military Amount  |             0  |
 | Gold Chest Amount           |             2  |
-| Gold Chest Price            |            -1  |
+| Gold Chest Price            |            300 |
 | Small Chest Amount          |            16  |
 | Small Chest Price           |            -1  |
 | Large Chest Amount          |             8  |
@@ -197,7 +203,13 @@ Special thanks to my friend Riley for helping me test https://github.com/SimpleM
 Special thanks to my friend Justin for helping me test https://github.com/Sethix  
 
 ### Change log:  
-**1.5.0 (Current)**  
+**1.5.1 (Current)**  
+- Updated to R2API 2.5.28  
+- Default config value for cash grant is changed from 50 to 70  
+- Default config value for golden chest price is changed from 400 to 300  
+- Companions (drones, turrets, etc) now attacks each other as intended in free for all pvp mode  
+- Added "Sundered Grove" to the list of destinations when "Wider stage transition" is turned on  
+**1.5.0**  
 - Added a Free For All game mode  
 - https://imgur.com/PRBt3AP  
 - Added a Team Picker menu to the lobby room, host can now pick people's teams in-game  
@@ -267,7 +279,7 @@ Special thanks to my friend Justin for helping me test https://github.com/Sethix
 - Added compatibility notice to the readme to make a few things clear  
 - Added money scaling when Custom Interactables Spawner is false  
 - Tweaked the config  
-- Buffed sniper(No more slow debuff when using the scope and instead gains an attack speed buff)  
+- Buffed sniper (No more slow debuff when using the scope and instead gains an attack speed buff)  
 - Added built-in kill zone (height: -2200) as a fail safe if you fall past the vanilla kill zone to prevent soft lock  
   - Note: if you still somehow get past this death plane, then there was either no CharacterBody component or you desynced from the server in which case i can't do anything for you  
 - Fixed death planes softlocking certain players when teams are changed  

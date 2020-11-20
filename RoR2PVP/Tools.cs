@@ -13,6 +13,7 @@ using R2API.Utils;
 using RoR2;
 using RoR2.Networking;
 using RoR2.UI;
+using RoR2.CharacterAI;
 
 namespace RoR2PVP
 {
@@ -155,6 +156,24 @@ namespace RoR2PVP
                 }
             }
             return EquipmentIndex.None;
+        }
+
+        public static void FilterOutMinionGroup(this BullseyeSearch search, NetworkInstanceId netId)
+        {
+            List<MinionOwnership.MinionGroup> minionGroups = (List<MinionOwnership.MinionGroup>)typeof(MinionOwnership.MinionGroup).GetField("instancesList", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
+            for (int i = 0; i < minionGroups.Count; i++)
+            {
+                if (netId == minionGroups[i].ownerId)
+                {
+                    MinionOwnership[] members = minionGroups[i].GetFieldValue<MinionOwnership[]>("members");
+                    for (int j = 0; j < minionGroups[i].memberCount; j++)
+                    {
+                        CharacterBody minionBody = members[j].GetComponent<CharacterMaster>().GetBody();
+                        if (minionBody) search.FilterOutGameObject(minionBody.gameObject);
+                    }
+                    break;
+                }
+            }
         }
 
         //Shuffles a list

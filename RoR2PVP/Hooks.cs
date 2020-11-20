@@ -596,39 +596,57 @@ namespace RoR2PVP
         static HurtBox CustomAITargetFilter(On.RoR2.CharacterAI.BaseAI.orig_FindEnemyHurtBox orig, RoR2.CharacterAI.BaseAI self, float maxDistance, bool full360Vision, bool filterByLoS)
         {
             if (!self.body) return null;
-            BullseyeSearch enemySearch = self.GetFieldValue<BullseyeSearch>("enemySearch");
 
-            //Free for all pvp and player bot AI
-            if (VoteAPI.VoteResults.HasVote(Settings.FreeForAllPVPToggle.Item2) && self.master.playerCharacterMasterController)
+            bool defaultSearch = true;
+            bool isPlayerBot = self.master.playerCharacterMasterController ? true : false;
+            bool isMinion = self.master.minionOwnership.ownerMaster ? true : false;
+            bool isPlayerMinion = false;
+
+            if(isMinion)
             {
-                enemySearch.viewer = self.body;
-                enemySearch.teamMaskFilter = TeamMask.all;
-                if (PVPMode.IsGracePeriod) enemySearch.teamMaskFilter.RemoveTeam(self.master.teamIndex);
-                enemySearch.sortMode = BullseyeSearch.SortMode.Distance;
-                enemySearch.minDistanceFilter = 0f;
-                enemySearch.maxDistanceFilter = maxDistance;
-                enemySearch.searchOrigin = self.bodyInputBank.aimOrigin;
-                enemySearch.searchDirection = self.bodyInputBank.aimDirection;
-                enemySearch.maxAngleFilter = (full360Vision ? 180f : 90f);
-                enemySearch.filterByLoS = filterByLoS;
-                enemySearch.RefreshCandidates();
-                enemySearch.FilterOutGameObject(self.body.gameObject);
+                if (self.master.minionOwnership.ownerMaster.playerCharacterMasterController) isPlayerMinion = true;
             }
+
+            BullseyeSearch enemySearch = self.GetFieldValue<BullseyeSearch>("enemySearch");
+            enemySearch.viewer = self.body;
+            enemySearch.teamMaskFilter = TeamMask.all;
+            enemySearch.sortMode = BullseyeSearch.SortMode.Distance;
+            enemySearch.minDistanceFilter = 0f;
+            enemySearch.maxDistanceFilter = maxDistance;
+            enemySearch.searchOrigin = self.bodyInputBank.aimOrigin;
+            enemySearch.searchDirection = self.bodyInputBank.aimDirection;
+            enemySearch.maxAngleFilter = (full360Vision ? 180f : 90f);
+            enemySearch.filterByLoS = filterByLoS;
+
+            //Free for all pvp
+            if (VoteAPI.VoteResults.HasVote(Settings.FreeForAllPVPToggle.Item2))
+            {
+                //Player bot AI  or player minion
+                if (isPlayerBot || isPlayerMinion)
+                {
+                    if (PVPMode.IsGracePeriod) enemySearch.teamMaskFilter.RemoveTeam(self.master.teamIndex);
+                    enemySearch.RefreshCandidates();
+
+                    enemySearch.FilterOutGameObject(self.body.gameObject);
+                    if (isMinion)
+                    {
+                        CharacterBody ownerBody = self.master.minionOwnership.ownerMaster.GetBody();
+                        if(ownerBody) enemySearch.FilterOutGameObject(ownerBody.gameObject);
+                        enemySearch.FilterOutMinionGroup(self.master.minionOwnership.ownerMaster.netId);
+                    }
+                    else enemySearch.FilterOutMinionGroup(self.master.netId);
+
+                    defaultSearch = false;
+                }
+            }
+
             //Team pvp or regular mobs AI
-            else
+            if (defaultSearch)
             {
-                enemySearch.viewer = self.body;
-                enemySearch.teamMaskFilter = TeamMask.all;
                 enemySearch.teamMaskFilter.RemoveTeam(self.master.teamIndex);
-                enemySearch.sortMode = BullseyeSearch.SortMode.Distance;
-                enemySearch.minDistanceFilter = 0f;
-                enemySearch.maxDistanceFilter = maxDistance;
-                enemySearch.searchOrigin = self.bodyInputBank.aimOrigin;
-                enemySearch.searchDirection = self.bodyInputBank.aimDirection;
-                enemySearch.maxAngleFilter = (full360Vision ? 180f : 90f);
-                enemySearch.filterByLoS = filterByLoS;
                 enemySearch.RefreshCandidates();
             }
+
             return enemySearch.GetResults().FirstOrDefault<HurtBox>();
         }
 

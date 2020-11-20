@@ -21,16 +21,16 @@ namespace RoR2PVP
         public static AssetBundleResourcesProvider Provider;
 
         /*Default values and registered vote indexes for voteable mod options*/
-        public static readonly Tuple<bool, int> FreeForAllPVPToggle = Tuple.Create(false, 100);
-        public static readonly Tuple<bool, int> TeamPVPToggle = Tuple.Create(false, 101);
-        public static readonly Tuple<bool, int> RandomTeams = Tuple.Create(true, 102);
-        public static readonly Tuple<bool, int> MobSpawn = Tuple.Create(false, 103);
-        public static readonly Tuple<bool, int> BanItems = Tuple.Create(true, 104);
-        public static readonly Tuple<bool, int> CompanionsShareItems = Tuple.Create(true, 105);
-        public static readonly Tuple<bool, int> CustomPlayableCharacters = Tuple.Create(true, 106);
-        public static readonly Tuple<bool, int> CustomInteractablesSpawner = Tuple.Create(true, 107);
-        public static readonly Tuple<bool, int> UseDeathPlaneFailsafe = Tuple.Create(true, 108);
-        public static readonly Tuple<bool, int> WiderStageTransitions = Tuple.Create(false, 109);
+        public static readonly Tuple<bool, int> FreeForAllPVPToggle = Tuple.Create(false, 1);
+        public static readonly Tuple<bool, int> TeamPVPToggle = Tuple.Create(false, 2);
+        public static readonly Tuple<bool, int> RandomTeams = Tuple.Create(true, 3);
+        public static readonly Tuple<bool, int> MobSpawn = Tuple.Create(false, 4);
+        public static readonly Tuple<bool, int> BanItems = Tuple.Create(true, 5);
+        public static readonly Tuple<bool, int> CompanionsShareItems = Tuple.Create(true, 6);
+        public static readonly Tuple<bool, int> CustomPlayableCharacters = Tuple.Create(true, 7);
+        public static readonly Tuple<bool, int> CustomInteractablesSpawner = Tuple.Create(true, 8);
+        public static readonly Tuple<bool, int> UseDeathPlaneFailsafe = Tuple.Create(true, 9);
+        public static readonly Tuple<bool, int> WiderStageTransitions = Tuple.Create(false, 10);
 
         /*Config*/
         //Multiplayer settings
@@ -40,7 +40,7 @@ namespace RoR2PVP
         //PVP settings
         public static float GraceTimerDuration = 60;
         public static float CashDelay = 10;
-        public static uint CashGrantAmount = 50u;
+        public static uint CashGrantAmount = 70u;
         public static int RespawnsPerRound = 2;
 
         //Debug settings
@@ -90,7 +90,7 @@ namespace RoR2PVP
         public static int DuplicatorMilitaryAmount = 0;
         //Chests
         public static int GoldChestAmount = 2;
-        public static int GoldChestPrice = -1;
+        public static int GoldChestPrice = 300;
         public static int SmallChestAmount = 16;
         public static int SmallChestPrice = -1;
         public static int LargeChestAmount = 8;

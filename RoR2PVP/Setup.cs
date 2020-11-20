@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
@@ -14,11 +15,13 @@ using Mono.Cecil.Cil;
 using R2API.Utils;
 using RoR2;
 using APIExtension.VoteAPI;
+using R2API;
+using UnityEngine.SceneManagement;
 
 namespace RoR2PVP
 {
     [BepInDependency("com.bepis.r2api")]
-    [BepInPlugin("PVP", "PVP Mode", "1.5.0")]
+    [BepInPlugin("PVP", "PVP Mode", "1.5.1")]
     [NetworkCompatibility(CompatibilityLevel.NoNeedForSync)]
     [R2APISubmoduleDependency(new string[]
     {

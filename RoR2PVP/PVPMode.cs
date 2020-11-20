@@ -408,6 +408,7 @@ namespace RoR2PVP
             Tools.TryAddStage("goolake", Destinations);
             Tools.TryAddStage("shipgraveyard", Destinations);
             Tools.TryAddStage("wispgraveyard", Destinations);
+            Tools.TryAddStage("rootjungle", Destinations);
 
             if (Tools.TryGetStage("skymeadow", out SceneDef finalStage)) FinalDestination = finalStage;
         }
