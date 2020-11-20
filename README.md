@@ -208,7 +208,7 @@ Special thanks to my friend Justin for helping me test https://github.com/Sethix
 - Default config value for cash grant is changed from 50 to 70  
 - Default config value for golden chest price is changed from 400 to 300  
 - Companions (drones, turrets, etc) now attacks each other as intended in free for all pvp mode  
-- added "Sundered Grove" to the list of destinations when "Wider stage transition" is turned on  
+- Added "Sundered Grove" to the list of destinations when "Wider stage transition" is turned on  
 **1.5.0**  
 - Added a Free For All game mode  
 - https://imgur.com/PRBt3AP  
