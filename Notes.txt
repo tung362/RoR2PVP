@@ -1,5 +1,6 @@
-R2API 2.5.28
-BepInExPack 5.3.1
+R2API 3.0.13
+HookGenPatcher 1.2.1
+BepInExPack 5.4.9
 
 Capture the flag
 King of the hill

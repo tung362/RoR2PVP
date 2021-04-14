@@ -82,34 +82,38 @@ namespace RoR2PVP.UI
                         slotBodyName = "HuntressBody";
                         break;
                     case 2:
+                        slotName = "Bandit Slot";
+                        slotBodyName = "Bandit2Body";
+                        break;
+                    case 3:
                         slotName = "MUL-T Slot";
                         slotBodyName = "ToolbotBody";
                         break;
-                    case 3:
+                    case 4:
                         slotName = "Engineer Slot";
                         slotBodyName = "EngiBody";
                         break;
-                    case 4:
+                    case 5:
                         slotName = "Artificer Slot";
                         slotBodyName = "MageBody";
                         break;
-                    case 5:
+                    case 6:
                         slotName = "Mercenary Slot";
                         slotBodyName = "MercBody";
                         break;
-                    case 6:
+                    case 7:
                         slotName = "REX Slot";
                         slotBodyName = "TreebotBody";
                         break;
-                    case 7:
+                    case 8:
                         slotName = "Loader Slot";
                         slotBodyName = "LoaderBody";
                         break;
-                    case 8:
+                    case 9:
                         slotName = "Acrid Slot";
                         slotBodyName = "CrocoBody";
                         break;
-                    case 9:
+                    case 10:
                         slotName = "Captain Slot";
                         slotBodyName = "CaptainBody";
                         break;

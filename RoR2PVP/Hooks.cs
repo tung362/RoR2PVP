@@ -123,7 +123,7 @@ namespace RoR2PVP
             On.RoR2.Run.BuildDropTable += BanItems;
             On.RoR2.GlobalEventManager.OnInteractionBegin += PreventTeleporterFireworks;
             On.RoR2.CharacterAI.BaseAI.FindEnemyHurtBox += CustomAITargetFilter;
-            On.RoR2.Inventory.GiveItem += EnforceBannedItems;
+            On.RoR2.Inventory.GiveItem_ItemIndex_int += EnforceBannedItems;
             On.RoR2.Inventory.SetEquipmentInternal += EnforceBannedEquipments;
         }
 
@@ -142,7 +142,7 @@ namespace RoR2PVP
             On.RoR2.Run.BuildDropTable -= BanItems;
             On.RoR2.GlobalEventManager.OnInteractionBegin -= PreventTeleporterFireworks;
             On.RoR2.CharacterAI.BaseAI.FindEnemyHurtBox -= CustomAITargetFilter;
-            On.RoR2.Inventory.GiveItem -= EnforceBannedItems;
+            On.RoR2.Inventory.GiveItem_ItemIndex_int -= EnforceBannedItems;
             On.RoR2.Inventory.SetEquipmentInternal -= EnforceBannedEquipments;
         }
 
@@ -205,27 +205,30 @@ namespace RoR2PVP
                             slotName = "Huntress";
                             break;
                         case 2:
-                            slotName = "MUL-T";
+                            slotName = "Bandit";
                             break;
                         case 3:
-                            slotName = "Engineer";
+                            slotName = "MUL-T";
                             break;
                         case 4:
-                            slotName = "Artificer";
+                            slotName = "Engineer";
                             break;
                         case 5:
-                            slotName = "Mercenary";
+                            slotName = "Artificer";
                             break;
                         case 6:
-                            slotName = "REX";
+                            slotName = "Mercenary";
                             break;
                         case 7:
-                            slotName = "Loader";
+                            slotName = "REX";
                             break;
                         case 8:
-                            slotName = "Acrid";
+                            slotName = "Loader";
                             break;
                         case 9:
+                            slotName = "Acrid";
+                            break;
+                        case 10:
                             slotName = "Captain";
                             break;
                     }
@@ -361,29 +364,32 @@ namespace RoR2PVP
                         case "HuntressBody":
                             playerCharater.bodyPrefab = BodyCatalog.FindBodyPrefab(Settings.PlayableCharactersList[1]);
                             break;
-                        case "ToolbotBody":
+                        case "Bandit2Body":
                             playerCharater.bodyPrefab = BodyCatalog.FindBodyPrefab(Settings.PlayableCharactersList[2]);
                             break;
-                        case "EngiBody":
+                        case "ToolbotBody":
                             playerCharater.bodyPrefab = BodyCatalog.FindBodyPrefab(Settings.PlayableCharactersList[3]);
                             break;
-                        case "MageBody":
+                        case "EngiBody":
                             playerCharater.bodyPrefab = BodyCatalog.FindBodyPrefab(Settings.PlayableCharactersList[4]);
                             break;
-                        case "MercBody":
+                        case "MageBody":
                             playerCharater.bodyPrefab = BodyCatalog.FindBodyPrefab(Settings.PlayableCharactersList[5]);
                             break;
-                        case "TreebotBody":
+                        case "MercBody":
                             playerCharater.bodyPrefab = BodyCatalog.FindBodyPrefab(Settings.PlayableCharactersList[6]);
                             break;
-                        case "LoaderBody":
+                        case "TreebotBody":
                             playerCharater.bodyPrefab = BodyCatalog.FindBodyPrefab(Settings.PlayableCharactersList[7]);
                             break;
-                        case "CrocoBody":
+                        case "LoaderBody":
                             playerCharater.bodyPrefab = BodyCatalog.FindBodyPrefab(Settings.PlayableCharactersList[8]);
                             break;
-                        case "CaptainBody":
+                        case "CrocoBody":
                             playerCharater.bodyPrefab = BodyCatalog.FindBodyPrefab(Settings.PlayableCharactersList[9]);
+                            break;
+                        case "CaptainBody":
+                            playerCharater.bodyPrefab = BodyCatalog.FindBodyPrefab(Settings.PlayableCharactersList[10]);
                             break;
                         default:
                             break;
@@ -401,10 +407,10 @@ namespace RoR2PVP
                 CharacterMaster spawnedCompanion = orig(self, activator);
                 if (VoteAPI.VoteResults.HasVote(Settings.CompanionsShareItems.Item2))
                 {
-                    spawnedCompanion.GetBody().inventory.CopyItemsFrom(activator.GetComponent<CharacterBody>().master.inventory);
-                    spawnedCompanion.GetBody().inventory.ResetItem(ItemIndex.WardOnLevel);
-                    spawnedCompanion.GetBody().inventory.ResetItem(ItemIndex.BeetleGland);
-                    spawnedCompanion.GetBody().inventory.ResetItem(ItemIndex.CrippleWardOnLevel);
+                    spawnedCompanion.inventory.CopyItemsFrom(activator.GetComponent<CharacterBody>().master.inventory);
+                    spawnedCompanion.inventory.ResetItem(RoR2Content.Items.WardOnLevel);
+                    spawnedCompanion.inventory.ResetItem(RoR2Content.Items.BeetleGland);
+                    spawnedCompanion.inventory.ResetItem(RoR2Content.Items.CrippleWardOnLevel);
                 }
                 return spawnedCompanion;
             }
@@ -417,12 +423,12 @@ namespace RoR2PVP
             {
                 //Remove revives before shuffling so it doesn't add to the shuffle
                 RoR2.Inventory playerInventory = interactor.GetComponent<CharacterBody>().master.inventory;
-                playerInventory.RemoveItem(ItemIndex.ExtraLife, 9999);
-                playerInventory.RemoveItem(ItemIndex.ExtraLifeConsumed, 9999);
+                playerInventory.RemoveItem(RoR2Content.Items.ExtraLife, 9999);
+                playerInventory.RemoveItem(RoR2Content.Items.ExtraLifeConsumed, 9999);
                 //Shuffle
                 orig(self, interactor);
                 //Reshuffle if shuffle landed on a revive item
-                while (playerInventory.GetItemCount(ItemIndex.ExtraLife) != 0 || playerInventory.GetItemCount(ItemIndex.ExtraLife) != 0)
+                while (playerInventory.GetItemCount(RoR2Content.Items.ExtraLife) != 0 || playerInventory.GetItemCount(RoR2Content.Items.ExtraLife) != 0)
                 {
                     playerInventory.ShrineRestackInventory(Run.instance.treasureRng);
                 }
@@ -441,8 +447,8 @@ namespace RoR2PVP
             orig(self);
             if (NetworkServer.active)
             {
-                self.outer.commonComponents.characterBody.RemoveBuff(BuffIndex.Slow50);
-                self.outer.commonComponents.characterBody.AddBuff(BuffIndex.AttackSpeedOnCrit);
+                self.outer.commonComponents.characterBody.RemoveBuff(RoR2Content.Buffs.Slow50);
+                self.outer.commonComponents.characterBody.AddBuff(RoR2Content.Buffs.AttackSpeedOnCrit);
             }
         }
 
@@ -450,8 +456,8 @@ namespace RoR2PVP
         {
             if (NetworkServer.active)
             {
-                self.outer.commonComponents.characterBody.AddBuff(BuffIndex.Slow50);
-                self.outer.commonComponents.characterBody.RemoveBuff(BuffIndex.AttackSpeedOnCrit);
+                self.outer.commonComponents.characterBody.AddBuff(RoR2Content.Buffs.Slow50);
+                self.outer.commonComponents.characterBody.RemoveBuff(RoR2Content.Buffs.AttackSpeedOnCrit);
             }
             orig(self);
         }
@@ -577,14 +583,14 @@ namespace RoR2PVP
             orig(self);
 
             //Lists causes errors if left empty so add junk item to empty list
-            if(self.availableTier1DropList.Count == 0) self.availableTier1DropList.Add(PickupCatalog.FindPickupIndex(ItemIndex.ExtraLifeConsumed));
-            if (self.availableTier2DropList.Count == 0) self.availableTier2DropList.Add(PickupCatalog.FindPickupIndex(ItemIndex.ExtraLifeConsumed));
-            if (self.availableTier3DropList.Count == 0) self.availableTier3DropList.Add(PickupCatalog.FindPickupIndex(ItemIndex.ExtraLifeConsumed));
-            if (self.availableLunarDropList.Count == 0) self.availableLunarDropList.Add(PickupCatalog.FindPickupIndex(ItemIndex.ExtraLifeConsumed));
-            if (self.availableEquipmentDropList.Count == 0) self.availableEquipmentDropList.Add(PickupCatalog.FindPickupIndex(ItemIndex.ExtraLifeConsumed));
-            if (self.availableBossDropList.Count == 0) self.availableBossDropList.Add(PickupCatalog.FindPickupIndex(ItemIndex.ExtraLifeConsumed));
-            if (self.availableLunarEquipmentDropList.Count == 0) self.availableLunarEquipmentDropList.Add(PickupCatalog.FindPickupIndex(ItemIndex.ExtraLifeConsumed));
-            if (self.availableNormalEquipmentDropList.Count == 0) self.availableNormalEquipmentDropList.Add(PickupCatalog.FindPickupIndex(ItemIndex.ExtraLifeConsumed));
+            if(self.availableTier1DropList.Count == 0) self.availableTier1DropList.Add(PickupCatalog.FindPickupIndex(RoR2Content.Items.ExtraLifeConsumed.itemIndex));
+            if (self.availableTier2DropList.Count == 0) self.availableTier2DropList.Add(PickupCatalog.FindPickupIndex(RoR2Content.Items.ExtraLifeConsumed.itemIndex));
+            if (self.availableTier3DropList.Count == 0) self.availableTier3DropList.Add(PickupCatalog.FindPickupIndex(RoR2Content.Items.ExtraLifeConsumed.itemIndex));
+            if (self.availableLunarDropList.Count == 0) self.availableLunarDropList.Add(PickupCatalog.FindPickupIndex(RoR2Content.Items.ExtraLifeConsumed.itemIndex));
+            if (self.availableEquipmentDropList.Count == 0) self.availableEquipmentDropList.Add(PickupCatalog.FindPickupIndex(RoR2Content.Items.ExtraLifeConsumed.itemIndex));
+            if (self.availableBossDropList.Count == 0) self.availableBossDropList.Add(PickupCatalog.FindPickupIndex(RoR2Content.Items.ExtraLifeConsumed.itemIndex));
+            if (self.availableLunarEquipmentDropList.Count == 0) self.availableLunarEquipmentDropList.Add(PickupCatalog.FindPickupIndex(RoR2Content.Items.ExtraLifeConsumed.itemIndex));
+            if (self.availableNormalEquipmentDropList.Count == 0) self.availableNormalEquipmentDropList.Add(PickupCatalog.FindPickupIndex(RoR2Content.Items.ExtraLifeConsumed.itemIndex));
         }
 
         static void PreventTeleporterFireworks(On.RoR2.GlobalEventManager.orig_OnInteractionBegin orig, GlobalEventManager self, Interactor interactor, IInteractable interactable, GameObject interactableObject)
@@ -650,7 +656,7 @@ namespace RoR2PVP
             return enemySearch.GetResults().FirstOrDefault<HurtBox>();
         }
 
-        static void EnforceBannedItems(On.RoR2.Inventory.orig_GiveItem orig, Inventory self, ItemIndex itemIndex, int count)
+        static void EnforceBannedItems(On.RoR2.Inventory.orig_GiveItem_ItemIndex_int orig, Inventory self, ItemIndex itemIndex, int count)
         {
             ItemIndex item = itemIndex;
             if (NetworkServer.active)

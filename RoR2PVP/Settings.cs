@@ -11,6 +11,7 @@ using BepInEx.Configuration;
 using R2API;
 using R2API.Utils;
 using RoR2;
+using RoR2.ContentManagement;
 
 namespace RoR2PVP
 {
@@ -115,13 +116,16 @@ namespace RoR2PVP
             List<string> bodiesList = new List<string>();
             //Character slots
             bodiesList.Add("# Custom playable character for Commando slot");
-            bodiesList.Add("AssassinBody");
+            bodiesList.Add("BanditBody");
             bodiesList.Add("");
             bodiesList.Add("# Custom playable character for Huntress slot");
-            bodiesList.Add("AssassinBody");
+            bodiesList.Add("BanditBody");
+            bodiesList.Add("");
+            bodiesList.Add("# Custom playable character for Bandit slot");
+            bodiesList.Add("BanditBody");
             bodiesList.Add("");
             bodiesList.Add("# Custom playable character for MUL-T slot");
-            bodiesList.Add("AssassinBody");
+            bodiesList.Add("BanditBody");
             bodiesList.Add("");
             bodiesList.Add("# Custom playable character for Engineer slot");
             bodiesList.Add("BanditBody");
@@ -130,7 +134,7 @@ namespace RoR2PVP
             bodiesList.Add("BanditBody");
             bodiesList.Add("");
             bodiesList.Add("# Custom playable character for Mercenary slot");
-            bodiesList.Add("BanditBody");
+            bodiesList.Add("SniperBody");
             bodiesList.Add("");
             bodiesList.Add("# Custom playable character for REX slot");
             bodiesList.Add("SniperBody");
@@ -149,7 +153,7 @@ namespace RoR2PVP
             bodiesList.Add("# List of bodies for selecting custom characters for each playable character slot (copy and paste to a slot)");
             bodiesList.Add("# -----------------------------------------------------------------------------------------");
             List<GameObject> bodies = BodyCatalog.allBodyPrefabs.ToList();
-            for (int i = 0; i < bodies.Count; i++)
+            for (int i = 0; i < BodyCatalog.bodyCount; i++)
             {
                 bodiesList.Add("# " + bodies[i].name);
             }
@@ -162,41 +166,45 @@ namespace RoR2PVP
             bannedItems.Add("# Make sure each item id is on it's own line");
             bannedItems.Add("# Do not paste item's full name, only paste the id provided below");
             //Items
-            bannedItems.Add("Behemoth");
-            bannedItems.Add("NovaOnHeal");
-            bannedItems.Add("ShockNearby");
-            bannedItems.Add("SprintWisp");
-            bannedItems.Add("Thorns");
-            bannedItems.Add("LunarUtilityReplacement");
+            bannedItems.Add("# --Items--");
+            bannedItems.Add("I13"); //Brilliant Behemoth
+            bannedItems.Add("I85"); //N'kuhana's Opinion
+            bannedItems.Add("I105"); //Unstable Tesla Coil
+            bannedItems.Add("I112"); //Little Disciple
+            bannedItems.Add("I122"); //Razorwire
+            bannedItems.Add("I76"); //Strides of Heresy
             //Equipment
-            bannedItems.Add("Tonic");
-            bannedItems.Add("Meteor");
-            bannedItems.Add("BurnNearby");
-            bannedItems.Add("BFG");
-            bannedItems.Add("Blackhole");
-            bannedItems.Add("Lightning");
-            bannedItems.Add("CommandMissile");
-            bannedItems.Add("FireBallDash");
-            bannedItems.Add("GoldGat");
-            bannedItems.Add("DroneBackup");
-            bannedItems.Add("DeathProjectile");
+            bannedItems.Add("# --Equipments--");
+            bannedItems.Add("E39"); //Spinel Tonic
+            bannedItems.Add("E29"); //Glowing Meteorite
+            bannedItems.Add("E11"); //Helfire Tincture
+            bannedItems.Add("E9"); //Preon Accumulator
+            bannedItems.Add("E10"); //Primordial Cube
+            bannedItems.Add("E27"); //Royal Capacitor
+            bannedItems.Add("E13"); //Disposable Missile Launcher
+            bannedItems.Add("E19"); //Volcanic Egg
+            bannedItems.Add("E24"); //The Crowdfunder
+            bannedItems.Add("E17"); //The Back-up
+            bannedItems.Add("E16"); //Forgive Me Please
             //Output all item names
             bannedItems.Add("# -----------------------------------------------------------------------------------------");
             bannedItems.Add("# List of item ids and it's full name");
             bannedItems.Add("# -----------------------------------------------------------------------------------------");
-            for (int i = 0; i < (int)ItemIndex.Count; i++)
+            List<ItemIndex> items = ItemCatalog.allItems.ToList();
+            for (int i = 0; i < items.Count; i++)
             {
-                ItemDef itemDef = ItemCatalog.GetItemDef((ItemIndex)i);
-                bannedItems.Add("# ID: " + (ItemIndex)i + " FullName: " + Language.GetString(itemDef.nameToken));
+                ItemDef itemDef = ItemCatalog.GetItemDef(items[i]);
+                bannedItems.Add("# ID: I" + itemDef.itemIndex + " FullName: " + Language.GetString(itemDef.nameToken));
             }
             //Output all equipment names
             bannedItems.Add("# -----------------------------------------------------------------------------------------");
             bannedItems.Add("# List of equipment ids and it's full name");
             bannedItems.Add("# -----------------------------------------------------------------------------------------");
-            for (int i = 0; i < (int)EquipmentIndex.Count; i++)
+            List<EquipmentIndex> equipments = EquipmentCatalog.allEquipment.ToList();
+            for (int i = 0; i < equipments.Count; i++)
             {
-                EquipmentDef equipmentDef = EquipmentCatalog.GetEquipmentDef((EquipmentIndex)i);
-                bannedItems.Add("# ID: " + (EquipmentIndex)i + " FullName: " + Language.GetString(equipmentDef.nameToken));
+                EquipmentDef equipmentDef = EquipmentCatalog.GetEquipmentDef(equipments[i]);
+                bannedItems.Add("# ID: E" + equipmentDef.equipmentIndex + " FullName: " + Language.GetString(equipmentDef.nameToken));
             }
             return bannedItems;
         }
@@ -272,13 +280,23 @@ namespace RoR2PVP
                     //If not a comment
                     if (configLines[i][0] != '#')
                     {
-                        if (Enum.TryParse(configLines[i], out ItemIndex itemIndex))
+                        char identifier = char.ToUpperInvariant(configLines[i][0]);
+                        string entryID = configLines[i].Substring(1, configLines[i].Length - 1);
+                        if (identifier == char.ToUpperInvariant('I'))
                         {
-                            if (!BannedItems.ContainsKey(itemIndex)) BannedItems.Add(itemIndex, itemIndex);
+                            if (int.TryParse(entryID, out int itemIndex))
+                            {
+                                ItemIndex index = (ItemIndex)itemIndex;
+                                if (!BannedItems.ContainsKey(index)) BannedItems.Add(index, index);
+                            }
                         }
-                        if (Enum.TryParse(configLines[i], out EquipmentIndex equipmentIndex))
+                        else if(identifier == char.ToUpperInvariant('E'))
                         {
-                            if (!BannedEquipments.ContainsKey(equipmentIndex)) BannedEquipments.Add(equipmentIndex, equipmentIndex);
+                            if (int.TryParse(entryID, out int equipmentIndex))
+                            {
+                                EquipmentIndex index = (EquipmentIndex)equipmentIndex;
+                                if (!BannedEquipments.ContainsKey(index)) BannedEquipments.Add(index, index);
+                            }
                         }
                     }
                 }

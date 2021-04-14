@@ -80,18 +80,18 @@ namespace APIExtension.VoteAPI
             foreach (RuleDef selection in VoteSelections) RegisterVoteSelection(selection);
 
             //Filler due to last 2 indexes never showing up
-            RuleCategoryDef dummyHeader = VoteAPI.AddVoteHeader("Dummy", new Color(0.0f, 0.0f, 0.0f, 1.0f), true);
-            RegisterVoteHeader(dummyHeader);
+            //RuleCategoryDef dummyHeader = VoteAPI.AddVoteHeader("Dummy", new Color(0.0f, 0.0f, 0.0f, 1.0f), true);
+            //RegisterVoteHeader(dummyHeader);
 
-            RuleDef dummySelection1 = VoteAPI.AddVoteSelection(dummyHeader, "Dummy1", new ChoiceMenu("Dummy1 On", new Color(0.0f, 0.0f, 0.0f, 0.4f), "", Color.black, "Textures/ArtifactIcons/texCommandSmallSelected", "artifact_dummy", -1));
-            VoteAPI.AddVoteChoice(dummySelection1, new ChoiceMenu("Dummy1 Off", new Color(0.0f, 0.0f, 0.0f, 0.4f), "", Color.black, "Textures/ArtifactIcons/texCommandSmallDeselected", "artifact_dummy", -1));
-            dummySelection1.defaultChoiceIndex = 0;
-            RegisterVoteSelection(dummySelection1);
+            //RuleDef dummySelection1 = VoteAPI.AddVoteSelection(dummyHeader, "Dummy1", new ChoiceMenu("Dummy1 On", new Color(0.0f, 0.0f, 0.0f, 0.4f), "", Color.black, "Textures/ArtifactIcons/texCommandSmallSelected", "artifact_dummy", -1));
+            //VoteAPI.AddVoteChoice(dummySelection1, new ChoiceMenu("Dummy1 Off", new Color(0.0f, 0.0f, 0.0f, 0.4f), "", Color.black, "Textures/ArtifactIcons/texCommandSmallDeselected", "artifact_dummy", -1));
+            //dummySelection1.defaultChoiceIndex = 0;
+            //RegisterVoteSelection(dummySelection1);
 
-            RuleDef dummySelection2 = VoteAPI.AddVoteSelection(dummyHeader, "Dummy2", new ChoiceMenu("Dummy2 On", new Color(0.0f, 0.0f, 0.0f, 0.4f), "", Color.black, "Textures/ArtifactIcons/texCommandSmallSelected", "artifact_dummy", -1));
-            VoteAPI.AddVoteChoice(dummySelection2, new ChoiceMenu("Dummy2 Off", new Color(0.0f, 0.0f, 0.0f, 0.4f), "", Color.black, "Textures/ArtifactIcons/texCommandSmallDeselected", "artifact_dummy", -1));
-            dummySelection2.defaultChoiceIndex = 0;
-            RegisterVoteSelection(dummySelection2);
+            //RuleDef dummySelection2 = VoteAPI.AddVoteSelection(dummyHeader, "Dummy2", new ChoiceMenu("Dummy2 On", new Color(0.0f, 0.0f, 0.0f, 0.4f), "", Color.black, "Textures/ArtifactIcons/texCommandSmallSelected", "artifact_dummy", -1));
+            //VoteAPI.AddVoteChoice(dummySelection2, new ChoiceMenu("Dummy2 Off", new Color(0.0f, 0.0f, 0.0f, 0.4f), "", Color.black, "Textures/ArtifactIcons/texCommandSmallDeselected", "artifact_dummy", -1));
+            //dummySelection2.defaultChoiceIndex = 0;
+            //RegisterVoteSelection(dummySelection2);
         }
 
         static void ApplyVotes(On.RoR2.Run.orig_SetRuleBook orig, Run self, RuleBook newRuleBook)
@@ -287,7 +287,7 @@ namespace APIExtension.VoteAPI
             choice.tooltipBodyToken = choiceMenu.TooltipBody;
             choice.tooltipBodyColor = choiceMenu.TooltipBodyColor;
             choice.spritePath = choiceMenu.IconPath;
-            choice.unlockableName = choiceMenu.UnlockableName;
+            //choice.unlockableName = choiceMenu.UnlockableName;
             choice.VoteIndex = choiceMenu.ChoiceIndex;
         }
         #endregion

@@ -103,9 +103,9 @@ namespace RoR2PVP
                                     //Grant respawns
                                     if (Settings.RespawnsPerRound != 0)
                                     {
-                                        players[i].master.GetBody().inventory.RemoveItem(ItemIndex.ExtraLife, 9999);
-                                        players[i].master.GetBody().inventory.RemoveItem(ItemIndex.ExtraLifeConsumed, 9999);
-                                        players[i].master.GetBody().inventory.GiveItem(ItemIndex.ExtraLife, Settings.RespawnsPerRound);
+                                        players[i].master.GetBody().inventory.RemoveItem(RoR2Content.Items.ExtraLife, 9999);
+                                        players[i].master.GetBody().inventory.RemoveItem(RoR2Content.Items.ExtraLifeConsumed, 9999);
+                                        players[i].master.GetBody().inventory.GiveItem(RoR2Content.Items.ExtraLife, Settings.RespawnsPerRound);
                                     }
                                     //Reset cash
                                     players[i].master.money = 0u;
@@ -140,9 +140,9 @@ namespace RoR2PVP
                                         //Grant respawns
                                         if (Settings.RespawnsPerRound != 0)
                                         {
-                                            players[i].master.GetBody().inventory.RemoveItem(ItemIndex.ExtraLife, 9999);
-                                            players[i].master.GetBody().inventory.RemoveItem(ItemIndex.ExtraLifeConsumed, 9999);
-                                            players[i].master.GetBody().inventory.GiveItem(ItemIndex.ExtraLife, Settings.RespawnsPerRound);
+                                            players[i].master.GetBody().inventory.RemoveItem(RoR2Content.Items.ExtraLife, 9999);
+                                            players[i].master.GetBody().inventory.RemoveItem(RoR2Content.Items.ExtraLifeConsumed, 9999);
+                                            players[i].master.GetBody().inventory.GiveItem(RoR2Content.Items.ExtraLife, Settings.RespawnsPerRound);
                                         }
                                         //Reset cash
                                         players[i].master.money = 0u;
@@ -205,9 +205,9 @@ namespace RoR2PVP
                                         //Grant respawns
                                         if (Settings.RespawnsPerRound != 0)
                                         {
-                                            players[i].master.GetBody().inventory.RemoveItem(ItemIndex.ExtraLife, 9999);
-                                            players[i].master.GetBody().inventory.RemoveItem(ItemIndex.ExtraLifeConsumed, 9999);
-                                            players[i].master.GetBody().inventory.GiveItem(ItemIndex.ExtraLife, Settings.RespawnsPerRound);
+                                            players[i].master.GetBody().inventory.RemoveItem(RoR2Content.Items.ExtraLife, 9999);
+                                            players[i].master.GetBody().inventory.RemoveItem(RoR2Content.Items.ExtraLifeConsumed, 9999);
+                                            players[i].master.GetBody().inventory.GiveItem(RoR2Content.Items.ExtraLife, Settings.RespawnsPerRound);
                                         }
                                         //Reset cash
                                         players[i].master.money = 0u;

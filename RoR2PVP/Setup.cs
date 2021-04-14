@@ -8,20 +8,22 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using TMPro;
 using BepInEx;
 using BepInEx.Configuration;
 using Mono.Cecil.Cil;
-using R2API.Utils;
 using RoR2;
-using APIExtension.VoteAPI;
+using RoR2.ContentManagement;
+using HG.Reflection;
 using R2API;
-using UnityEngine.SceneManagement;
+using R2API.Utils;
+using APIExtension.VoteAPI;
 
 namespace RoR2PVP
 {
     [BepInDependency("com.bepis.r2api")]
-    [BepInPlugin("PVP", "PVP Mode", "1.5.1")]
+    [BepInPlugin("PVP", "PVP Mode", "1.5.2")]
     [NetworkCompatibility(CompatibilityLevel.NoNeedForSync)]
     [R2APISubmoduleDependency(new string[]
     {
@@ -48,13 +50,30 @@ namespace RoR2PVP
 
         public void Start()
         {
-            /*Loads Config Settings*/
-            Settings.LoadConfig(Config);
-            Settings.LoadCustomPlayableCharactersConfig(ConfigRootPath + "PVPCustomPlayableCharacters.cfg");
-            Settings.LoadBannedItemListConfig(ConfigRootPath + "PVPBannedItemList.cfg");
-            Settings.LoadCustomInteractablesSpawnerConfig(new ConfigFile(ConfigRootPath + "PVPCustomInteractablesSpawner.cfg", true));
-            /*Setup*/
-            Hooks.SetupHook();
+            //Let me know if there's a better way of doing this
+            SceneManager.sceneLoaded += ModSetup;
+        }
+
+        void ModSetup(Scene scene, LoadSceneMode loadSceneMode)
+        {
+            if (scene.name == "title")
+            {
+                if (BodyCatalog.availability.available &&
+                    ItemCatalog.availability.available &&
+                    EquipmentCatalog.availability.available)
+                {
+                    /*Loads Config Settings*/
+                    Settings.LoadConfig(Config);
+                    Settings.LoadCustomPlayableCharactersConfig(ConfigRootPath + "PVPCustomPlayableCharacters.cfg");
+                    Settings.LoadBannedItemListConfig(ConfigRootPath + "PVPBannedItemList.cfg");
+                    Settings.LoadCustomInteractablesSpawnerConfig(new ConfigFile(ConfigRootPath + "PVPCustomInteractablesSpawner.cfg", true));
+                    /*Setup*/
+                    Hooks.SetupHook();
+                    Debug.Log("RoR2PVP mod setup completed");
+                }
+                else Debug.LogError("Failed to load RoR2PVP mod, please let the developer know on \"https://github.com/tung362/RoR2PVP/issues\"");
+                SceneManager.sceneLoaded -= ModSetup;
+            }
         }
     }
 }

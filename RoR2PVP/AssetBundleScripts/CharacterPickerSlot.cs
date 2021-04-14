@@ -30,6 +30,9 @@ namespace RoR2PVP.UI
         public TMP_Dropdown CharacterDropdown;
         public Image CharacterIcon;
 
+        /*Cache*/
+        Dictionary<BodyIndex, int> DropDownMap = new Dictionary<BodyIndex, int>();
+
         void Start()
         {
             //Bind
@@ -39,7 +42,14 @@ namespace RoR2PVP.UI
             CharacterIcon = transform.Find("Character Icon").GetComponent<Image>();
 
             //Load dropdown options
-            for (int i = 0; i < BodyCatalog.bodyCount; i++) CharacterDropdown.options.Add(new TMP_Dropdown.OptionData(BodyCatalog.GetBodyPrefabBodyComponent(i).name));
+            List<CharacterBody> bodies = BodyCatalog.allBodyPrefabBodyBodyComponents.ToList();
+            for (int i = 0; i < bodies.Count; i++)
+            {
+                CharacterDropdown.options.Add(new TMP_Dropdown.OptionData(bodies[i].name));
+
+                if (!DropDownMap.ContainsKey(bodies[i].bodyIndex)) DropDownMap.Add(bodies[i].bodyIndex, i);
+                else Debug.LogWarning($"Warning! Duplicate custom character dropdown body index \"{bodies[i].bodyIndex}\" @RoR2PVP");
+            }
 
             //Set listeners
             Picker.OnLoad += OnLoad;
@@ -52,12 +62,19 @@ namespace RoR2PVP.UI
         #region Listeners
         void OnLoad()
         {
-            CharacterDropdown.value = BodyCatalog.FindBodyIndex(Settings.PlayableCharactersList[Slot]);
+            BodyIndex bodyIndex = BodyCatalog.FindBodyIndex(Settings.PlayableCharactersList[Slot]);
+
+            if (bodyIndex != BodyIndex.None) CharacterDropdown.value = DropDownMap[bodyIndex];
+            else
+            {
+                SetCharacter(0);
+                Debug.LogWarning($"Warning! Custom character load could not find index for body of \"{Settings.PlayableCharactersList[Slot]}\", using default @RoR2PVP");
+            }
         }
 
         void SetCharacter(int num)
         {
-            CharacterBody body = BodyCatalog.GetBodyPrefabBodyComponent(num);
+            CharacterBody body = BodyCatalog.GetBodyPrefabBodyComponent(BodyCatalog.FindBodyIndex(CharacterDropdown.options[num].text));
             Settings.PlayableCharactersList[Slot] = body.name;
             CharacterIcon.sprite = Sprite.Create((Texture2D)body.portraitIcon, new Rect(0.0f, 0.0f, body.portraitIcon.width, body.portraitIcon.height), new Vector2(0.5f, 0.5f), 100.0f);
 

@@ -196,13 +196,23 @@ namespace RoR2PVP.UI
                         //If not a comment
                         if (presetLines[i][0] != '#')
                         {
-                            if (Enum.TryParse(presetLines[i], out ItemIndex itemIndex))
+                            char identifier = char.ToUpperInvariant(presetLines[i][0]);
+                            string entryID = presetLines[i].Substring(1, presetLines[i].Length - 1);
+                            if (identifier == char.ToUpperInvariant('I'))
                             {
-                                if(!Settings.BannedItems.ContainsKey(itemIndex)) Settings.BannedItems.Add(itemIndex, itemIndex);
+                                if (int.TryParse(entryID, out int itemIndex))
+                                {
+                                    ItemIndex index = (ItemIndex)itemIndex;
+                                    if (!Settings.BannedItems.ContainsKey(index)) Settings.BannedItems.Add(index, index);
+                                }
                             }
-                            if (Enum.TryParse(presetLines[i], out EquipmentIndex equipmentIndex))
+                            else if (identifier == char.ToUpperInvariant('E'))
                             {
-                                if (!Settings.BannedEquipments.ContainsKey(equipmentIndex)) Settings.BannedEquipments.Add(equipmentIndex, equipmentIndex);
+                                if (int.TryParse(entryID, out int equipmentIndex))
+                                {
+                                    EquipmentIndex index = (EquipmentIndex)equipmentIndex;
+                                    if (!Settings.BannedEquipments.ContainsKey(index)) Settings.BannedEquipments.Add(index, index);
+                                }
                             }
                         }
                     }
@@ -223,13 +233,13 @@ namespace RoR2PVP.UI
             //Add banned items
             foreach (ItemIndex item in Settings.BannedItems.Values)
             {
-                config.Add(item.ToString());
+                config.Add('I' + item.ToString());
             }
 
             //Add banned equipment
             foreach (EquipmentIndex equipment in Settings.BannedEquipments.Values)
             {
-                config.Add(equipment.ToString());
+                config.Add('E' + equipment.ToString());
             }
 
             //Save to preset file

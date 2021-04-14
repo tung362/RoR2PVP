@@ -89,7 +89,7 @@ namespace RoR2PVP
             return null;
         }
 
-        public static void SendPM(NetworkConnection conn, Chat.ChatMessageBase message)
+        public static void SendPM(NetworkConnection conn, ChatMessageBase message)
         {
             NetworkWriter networkWriter = new NetworkWriter();
             networkWriter.StartMessage(59);
