@@ -1,6 +1,8 @@
 # RoR2PVP
 RoR2PVP is a mod that adds a free for all and team PVP game mode to the game Risk of Rain 2.  
-Note: Everything is server sided, so only host needs this mod installed
+Note: Everything is server sided, so only host needs this mod installed  
+
+Current Update Note: due to the major changes from the anniversary update and from the API, this build might be unstable and may contain many bugs so if you enounter any feel free to let me know!  
 
 (Optional: non host players can also vote on settings if they have the mod installed but isn't needed necessarily to play)  
 ![alt text](https://i.imgur.com/vksJWY8.png)  
