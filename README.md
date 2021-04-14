@@ -65,8 +65,9 @@ Feel free to submit an issue here on my [github](https://github.com/tung362/RoR2
   - PVPCustomInteractablesSpawner.cfg
 
 ### Requirements:  
-[BepInExPack 5.3.1](https://thunderstore.io/package/download/bbepis/BepInExPack/5.3.1/)  
-[R2API 2.5.28](https://thunderstore.io/package/download/tristanmcpherson/R2API/2.5.28/)  
+[BepInExPack 5.4.9](https://thunderstore.io/package/download/bbepis/BepInExPack/5.4.9/)  
+[R2API 3.0.13](https://thunderstore.io/package/download/tristanmcpherson/R2API/3.0.13/)  
+[HookGenPatcher 1.2.1](https://thunderstore.io/package/download/RiskofThunder/HookGenPatcher/1.2.1/)  
 Friends :(  
 
 ### Installation:  
@@ -102,35 +103,36 @@ Friends :(
 
 | Default banned items    |
 | ----------------------- |
-| Behemoth                |
-| NovaOnHeal              |
-| ShockNearby             |
-| SprintWisp              |
-| Thorns                  |
-| LunarUtilityReplacement |
-| Tonic                   |
-| Meteor                  |
-| BurnNearby              |
-| BFG                     |
-| Blackhole               |
-| Lightning               |
-| CommandMissile          |
-| FireBallDash            |
-| GoldGat                 |
-| DroneBackup             |
-| DeathProjectile         |
+| I13                     |
+| I85                     |
+| I105                    |
+| I112                    |
+| I122                    |
+| I76                     |
+| E39                     |
+| E29                     |
+| E11                     |
+| E9                      |
+| E10                     |
+| E27                     |
+| E13                     |
+| E19                     |
+| E24                     |
+| E17                     |
+| E16                     |
 
 
 **`PVPCustomPlayableCharacters.cfg`**  
 
 | Character slots | Default custom characters   |
 | --------------- | --------------------------- |
-| Commando slot   |               AssassinBody  |
-| Huntress slot   |               AssassinBody  |
-| MUL-T slot      |               AssassinBody  |
+| Commando slot   |               BanditBody    |
+| Huntress slot   |               BanditBody    |
+| Bandit slot     |               BanditBody    |
+| MUL-T slot      |               BanditBody    |
 | Engineer slot   |               BanditBody    |
 | Artificer slot  |               BanditBody    |
-| Mercenary slot  |               BanditBody    |
+| Mercenary slot  |               SniperBody    |
 | REX slot        |               SniperBody    |
 | Loader slot     |               SniperBody    |
 | Acrid slot      |               SniperBody    |
@@ -203,7 +205,15 @@ Special thanks to my friend Riley for helping me test https://github.com/SimpleM
 Special thanks to my friend Justin for helping me test https://github.com/Sethix  
 
 ### Change log:  
-**1.5.1 (Current)**  
+**1.5.2 (Current)**  
+- Updated to BepInExPack 5.4.9, R2API 3.0.13, and HookGenPatcher 1.2.1  
+- Mod now depends on HookGenPatcher  
+- Banned items now switched over to a int key system instead of a enum key system due to changes made in the anniversary update  
+- Added character slot "Bandit" to the Custom Playable Characters config  
+- Removed assassin from the default custom playable characters (too powerful)  
+- Fixed scrolling sensitivity for the custom uis so that it matches the element size  
+- Note: due to the major changes from the anniversary update and from the API, this build might be unstable and may contain many bugs so if you enounter any feel free to let me know!  
+**1.5.1**  
 - Updated to R2API 2.5.28  
 - Default config value for cash grant is changed from 50 to 70  
 - Default config value for golden chest price is changed from 400 to 300  
