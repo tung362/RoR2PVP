@@ -75,8 +75,9 @@ Friends :(
 ### Installation:  
 1. Install BepInExPack (Version is provided above)
 2. Install R2API (Version is provided above)
-3. Download and unzip RoR2PVP (From releases or on thunderstore.io)
-4. Place `RoR2PVP.dll` into your `\Risk of Rain 2\BepInEx\plugins\` folder
+3. Install HookGenPatcher (Version is provided above)
+4. Download and unzip RoR2PVP (From releases or on thunderstore.io)
+5. Place `RoR2PVP.dll` into your `\Risk of Rain 2\BepInEx\plugins\` folder
 
 ### Configuration:  
 1. Run your game at least once with the RoR2PVP mod installed
