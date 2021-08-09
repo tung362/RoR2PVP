@@ -205,7 +205,7 @@ Special thanks to my friend Justin for helping me test https://github.com/Sethix
 - Removed config entry "Modded" since RoR2GameModeAPI's config includes it  
 - Removed config entry "Unlock All" since RoR2GameModeAPI's config includes it  
 - Fixed bug where vote ui would not transition  
-- Fixed bug where item bans would still be enforced even when item bans are set to false during voting
+- Fixed bug where item bans would still be enforced even when item bans are set to false during voting  
 **1.5.2**  
 - Updated to BepInExPack 5.4.9, R2API 3.0.13, and HookGenPatcher 1.2.1  
 - Mod now depends on HookGenPatcher  
