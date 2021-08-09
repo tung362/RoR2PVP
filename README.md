@@ -63,7 +63,7 @@ Feel free to submit an issue here on my [github](https://github.com/tung362/RoR2
 [BepInExPack 5.4.9](https://thunderstore.io/package/download/bbepis/BepInExPack/5.4.9/)  
 [R2API 3.0.50](https://thunderstore.io/package/download/tristanmcpherson/R2API/3.0.50/)  
 [HookGenPatcher 1.2.1](https://thunderstore.io/package/download/RiskofThunder/HookGenPatcher/1.2.1/)  
-[RoR2GameModeAPI 1.0.0]()  
+[RoR2GameModeAPI 1.0.0](https://thunderstore.io/package/download/60dfb16d5e944afc/RoR2GameModeAPI/1.0.0/)  
 Friends :(  
 
 ### Installation:  
