@@ -13,10 +13,12 @@ using RoR2;
 using RoR2.CharacterAI;
 using RoR2.Networking;
 using EntityStates;
-using APIExtension.VoteAPI;
 
 namespace RoR2PVP.UI
 {
+    /// <summary>
+    /// UI slot for item categories used by the item banner menu
+    /// </summary>
     public class ItemBannerCategorySlot : MonoBehaviour
     {
         public string CategoryName;
@@ -25,6 +27,9 @@ namespace RoR2PVP.UI
         /*Binds*/
         public TextMeshProUGUI CategoryNameText;
 
+        /// <summary>
+        /// Finds ui components, update slot
+        /// </summary>
         void Start()
         {
             //Bind
@@ -34,6 +39,9 @@ namespace RoR2PVP.UI
         }
 
         #region Utils
+        /// <summary>
+        /// Update slot's color and text to match the item category it's representing
+        /// </summary>
         public void UpdateCategory()
         {
             CategoryNameText.text = CategoryName;

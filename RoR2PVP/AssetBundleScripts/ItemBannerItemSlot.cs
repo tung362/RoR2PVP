@@ -13,10 +13,12 @@ using RoR2;
 using RoR2.CharacterAI;
 using RoR2.Networking;
 using EntityStates;
-using APIExtension.VoteAPI;
 
 namespace RoR2PVP.UI
 {
+    /// <summary>
+    /// UI slot for items used by the item banner menu
+    /// </summary>
     public class ItemBannerItemSlot : MonoBehaviour
     {
         public ItemIndex ItemSlot = ItemIndex.None;
@@ -39,6 +41,9 @@ namespace RoR2PVP.UI
         public static Color OffColor = Color.white;
         public static Color InteractableOffColor = new Color(0.4056604f, 0.4056604f, 0.4056604f, 1.0f);
 
+        /// <summary>
+        /// Finds ui components, set listeners, update slot
+        /// </summary>
         void Start()
         {
             //Bind
@@ -59,11 +64,14 @@ namespace RoR2PVP.UI
         }
 
         #region Listeners
+        /// <summary>
+        /// Item banner load preset slot listener
+        /// </summary>
         void OnLoad()
         {
             if (ItemSlot != ItemIndex.None)
             {
-                if (Settings.BannedItems.ContainsKey(ItemSlot))
+                if (Settings.BannedItems.Contains(ItemSlot))
                 {
                     ItemToggle.isOn = true;
                     return;
@@ -72,7 +80,7 @@ namespace RoR2PVP.UI
 
             if (EquipmentSlot != EquipmentIndex.None)
             {
-                if (Settings.BannedEquipments.ContainsKey(EquipmentSlot))
+                if (Settings.BannedEquipments.Contains(EquipmentSlot))
                 {
                     ItemToggle.isOn = true;
                     return;
@@ -81,6 +89,10 @@ namespace RoR2PVP.UI
             ItemToggle.isOn = false;
         }
 
+        /// <summary>
+        /// Ban/unban the item this slot represents
+        /// </summary>
+        /// <param name="toggle">Toggle ban</param>
         public void ToggleBan(bool toggle)
         {
             ItemToggleHandle.sprite = toggle ? OnSprite : OffSprite;
@@ -94,12 +106,12 @@ namespace RoR2PVP.UI
                 //Ban
                 if (toggle)
                 {
-                    if (!Settings.BannedItems.ContainsKey(ItemSlot)) Settings.BannedItems.Add(ItemSlot, ItemSlot);
+                    if (!Settings.BannedItems.Contains(ItemSlot)) Settings.BannedItems.Add(ItemSlot);
                 }
                 //Unban
                 else
                 {
-                    if (Settings.BannedItems.ContainsKey(ItemSlot)) Settings.BannedItems.Remove(ItemSlot);
+                    if (Settings.BannedItems.Contains(ItemSlot)) Settings.BannedItems.Remove(ItemSlot);
                 }
             }
 
@@ -109,18 +121,21 @@ namespace RoR2PVP.UI
                 //Ban
                 if (toggle)
                 {
-                    if (!Settings.BannedEquipments.ContainsKey(EquipmentSlot)) Settings.BannedEquipments.Add(EquipmentSlot, EquipmentSlot);
+                    if (!Settings.BannedEquipments.Contains(EquipmentSlot)) Settings.BannedEquipments.Add(EquipmentSlot);
                 }
                 //Unban
                 else
                 {
-                    if (Settings.BannedEquipments.ContainsKey(EquipmentSlot)) Settings.BannedEquipments.Remove(EquipmentSlot);
+                    if (Settings.BannedEquipments.Contains(EquipmentSlot)) Settings.BannedEquipments.Remove(EquipmentSlot);
                 }
             }
         }
         #endregion
 
         #region Utils
+        /// <summary>
+        /// Update slot's sprite and color to match the item it's representing
+        /// </summary>
         public void UpdateItem()
         {
             ItemNameText.text = Language.GetString(ItemNameToken);
@@ -128,6 +143,10 @@ namespace RoR2PVP.UI
             ItemIcon.sprite = ItemSprite;
         }
 
+        /// <summary>
+        /// Enable/disable interaction with the slot and grey it out if can't be interacted with
+        /// </summary>
+        /// <param name="toggle">Toggle interaction</param>
         public void InteractableToggle(bool toggle)
         {
             ItemToggle.interactable = toggle;

@@ -15,10 +15,12 @@ using RoR2;
 using RoR2.CharacterAI;
 using RoR2.Networking;
 using EntityStates;
-using APIExtension.VoteAPI;
 
 namespace RoR2PVP.UI
 {
+    /// <summary>
+    /// Lobby ui menu for picking custom playable characters
+    /// </summary>
     public class CharacterPicker : MonoBehaviour
     {
         public static CharacterPicker instance { get; private set; }
@@ -45,6 +47,9 @@ namespace RoR2PVP.UI
         public SlotType SaveSlot = SlotType.Slot0;
         private List<RectTransform> Slots = new List<RectTransform>();
 
+        /// <summary>
+        /// Finds ui components and set listeners
+        /// </summary>
         void OnEnable()
         {
             if (!instance) instance = this;
@@ -65,6 +70,9 @@ namespace RoR2PVP.UI
             SaveButton.onClick.AddListener(Save);
         }
 
+        /// <summary>
+        /// Fills menu with character slots
+        /// </summary>
         void Start()
         {
             for (int i = 0; i < Settings.PlayableCharactersList.Count; i++)
@@ -138,14 +146,21 @@ namespace RoR2PVP.UI
         }
 
         #region Listeners
+        /// <summary>
+        /// Sets the preset load slot
+        /// </summary>
+        /// <param name="num">Slot number</param>
         public void SetLoadSlot(int num)
         {
             LoadSlot = (SlotType)num;
         }
 
+        /// <summary>
+        /// Loads a character picker preset from the set load slot
+        /// </summary>
         public void Load()
         {
-            string path = Setup.ConfigRootPath + "PVPCharacterPicker" + LoadSlot + ".preset";
+            string path = $"{Settings.ConfigRootPath}PVPCharacterPicker{LoadSlot}.preset";
 
             //If preset exist
             if (File.Exists(path))
@@ -166,11 +181,18 @@ namespace RoR2PVP.UI
             OnLoad?.Invoke();
         }
 
+        /// <summary>
+        /// Sets the preset save slot
+        /// </summary>
+        /// <param name="num">Slot number</param>
         public void SetSaveSlot(int num)
         {
             SaveSlot = (SlotType)num;
         }
 
+        /// <summary>
+        /// Saves a character picker preset from the set save slot
+        /// </summary>
         public void Save()
         {
             List<string> config = new List<string>();
@@ -182,7 +204,7 @@ namespace RoR2PVP.UI
             }
 
             //Save to preset file
-            File.WriteAllLines(Setup.ConfigRootPath + "PVPCharacterPicker" + SaveSlot + ".preset", config);
+            File.WriteAllLines($"{Settings.ConfigRootPath}PVPCharacterPicker{SaveSlot}.preset", config);
         }
         #endregion
     }

@@ -8,51 +8,64 @@ using UnityEngine;
 using UnityEngine.Networking;
 using BepInEx;
 using BepInEx.Configuration;
-using R2API;
-using R2API.Utils;
 using RoR2;
 using RoR2.ContentManagement;
+using R2API;
+using R2API.Utils;
+using RoR2GameModeAPI;
+using RoR2GameModeAPI.Utils;
+using RoR2PVP.GameModes;
 
 namespace RoR2PVP
 {
+    /// <summary>
+    /// Keeps track of databases and cached values used by the mod along with handling the pre core inits
+    /// </summary>
     public static class Settings
     {
+        /*Paths*/
+        public static string ConfigRootPath
+        {
+            get
+            {
+                string configPath = RoR2PVP.instance.Config.ConfigFilePath;
+                return configPath.Remove(configPath.Count() - $"{RoR2PVP.PluginGUID}.cfg".Length);
+            }
+        }
+
         /*Assets*/
         public static AssetBundle Assets;
         public static AssetBundleResourcesProvider Provider;
 
-        /*Default values and registered vote indexes for voteable mod options*/
-        public static readonly Tuple<bool, int> FreeForAllPVPToggle = Tuple.Create(false, 1);
-        public static readonly Tuple<bool, int> TeamPVPToggle = Tuple.Create(false, 2);
-        public static readonly Tuple<bool, int> RandomTeams = Tuple.Create(true, 3);
-        public static readonly Tuple<bool, int> MobSpawn = Tuple.Create(false, 4);
-        public static readonly Tuple<bool, int> BanItems = Tuple.Create(true, 5);
-        public static readonly Tuple<bool, int> CompanionsShareItems = Tuple.Create(true, 6);
-        public static readonly Tuple<bool, int> CustomPlayableCharacters = Tuple.Create(true, 7);
-        public static readonly Tuple<bool, int> CustomInteractablesSpawner = Tuple.Create(true, 8);
-        public static readonly Tuple<bool, int> UseDeathPlaneFailsafe = Tuple.Create(true, 9);
-        public static readonly Tuple<bool, int> WiderStageTransitions = Tuple.Create(false, 10);
+        /*Votes*/
+        public const string VotePollName = "RoR2PVPVotePoll";
+        //Default values and registered vote indexes for voteable mod options
+        public static readonly Tuple<bool, int> RandomTeams = Tuple.Create(true, 1);
+        public static readonly Tuple<bool, int> MobSpawn = Tuple.Create(false, 2);
+        public static readonly Tuple<bool, int> BanItems = Tuple.Create(true, 3);
+        public static readonly Tuple<bool, int> CompanionsShareItems = Tuple.Create(true, 4);
+        public static readonly Tuple<bool, int> CustomPlayableCharacters = Tuple.Create(true, 5);
+        public static readonly Tuple<bool, int> CustomInteractablesSpawner = Tuple.Create(true, 6);
+        public static readonly Tuple<bool, int> UseDeathPlaneFailsafe = Tuple.Create(true, 7);
+        public static readonly Tuple<bool, int> WiderStageTransitions = Tuple.Create(false, 8);
+
+        /*Game Mode Information*/
+        public static TeamGameMode TeamPVPGameMode = new TeamGameMode("Team PVP");
+        public static FreeForAllGameMode FreeForAllPVPGameMode = new FreeForAllGameMode("Free For All");
 
         /*Config*/
-        //Multiplayer settings
-        public static int MaxMultiplayerCount = 4;
-        public static bool Modded = true;
-
         //PVP settings
         public static float GraceTimerDuration = 60;
         public static float CashDelay = 10;
         public static uint CashGrantAmount = 70u;
         public static int RespawnsPerRound = 2;
 
-        //Debug settings
-        public static bool UnlockAll = false;
-
         //Characters settings
         public static List<string> PlayableCharactersList = new List<string>();
 
         //Ban item settings
-        public static Dictionary<ItemIndex, ItemIndex> BannedItems = new Dictionary<ItemIndex, ItemIndex>();
-        public static Dictionary<EquipmentIndex, EquipmentIndex> BannedEquipments = new Dictionary<EquipmentIndex, EquipmentIndex>();
+        public static HashSet<ItemIndex> BannedItems = new HashSet<ItemIndex>();
+        public static HashSet<EquipmentIndex> BannedEquipments = new HashSet<EquipmentIndex>();
 
         //Interactables Spawner Settings
         //Drones
@@ -111,6 +124,63 @@ namespace RoR2PVP
         public static int LockboxAmount = 4;
         public static int LunarChestAmount = 4;
 
+        /// <summary>
+        /// Pre core inits. Registers vote options, game modes, and asset bundles
+        /// </summary>
+        public static void Init()
+        {
+            //Register asset bundles
+            EmbeddedUtils.LoadAssetBundle("RoR2PVP.Assets.teampvp.ui", "@TeamPVP", ref Assets, ref Provider);
+
+            //Register game mode
+            GameModeAPI.RegisterGameMode("Team PVP Game Mode", "@TeamPVP:Assets/Resources/UI/FreeForAllPVPSelected.png", TeamPVPGameMode);
+            GameModeAPI.RegisterGameMode("Free For All Game Mode", "@TeamPVP:Assets/Resources/UI/TeamPVPSelected.png", FreeForAllPVPGameMode);
+
+            //Register vote option polls
+            VoteAPI.AddVotePoll(VotePollName);
+
+            //Register vote option headers
+            RuleCategoryDef pvpHeader = VoteAPI.AddVoteHeader("PVP", new Color(1.0f, 0.0f, 0.0f, 1.0f), false);
+
+            //Register vote option selections and choices
+            RuleDef randomTeamsSelection = VoteAPI.AddVoteSelection(pvpHeader, "Random Teams", new ChoiceMenu("Random Teams On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Teams will be shuffled every round (only for team pvp game mode)", Color.black, "@TeamPVP:Assets/Resources/UI/RandomTeamsSelected.png", RandomTeams.Item2, VotePollName));
+            VoteAPI.AddVoteChoice(randomTeamsSelection, new ChoiceMenu("Random Teams Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Teams will stay the same every round (only for team pvp game mode)", Color.black, "@TeamPVP:Assets/Resources/UI/RandomTeamsDeselected.png", -1, VotePollName));
+            randomTeamsSelection.defaultChoiceIndex = Settings.RandomTeams.Item1 ? 0 : 1;
+
+            RuleDef mobSpawnSelection = VoteAPI.AddVoteSelection(pvpHeader, "Mob Spawn", new ChoiceMenu("Mob Spawn On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Mobs will spawn", Color.black, "@TeamPVP:Assets/Resources/UI/MobSpawnSelected.png", MobSpawn.Item2, VotePollName));
+            VoteAPI.AddVoteChoice(mobSpawnSelection, new ChoiceMenu("Mob Spawn Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Mobs will not spawn", Color.black, "@TeamPVP:Assets/Resources/UI/MobSpawnDeselected.png", -1, VotePollName));
+            mobSpawnSelection.defaultChoiceIndex = Settings.MobSpawn.Item1 ? 0 : 1;
+
+            RuleDef banItemsSelection = VoteAPI.AddVoteSelection(pvpHeader, "Ban Items", new ChoiceMenu("Ban Items On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Banned items configured in the config will be blacklisted", Color.black, "@TeamPVP:Assets/Resources/UI/BanItemsSelected.png", BanItems.Item2, VotePollName));
+            VoteAPI.AddVoteChoice(banItemsSelection, new ChoiceMenu("Ban Items Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Banned Items will not be blacklisted", Color.black, "@TeamPVP:Assets/Resources/UI/BanItemsDeselected.png", -1, VotePollName));
+            banItemsSelection.defaultChoiceIndex = Settings.BanItems.Item1 ? 0 : 1;
+
+            RuleDef companionsShareItemsSelection = VoteAPI.AddVoteSelection(pvpHeader, "Companions Share Items", new ChoiceMenu("Companions Share Items On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Items picked up by the player will be shared with their drones etc", Color.black, "@TeamPVP:Assets/Resources/UI/CompanionsShareItemsSelected.png", CompanionsShareItems.Item2, VotePollName));
+            VoteAPI.AddVoteChoice(companionsShareItemsSelection, new ChoiceMenu("Companions Share Items Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Items will not be shared with drones etc", Color.black, "@TeamPVP:Assets/Resources/UI/CompanionsShareItemsDeselected.png", -1, VotePollName));
+            companionsShareItemsSelection.defaultChoiceIndex = Settings.CompanionsShareItems.Item1 ? 0 : 1;
+
+            RuleDef customPlayableCharactersSelection = VoteAPI.AddVoteSelection(pvpHeader, "Custom Playable Characters", new ChoiceMenu("Custom Playable Characters On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Play custom characters configured in the config", Color.black, "@TeamPVP:Assets/Resources/UI/CustomPlayableCharactersSelected.png", CustomPlayableCharacters.Item2, VotePollName));
+            VoteAPI.AddVoteChoice(customPlayableCharactersSelection, new ChoiceMenu("Custom Playable Characters Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Play the default vanilla characters (unbalanced)", Color.black, "@TeamPVP:Assets/Resources/UI/CustomPlayableCharactersDeselected.png", -1, VotePollName));
+            customPlayableCharactersSelection.defaultChoiceIndex = Settings.CustomPlayableCharacters.Item1 ? 0 : 1;
+
+            RuleDef customInteractablesSpawnerSelection = VoteAPI.AddVoteSelection(pvpHeader, "Custom Interactables Spawner", new ChoiceMenu("Custom Interactables Spawner On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Spawn custom objects (chests, drones, etc) at custom rates configured in the config", Color.black, "@TeamPVP:Assets/Resources/UI/CustomInteractablesSpawnerSelected.png", CustomInteractablesSpawner.Item2, VotePollName));
+            VoteAPI.AddVoteChoice(customInteractablesSpawnerSelection, new ChoiceMenu("Custom Interactables Spawner Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Spawn objects (chests, drones, etc) normally as vanilla", Color.black, "@TeamPVP:Assets/Resources/UI/CustomInteractablesSpawnerDeselected.png", -1, VotePollName));
+            customInteractablesSpawnerSelection.defaultChoiceIndex = Settings.CustomInteractablesSpawner.Item1 ? 0 : 1;
+
+            RuleDef useDeathPlaneFailsafeSelection = VoteAPI.AddVoteSelection(pvpHeader, "Use Death Plane Failsafe", new ChoiceMenu("Use Death Plane Failsafe On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Force players to die should they fall off the map to prevent softlock", Color.black, "@TeamPVP:Assets/Resources/UI/UseDeathPlaneFailsafeSelected.png", UseDeathPlaneFailsafe.Item2, VotePollName));
+            VoteAPI.AddVoteChoice(useDeathPlaneFailsafeSelection, new ChoiceMenu("Use Death Plane Failsafe Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Disables the death plane. Only turn off if your using a custom map!", Color.black, "@TeamPVP:Assets/Resources/UI/UseDeathPlaneFailsafeDeselected.png", -1, VotePollName));
+            useDeathPlaneFailsafeSelection.defaultChoiceIndex = Settings.UseDeathPlaneFailsafe.Item1 ? 0 : 1;
+
+            RuleDef widerStageTransitionsSelection = VoteAPI.AddVoteSelection(pvpHeader, "Wider Stage Transitions", new ChoiceMenu("Wider Stage Transitions On", new Color(0.0f, 0.58f, 1.0f, 0.4f), "Transitions through a wider selection of stages when using the teleporter", Color.black, "@TeamPVP:Assets/Resources/UI/WiderStageTransitionsSelected.png", WiderStageTransitions.Item2, VotePollName));
+            VoteAPI.AddVoteChoice(widerStageTransitionsSelection, new ChoiceMenu("Wider Stage Transitions Off", new Color(1.0f, 0.0f, 0.0f, 0.4f), "Vanilla stage transitions. Also turn off when using custom stages", Color.black, "@TeamPVP:Assets/Resources/UI/WiderStageTransitionsDeselected.png", -1, VotePollName));
+            widerStageTransitionsSelection.defaultChoiceIndex = Settings.WiderStageTransitions.Item1 ? 0 : 1;
+        }
+
+        #region Config Generation And Loading
+        /// <summary>
+        /// Formats the newly created config file for loading custom playable characters
+        /// </summary>
+        /// <returns></returns>
         static List<string> OutputBodies()
         {
             List<string> bodiesList = new List<string>();
@@ -160,6 +230,9 @@ namespace RoR2PVP
             return bodiesList;
         }
 
+        /// <summary>
+        /// Formats the newly created config file for loading banned items
+        /// </summary>
         static List<string> DefaultBannedItemsList()
         {
             List<string> bannedItems = new List<string>();
@@ -209,22 +282,22 @@ namespace RoR2PVP
             return bannedItems;
         }
 
+        /// <summary>
+        /// Create and loads the base mod config
+        /// </summary>
+        /// <param name="config"></param>
         public static void LoadConfig(ConfigFile config)
         {
-            //Multiplayer settings
-            MaxMultiplayerCount = config.Bind<int>("Multiplayer Settings", "Max Multiplayer Count", MaxMultiplayerCount, "Max amount of players that can join your game (16 max)").Value;
-            Modded = config.Bind<bool>("Multiplayer Settings", "Modded", Modded, "Set to false allows you to play with unmodded players, does not enable quickplay").Value;
-
             //PVP settings
             GraceTimerDuration = config.Bind<float>("PVP Settings", "Grace Timer Duration", GraceTimerDuration, "Grace period duration before enabling pvp in seconds").Value;
             CashDelay = config.Bind<float>("PVP Settings", "Cash Delay", CashDelay, "Cash grant delay in seconds").Value;
             CashGrantAmount = config.Bind<uint>("PVP Settings", "Cash Grant Amount", CashGrantAmount, "Amount of cash granted after each delay").Value;
             RespawnsPerRound = config.Bind<int>("PVP Settings", "Respawns Per Round", RespawnsPerRound, "Amount of free revives per round").Value;
-
-            //Debug settings
-            UnlockAll = config.Bind<bool>("Debug Settings", "Unlock All", UnlockAll, "Set to true unlocks all characters and loadouts").Value;
         }
 
+        /// <summary>
+        /// Create and loads the custom playable characters config
+        /// </summary>
         public static void LoadCustomPlayableCharactersConfig(string configPath)
         {
             //Init
@@ -254,6 +327,9 @@ namespace RoR2PVP
             }
         }
 
+        /// <summary>
+        /// Create and loads the banned items config
+        /// </summary>
         public static void LoadBannedItemListConfig(string configPath)
         {
             //Init
@@ -287,7 +363,7 @@ namespace RoR2PVP
                             if (int.TryParse(entryID, out int itemIndex))
                             {
                                 ItemIndex index = (ItemIndex)itemIndex;
-                                if (!BannedItems.ContainsKey(index)) BannedItems.Add(index, index);
+                                if (!BannedItems.Contains(index)) BannedItems.Add(index);
                             }
                         }
                         else if(identifier == char.ToUpperInvariant('E'))
@@ -295,7 +371,7 @@ namespace RoR2PVP
                             if (int.TryParse(entryID, out int equipmentIndex))
                             {
                                 EquipmentIndex index = (EquipmentIndex)equipmentIndex;
-                                if (!BannedEquipments.ContainsKey(index)) BannedEquipments.Add(index, index);
+                                if (!BannedEquipments.Contains(index)) BannedEquipments.Add(index);
                             }
                         }
                     }
@@ -303,6 +379,9 @@ namespace RoR2PVP
             }
         }
 
+        /// <summary>
+        /// Create and loads the custom interactables spawner config
+        /// </summary>
         public static void LoadCustomInteractablesSpawnerConfig(ConfigFile config)
         {
             //Drones
@@ -361,5 +440,6 @@ namespace RoR2PVP
             LockboxAmount = config.Bind<int>("Chests", "Lockbox Amount", LockboxAmount, "Amount to attempt to spawn in each stage").Value;
             LunarChestAmount = config.Bind<int>("Chests", "Lunar Chest Amount", LunarChestAmount, "Amount to attempt to spawn in each stage").Value;
         }
+        #endregion
     }
 }

@@ -1,4 +1,4 @@
-R2API 3.0.13
+R2API 3.0.50
 HookGenPatcher 1.2.1
 BepInExPack 5.4.9
 
@@ -10,3 +10,6 @@ TeamManager - keeps track of team's data
 
 Run.instance.AdvanceStage - instant teleport
 Run.instance.nextStageScene - teleporter destination
+
+mscorlib
+system.core

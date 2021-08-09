@@ -15,13 +15,18 @@ using RoR2;
 using RoR2.CharacterAI;
 using RoR2.Networking;
 using EntityStates;
-using APIExtension.VoteAPI;
 
 namespace RoR2PVP.UI
 {
+    /// <summary>
+    /// Lobby ui menu for banning items
+    /// </summary>
     public class ItemBanner : MonoBehaviour
     {
         #region Format
+        /// <summary>
+        /// Item sorting by tier then name
+        /// </summary>
         public class ItemSorter : IComparer<ItemIndex>
         {
             public int Compare(ItemIndex x, ItemIndex y)
@@ -33,6 +38,10 @@ namespace RoR2PVP.UI
                 return result;
             }
         }
+
+        /// <summary>
+        /// Equipment sorting by color tier then name
+        /// </summary>
         public class EquipmentSorter : IComparer<EquipmentIndex>
         {
             public int Compare(EquipmentIndex x, EquipmentIndex y)
@@ -73,6 +82,9 @@ namespace RoR2PVP.UI
         public SlotType SaveSlot = SlotType.Slot0;
         private List<RectTransform> Slots = new List<RectTransform>();
 
+        /// <summary>
+        /// Finds ui components, set listeners
+        /// </summary>
         void OnEnable()
         {
             if (!instance) instance = this;
@@ -96,6 +108,9 @@ namespace RoR2PVP.UI
             ClearAllButton.onClick.AddListener(ClearAll);
         }
 
+        /// <summary>
+        /// Fills menu with item and category slots
+        /// </summary>
         void Start()
         {
             float splitY = 0;
@@ -172,14 +187,21 @@ namespace RoR2PVP.UI
         }
 
         #region Listeners
+        /// <summary>
+        /// Sets the preset load slot
+        /// </summary>
+        /// <param name="num">Slot number</param>
         public void SetLoadSlot(int num)
         {
             LoadSlot = (SlotType)num;
         }
 
+        /// <summary>
+        /// Loads a item banner preset from the set load slot
+        /// </summary>
         public void Load()
         {
-            string path = Setup.ConfigRootPath + "PVPBanItem" + LoadSlot + ".preset";
+            string path = $"{Settings.ConfigRootPath}PVPBanItem{LoadSlot}.preset";
             Settings.BannedItems.Clear();
             Settings.BannedEquipments.Clear();
 
@@ -203,7 +225,7 @@ namespace RoR2PVP.UI
                                 if (int.TryParse(entryID, out int itemIndex))
                                 {
                                     ItemIndex index = (ItemIndex)itemIndex;
-                                    if (!Settings.BannedItems.ContainsKey(index)) Settings.BannedItems.Add(index, index);
+                                    if (!Settings.BannedItems.Contains(index)) Settings.BannedItems.Add(index);
                                 }
                             }
                             else if (identifier == char.ToUpperInvariant('E'))
@@ -211,7 +233,7 @@ namespace RoR2PVP.UI
                                 if (int.TryParse(entryID, out int equipmentIndex))
                                 {
                                     EquipmentIndex index = (EquipmentIndex)equipmentIndex;
-                                    if (!Settings.BannedEquipments.ContainsKey(index)) Settings.BannedEquipments.Add(index, index);
+                                    if (!Settings.BannedEquipments.Contains(index)) Settings.BannedEquipments.Add(index);
                                 }
                             }
                         }
@@ -221,31 +243,33 @@ namespace RoR2PVP.UI
             OnLoad?.Invoke();
         }
 
+        /// <summary>
+        /// Sets the preset save slot
+        /// </summary>
+        /// <param name="num">Slot number</param>
         public void SetSaveSlot(int num)
         {
             SaveSlot = (SlotType)num;
         }
 
+        /// <summary>
+        /// Saves a item banner preset from the set save slot
+        /// </summary>
         public void Save()
         {
             List<string> config = new List<string>();
 
             //Add banned items
-            foreach (ItemIndex item in Settings.BannedItems.Values)
-            {
-                config.Add('I' + item.ToString());
-            }
+            foreach (ItemIndex item in Settings.BannedItems) config.Add('I' + item.ToString());
 
             //Add banned equipment
-            foreach (EquipmentIndex equipment in Settings.BannedEquipments.Values)
-            {
-                config.Add('E' + equipment.ToString());
-            }
+            foreach (EquipmentIndex equipment in Settings.BannedEquipments) config.Add('E' + equipment.ToString());
 
             //Save to preset file
-            File.WriteAllLines(Setup.ConfigRootPath + "PVPBanItem" + SaveSlot + ".preset", config);
+            File.WriteAllLines($"{Settings.ConfigRootPath}PVPBanItem{SaveSlot}.preset", config);
         }
 
+        //Clear all item bans
         public void ClearAll()
         {
             Settings.BannedItems.Clear();

@@ -2,19 +2,18 @@
 RoR2PVP is a mod that adds a free for all and team PVP game mode to the game Risk of Rain 2.  
 Note: Everything is server sided, so only host needs this mod installed  
 
-Current Update Note: due to the major changes from the anniversary update and from the API, this build might be unstable and may contain many bugs so if you enounter any feel free to let me know!  
+Want to create your own custom game modes? Check out my API: [RoR2GameModeAPI](https://github.com/tung362/RoR2GameModeAPI)!  
+
+### [Want to buy me a coffee?](https://www.paypal.com/donate?business=UPQ757L48DWRA&currency_code=USD)  
 
 (Optional: non host players can also vote on settings if they have the mod installed but isn't needed necessarily to play)  
-![alt text](https://i.imgur.com/vksJWY8.png)  
+![alt text](https://i.imgur.com/MCtzH5B.png)  
 
 Menus  
 ![alt text](https://i.imgur.com/onUtK43.png)  
 ![alt text](https://i.imgur.com/BSXNwk0.gif)  
 ![alt text](https://i.imgur.com/9wwsxXW.png)  
 ![alt text](https://i.imgur.com/yslNCEw.png)  
-
-Also unlocks all artifacts  
-![alt text](https://i.imgur.com/SQzJkPB.png)  
 
 ### Videos of mod in action:  
 **PVP Mod With PlayerBots Mod**  
@@ -52,13 +51,7 @@ Feel free to submit an issue here on my [github](https://github.com/tung362/RoR2
     - Enable/Disable randomized stage progression with a wider selection
   - In-game menu and config entry for banning items and equipments (includes loading and saving presets)
   - In-game menu and config entry for playing custom characters, you and others can even play as mobs and hidden characters! (includes loading and saving presets)
-  - Config entry for changing to vanilla version number, can be used to host vanilla lobbies
-  - Config entry for setting the multiplayer limit, can play with up to 16 players!
   - Config entries for changing game mode settings
-  
-- **Extras**
-  - Unlocking of all artifacts
-  - Unlocking of all vanilla characters and loadouts
   
 - **Includes 4 config files to balance your game as you see fit**
   - PVP.cfg
@@ -68,16 +61,18 @@ Feel free to submit an issue here on my [github](https://github.com/tung362/RoR2
 
 ### Requirements:  
 [BepInExPack 5.4.9](https://thunderstore.io/package/download/bbepis/BepInExPack/5.4.9/)  
-[R2API 3.0.13](https://thunderstore.io/package/download/tristanmcpherson/R2API/3.0.13/)  
+[R2API 3.0.50](https://thunderstore.io/package/download/tristanmcpherson/R2API/3.0.50/)  
 [HookGenPatcher 1.2.1](https://thunderstore.io/package/download/RiskofThunder/HookGenPatcher/1.2.1/)  
+[RoR2GameModeAPI 1.0.0]()  
 Friends :(  
 
 ### Installation:  
 1. Install BepInExPack (Version is provided above)
 2. Install R2API (Version is provided above)
 3. Install HookGenPatcher (Version is provided above)
-4. Download and unzip RoR2PVP (From releases or on thunderstore.io)
-5. Place `RoR2PVP.dll` into your `\Risk of Rain 2\BepInEx\plugins\` folder
+4. Install RoR2GameModeAPI (Version is provided above)
+5. Download and unzip RoR2PVP (From releases or on thunderstore.io)
+6. Place `RoR2PVP.dll` into your `\Risk of Rain 2\BepInEx\plugins\` folder
 
 ### Configuration:  
 1. Run your game at least once with the RoR2PVP mod installed
@@ -90,20 +85,14 @@ Friends :(
 
 **Default config values**  
 **`PVP.cfg`**  
-
 | Keys                          | Default values |
 | ----------------------------- | -------------- |
 | Grace Timer Duration          |            60  |
 | Cash Delay                    |            10  |
 | Cash Grant Amount             |            70  |
 | Respawns Per Round            |             2  |
-| Max Multiplayer Count         |             4  |
-| Modded                        |          true  |
-| Unlock All                    |         false  |
 
 **`PVPBannedItemList.cfg`**  
-
-
 | Default banned items    |
 | ----------------------- |
 | I13                     |
@@ -126,7 +115,6 @@ Friends :(
 
 
 **`PVPCustomPlayableCharacters.cfg`**  
-
 | Character slots | Default custom characters   |
 | --------------- | --------------------------- |
 | Commando slot   |               BanditBody    |
@@ -143,7 +131,6 @@ Friends :(
 
 
 **`PVPCustomInteractablesSpawner.cfg`**  
-
 | keys                        | Default Values |
 | --------------------------- | -------------- |
 | Mega Drone Amount           |             0  |
@@ -208,7 +195,18 @@ Special thanks to my friend Riley for helping me test https://github.com/SimpleM
 Special thanks to my friend Justin for helping me test https://github.com/Sethix  
 
 ### Change log:  
-**1.5.2 (Current)**  
+**1.6.0 (Current)**  
+- Refactored mod  
+- Updated to R2API 3.0.50  
+- Mod now depends on RoR2GameModeAPI  
+- Added additional documentation  
+- Added stage "moon2" to the list of safe zones  
+- Removed config entry "Max Multiplayer Count" since RoR2GameModeAPI's config includes it  
+- Removed config entry "Modded" since RoR2GameModeAPI's config includes it  
+- Removed config entry "Unlock All" since RoR2GameModeAPI's config includes it  
+- Fixed bug where vote ui would not transition  
+- Fixed bug where item bans would still be enforced even when item bans are set to false during voting  
+**1.5.2**  
 - Updated to BepInExPack 5.4.9, R2API 3.0.13, and HookGenPatcher 1.2.1  
 - Mod now depends on HookGenPatcher  
 - Banned items now switched over to a int key system instead of a enum key system due to changes made in the anniversary update  

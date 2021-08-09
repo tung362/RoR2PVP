@@ -13,10 +13,12 @@ using RoR2;
 using RoR2.CharacterAI;
 using RoR2.Networking;
 using EntityStates;
-using APIExtension.VoteAPI;
 
 namespace RoR2PVP.UI
 {
+    /// <summary>
+    /// UI slot used by the character picker menu
+    /// </summary>
     public class CharacterPickerSlot : MonoBehaviour
     {
         public int Slot;
@@ -33,6 +35,9 @@ namespace RoR2PVP.UI
         /*Cache*/
         Dictionary<BodyIndex, int> DropDownMap = new Dictionary<BodyIndex, int>();
 
+        /// <summary>
+        /// Finds ui components, set listeners, loads drop down options, and updates slot
+        /// </summary>
         void Start()
         {
             //Bind
@@ -60,6 +65,9 @@ namespace RoR2PVP.UI
         }
 
         #region Listeners
+        /// <summary>
+        /// Character picker load preset slot listener
+        /// </summary>
         void OnLoad()
         {
             BodyIndex bodyIndex = BodyCatalog.FindBodyIndex(Settings.PlayableCharactersList[Slot]);
@@ -72,6 +80,10 @@ namespace RoR2PVP.UI
             }
         }
 
+        /// <summary>
+        /// Picks the custom character this character slot should spawn as, and updates the slot to represent the picked custom character
+        /// </summary>
+        /// <param name="num">Dropdown option value</param>
         void SetCharacter(int num)
         {
             CharacterBody body = BodyCatalog.GetBodyPrefabBodyComponent(BodyCatalog.FindBodyIndex(CharacterDropdown.options[num].text));
@@ -82,6 +94,9 @@ namespace RoR2PVP.UI
         #endregion
 
         #region Utils
+        /// <summary>
+        /// Update slot's text and sprite to match the custom character it's representing
+        /// </summary>
         public void UpdateCharacterSlot()
         {
             CharacterSlotNameText.text = CharacterSlotName;

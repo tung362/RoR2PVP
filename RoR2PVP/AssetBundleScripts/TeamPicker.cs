@@ -13,18 +13,28 @@ using RoR2;
 using RoR2.CharacterAI;
 using RoR2.Networking;
 using EntityStates;
-using APIExtension.VoteAPI;
 
 namespace RoR2PVP.UI
 {
+    /// <summary>
+    /// Lobby ui menu for selecting team loadouts 
+    /// </summary>
     public class TeamPicker : MonoBehaviour
     {
         #region Format
+        /// <summary>
+        /// Player's team state slot
+        /// </summary>
         public class Slot
         {
             public StateType State;
             public int Index;
 
+            /// <summary>
+            /// Constructor, assigns the slot's default values
+            /// </summary>
+            /// <param name="state">Player's team state</param>
+            /// <param name="index">List index</param>
             public Slot(StateType state, int index)
             {
                 State = state;
@@ -52,6 +62,9 @@ namespace RoR2PVP.UI
         public static Dictionary<NetworkUser, Slot> PlayerStates = new Dictionary<NetworkUser, Slot>();
         private List<TeamPickerSlot> Slots = new List<TeamPickerSlot>();
 
+        /// <summary>
+        /// Finds ui components, set listeners, reloads team loadout from previous game session
+        /// </summary>
         void OnEnable()
         {
             if (!instance) instance = this;
@@ -77,6 +90,10 @@ namespace RoR2PVP.UI
         }
 
         #region Listeners
+        /// <summary>
+        /// Drop down value change listener
+        /// </summary>
+        /// <param name="num">Unassign state</param>
         public void SetUnassignAction(int num)
         {
             UnassignAction = (UnassignType)num;
@@ -84,6 +101,10 @@ namespace RoR2PVP.UI
         #endregion
 
         #region Utils
+        /// <summary>
+        /// Add player to the loadout
+        /// </summary>
+        /// <param name="user">Player to add</param>
         public void AddPlayer(NetworkUser user)
         {
             if(!PlayerStates.ContainsKey(user))
@@ -99,6 +120,10 @@ namespace RoR2PVP.UI
             }
         }
 
+        /// <summary>
+        /// Remove player from the loadout
+        /// </summary>
+        /// <param name="user">Player to remove</param>
         public void RemovePlayer(NetworkUser user)
         {
             if (PlayerStates.ContainsKey(user))

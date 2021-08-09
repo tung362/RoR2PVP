@@ -13,10 +13,12 @@ using RoR2;
 using RoR2.CharacterAI;
 using RoR2.Networking;
 using EntityStates;
-using APIExtension.VoteAPI;
 
 namespace RoR2PVP.UI
 {
+    /// <summary>
+    /// UI slot used by the team picker menu
+    /// </summary>
     public class TeamPickerSlot : MonoBehaviour
     {
         public NetworkUser Slot;
@@ -30,6 +32,9 @@ namespace RoR2PVP.UI
         /*Cache*/
         private TeamPicker.StateType State = TeamPicker.StateType.Unassigned;
 
+        /// <summary>
+        /// Finds ui components and set listeners
+        /// </summary>
         void Start()
         {
             //Bind
@@ -50,6 +55,9 @@ namespace RoR2PVP.UI
         }
 
         #region Listeners
+        /// <summary>
+        /// Moves player over to team 1 or unassigned
+        /// </summary>
         public void MoveLeft()
         {
             switch(State)
@@ -71,6 +79,9 @@ namespace RoR2PVP.UI
             AnnounceMove(Slot, TeamPicker.PlayerStates[Slot].State);
         }
 
+        /// <summary>
+        /// Moves player over to team 2 or unassigned
+        /// </summary>
         public void MoveRight()
         {
             switch (State)
@@ -94,6 +105,9 @@ namespace RoR2PVP.UI
         #endregion
 
         #region Utils
+        /// <summary>
+        /// Announces the team transition
+        /// </summary>
         void AnnounceMove(NetworkUser user, TeamPicker.StateType state)
         {
             string teamText = "Unassigned";
